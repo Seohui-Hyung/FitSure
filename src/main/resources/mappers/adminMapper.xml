@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.pretzero.fitsure.model.dao.AdminDao">
+  
+  		<select id="selectOne" parameterType = "Map" resultType="Admin">
+			SELECT admin_name, admin_password 
+			FROM admin 
+			WHERE admin_name = #{adminName} AND admin_password  = #{adminPassword}
+		</select>
+  
+  
+  
+  
+  
+  
+  
+  </mapper>
