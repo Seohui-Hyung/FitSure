@@ -33,6 +33,28 @@ public class UserController {
         }
     }
     
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody User user, HttpSession session) {
+        
+        if (session.getAttribute("user") != null) {
+            session.invalidate();
+            return new ResponseEntity<>("Logout successful", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody User user){
+    	int result = userService.signup(user);
+    	if(result == 1) {
+    		return new ResponseEntity<>("signup successful", HttpStatus.OK);
+    	} else {
+    		return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+    	}
+    	
+    	
+    }
     
     
 }
