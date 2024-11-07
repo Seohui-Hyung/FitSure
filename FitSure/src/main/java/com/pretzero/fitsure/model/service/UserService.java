@@ -8,7 +8,8 @@ public interface UserService {
 	public User login(String userLoginId, String password);
 	
 	// 회원 회원가입
-	public void signup (User user);
+	public int signup (User user);
 	
-	
+	// 이메일 중복 확인 
+	public boolean emailCheck(String email);
 }
