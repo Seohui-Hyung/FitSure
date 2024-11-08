@@ -12,4 +12,12 @@ public interface UserService {
 	
 	// 이메일 중복 확인 
 	public boolean emailCheck(String email);
+	
+	// 탈퇴하기 
+	public boolean deleteUser(String loginId);
+	
+	// 비밀번호 체크 ( 개인정보 변경 혹은, 탈퇴 시에 사용 )
+	boolean checkPassword(int userId, String password);
+
+	public String getPassword(String loginId);
 }

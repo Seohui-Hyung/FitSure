@@ -22,6 +22,7 @@ public class MailController {
 	@PostMapping("/mailSend")
 	public HashMap<String, Object> mailSend(@RequestParam String mail) {
 		HashMap<String, Object> map = new HashMap<>();
+		System.out.println("done");
 
 		try {
 			number = mailService.sendMail(mail);

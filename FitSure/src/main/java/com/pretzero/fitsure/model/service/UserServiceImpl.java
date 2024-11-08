@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 	public User login(String userLoginId, String password) {
 		Map<String, String> info = new HashMap<>();
 		
-		info.put("id", userLoginId);
+		info.put("userLoginId", userLoginId);
 		info.put("password", password);
 		
 		User tmp = userDao.selectOne(info);
@@ -42,6 +42,38 @@ public class UserServiceImpl implements UserService {
 	public boolean emailCheck(String email) {
 		if(userDao.checkValidEmail(email) == 0) return true;
 		else return false;
+	}
+
+	@Override
+	public boolean deleteUser(String userLoginId) {
+		if (userDao.deleteUser(userLoginId) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+
+	@Override
+	public boolean checkPassword(int userId, String password) {
+		
+		Map<String, String> info = new HashMap<>();
+		
+		info.put("userId", String.valueOf(userId));
+		info.put("password", password);
+		
+		int result = userDao.checkPassword(info);		
+		
+		if (result > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public String getPassword(String loginId) {
+		return userDao.getPassword(loginId);
 	}
 	
 	

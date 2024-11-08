@@ -10,6 +10,12 @@ public interface UserDao {
 	
 	public int checkValidEmail (String email);
 	
-	public User insertUser(User user);
+	public int insertUser(User user);
+	
+	public int deleteUser(String userLoginId);
+
+	public int checkPassword(Map<String, String> info);
+
+	public String getPassword(String loginId);
 
 }

@@ -12,12 +12,10 @@ public class MailService {
     private static final String senderEmail = "monologue332@gmail.com";
     private static int number;
 
-    // 생성자 주입
     public MailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
-    // 랜덤으로 숫자 생성
     public static void createNumber() {
         number = (int) (Math.random() * (90000)) + 100000;
     }
