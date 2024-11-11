@@ -40,6 +40,12 @@
 			FROM user
 			WHERE user_loginid=#{loginId}
 		</select>
+		
+		<select id="userLoginId" parameterType="String" resultType="int">
+			SELECT user_id as userId
+			FROM user 
+			WHERE user_loginid = #{userLoginId}
+		</select>
   
   
   </mapper>

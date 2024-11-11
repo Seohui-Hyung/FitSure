@@ -17,5 +17,7 @@ public interface UserDao {
 	public int checkPassword(Map<String, String> info);
 
 	public String getPassword(String loginId);
+	
+	public int findUser(String userLoginId);
 
 }
