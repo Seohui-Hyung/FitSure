@@ -20,4 +20,6 @@ public interface UserService {
 	boolean checkPassword(int userId, String password);
 
 	public String getPassword(String loginId);
+	
+	public int findUserId(String userLoginId);
 }

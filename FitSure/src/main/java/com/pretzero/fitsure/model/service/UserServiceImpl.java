@@ -75,6 +75,11 @@ public class UserServiceImpl implements UserService {
 	public String getPassword(String loginId) {
 		return userDao.getPassword(loginId);
 	}
+
+	@Override
+	public int findUserId(String userLoginId) {
+		return userDao.findUser(userLoginId);
+	}
 	
 	
 }

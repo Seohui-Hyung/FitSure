@@ -4,12 +4,24 @@
   
   <mapper namespace="com.pretzero.fitsure.model.dao.GoalDao">
   
+  		<select id="selectGoal" parameterType="int" resultType="int"> 
+  			SELECT count(*)
+  			FROM GOAL 
+  			WHERE user_id=#{userId}
+  				AND expire_date >= now()
+  		</select>
   
+  		<insert id="insertGoal" parameterType="int">
+    		INSERT INTO goal (user_id, start_day)
+    		VALUES (#{userId}, NOW())
+		</insert>
   
-  
-  
-  
-  
+  		<update id="addWeekGoal">
+		    UPDATE goal
+		    SET week_goal = week_goal + 1
+		    WHERE DATEDIFF(NOW(), start_day) >= 7 AND day_goal >= 5
+		</update>
+  		
   
   
   </mapper>

@@ -14,9 +14,10 @@ public class JwtUtil {
     private static final String SECRET_KEY = "your-256-bit-secret-your-256-bit-secret"; // 256비트 시크릿 키
 
     // JWT 토큰 발급
-    public static String generateToken(String loginId, long expireTimeMs) {
+    public static String generateToken(int userId, String loginId, long expireTimeMs) {
         Claims claims = Jwts.claims();
-        claims.put("loginId", loginId);
+        claims.put("userId", userId);
+        claims.put("userLoginId", loginId);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -29,8 +30,14 @@ public class JwtUtil {
     // JWT 토큰에서 loginId 클레임 추출
     public static String getLoginId(String token) {
         Claims claims = extractClaims(token);
-        return claims != null ? claims.get("loginId", String.class) : null;
+        return claims != null ? claims.get("userLoginId", String.class) : null;
     }
+    
+    public static int getuserId(String token) {
+        Claims claims = extractClaims(token);
+        return claims != null ? ((Number) claims.get("userId")).intValue() : 0;
+    }
+    
 
     // JWT 토큰 만료 여부 확인
     public static boolean isExpired(String token) {

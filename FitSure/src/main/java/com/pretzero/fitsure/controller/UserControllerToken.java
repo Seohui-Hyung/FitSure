@@ -46,7 +46,7 @@ public class UserControllerToken {
 
         if (authenticatedUser != null) {
             // JWT 토큰 생성
-            String token = JwtUtil.generateToken(authenticatedUser.getUsername(), EXPIRATION_TIME_MS);
+            String token = JwtUtil.generateToken(authenticatedUser.getUserId(), authenticatedUser.getUsername(), EXPIRATION_TIME_MS);
 
             // 응답 데이터 구성
             Map<String, Object> response = new HashMap<>();
@@ -67,7 +67,8 @@ public class UserControllerToken {
     // 로그아웃: 클라이언트 측에서 토큰 제거하도록 안내
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
-        return ResponseEntity.ok("Logout successful. Please remove the token on the client side.");
+    	
+        return ResponseEntity.ok("Logout successful.");
     }
 
     // 회원 탈퇴
