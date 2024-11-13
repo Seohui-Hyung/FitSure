@@ -74,7 +74,7 @@ public class UserControllerToken {
     // 회원 탈퇴
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(HttpServletRequest request, @RequestBody Map<String, String> credentials) {
-        String token = request.getHeader("Authorization").substring(7); // "Bearer " 제거
+        String token = request.getHeader("access-token").substring(7); // "Bearer " 제거
         String loginId = JwtUtil.getLoginId(token);
         
         if (loginId == null || !credentials.get("password").equals(userService.getPassword(loginId))) {
@@ -88,7 +88,7 @@ public class UserControllerToken {
     // 토큰을 통한 사용자 인증
 //    @GetMapping("/profile")
 //    public ResponseEntity<User> getProfile(HttpServletRequest request) {
-//        String token = request.getHeader("Authorization").substring(7);
+//        String token = request.getHeader("access-token").substring(7);
 //        
 //        if (JwtUtil.isExpired(token, SECRET_KEY)) {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);

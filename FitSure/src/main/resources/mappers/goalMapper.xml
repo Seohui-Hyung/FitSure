@@ -4,13 +4,13 @@
   
   <mapper namespace="com.pretzero.fitsure.model.dao.GoalDao">
   
-  		<select id="selectGoal" parameterType="int" resultType="int"> 
-  			SELECT count(*)
-  			FROM GOAL 
-  			WHERE user_id=#{userId}
-  				AND expire_date >= now()
-  		</select>
-  
+  		<select id="selectGoal" parameterType="int" resultType="int">
+		    SELECT COALESCE(goal_id, 0)
+		    FROM GOAL
+		    WHERE user_id=#{userId}
+		      AND expire_date >= now()
+		</select>
+
   		<insert id="insertGoal" parameterType="int">
     		INSERT INTO goal (user_id, start_day)
     		VALUES (#{userId}, NOW())

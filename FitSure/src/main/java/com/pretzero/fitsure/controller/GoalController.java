@@ -1,5 +1,7 @@
 package com.pretzero.fitsure.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pretzero.fitsure.model.dto.GoalResult;
 import com.pretzero.fitsure.model.service.GoalResultService;
 import com.pretzero.fitsure.model.service.GoalService;
 import com.pretzero.fitsure.model.service.UserService;
@@ -60,29 +63,55 @@ public class GoalController {
 	
 	
 	// 목표 달성
-//	@PostMapping("/done")
-//    public ResponseEntity<String> completeGoal(HttpServletRequest request, 
-//                                               @RequestParam("goalId") int goalId, 
-//                                               @RequestParam("file") MultipartFile file) {
-//        String token = request.getHeader("Authorization").substring(7);
-//        int userId = JwtUtil.getuserId(token);
+	@PostMapping("/done")
+	public ResponseEntity<String> completeGoal(HttpServletRequest request,
+	                                           @RequestParam("file") MultipartFile file,
+	                                           @RequestParam("walking") int walking) throws IOException { // 추가된 걸음 수 파라미터
+	    String token = request.getHeader("Authorization").substring(7);
+	    int userId = JwtUtil.getuserId(token);
 
-//        if (userId < 0 || JwtUtil.isExpired(token)) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
-//        }
-//
-//        try {
-//            boolean goalCompleted = goalService.completeGoal(goalId, userId, file);
-//            if (goalCompleted) {
-//                return ResponseEntity.ok("Goal marked as complete and file uploaded successfully");
-//            } else {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Goal completion failed or goal not found");
-//            }
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File upload failed");
-//        }
-//    }
+	    if (userId < 0 || JwtUtil.isExpired(token)) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+	    }
 
+	    int goalId = goalService.findGoal(userId);
+	    
+	    if (goalId == 0) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Goal not found for this user");
+	    }
+
+	    if (file.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or empty file uploaded");
+	    }
+	    
+	    String attachmentPath = saveFile(file);  // saveFileToServer는 파일 저장 메서드
+
+	    // GoalResult 생성 및 필드 설정
+		GoalResult goalResult = new GoalResult();
+		goalResult.setGoalId(goalId);
+		goalResult.setUserId(userId);
+		goalResult.setWalking(walking);
+        goalResult.setAttachment(attachmentPath);  
+
+		int goalCompleted = goalResultService.completeGoal(goalResult);
+
+		if (goalCompleted == 1) {
+		    return ResponseEntity.ok("successfully");
+		} else {
+		    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Goal completion failed or goal not found");
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 7일이 지난 목표 중 dayGoal이 5 이상인 목표의 weekGoal 증가
     @Scheduled(cron = "0 0 0 * * *")
     public void updateWeeklyGoals() {
@@ -90,7 +119,13 @@ public class GoalController {
     }
     
     
-    
+    // 파일 저장 메서드
+    private String saveFile(MultipartFile file) throws IOException {
+        String filePath = "src/main/resources/static/img/" + file.getOriginalFilename();  // 예: 서버 경로에 파일 저장
+        File destination = new File(filePath);
+        file.transferTo(destination);
+        return filePath;  // 저장된 파일 경로 반환
+    }
     
 	
 }

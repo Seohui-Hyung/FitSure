@@ -8,7 +8,7 @@ public interface GoalService {
 
 	int createGoal(int user_id);
 	
-	boolean findGoal(int user_id);
+	int findGoal(int user_id);
 
 	void incrementWeekGoal();
 

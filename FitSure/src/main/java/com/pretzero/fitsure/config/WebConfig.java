@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.pretzero.fitsure.intercepter.AdminInterceptor;
+import com.pretzero.fitsure.interceptor.AdminInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
