@@ -6,7 +6,7 @@ public class Admin {
     private String adminPassword;
     
     
-	public Admin() {}
+	public Admin() { super(); }
 	
 	public Admin(int adminId, String adminName, String adminPassword) {
 		super();

@@ -1,4 +1,4 @@
-package com.pretzero.fitsure.intercepter;
+package com.pretzero.fitsure.interceptor;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

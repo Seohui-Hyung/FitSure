@@ -9,10 +9,12 @@ public class InsurancePlan {
     private String detail;
     private int validity;
     
+    private String fileUrl;
+    
 
 	public InsurancePlan() {	}
 	
-	public InsurancePlan(int insuranceId, String insuranceType, int adminId, int premium, String detail, int validity) {
+	public InsurancePlan(int insuranceId, String insuranceType, int adminId, int premium, String detail, int validity, String fileUrl) {
 		super();
 		this.insuranceId = insuranceId;
 		this.insuranceType = insuranceType;
@@ -20,6 +22,7 @@ public class InsurancePlan {
 		this.premium = premium;
 		this.detail = detail;
 		this.validity = validity;
+		this.fileUrl = fileUrl;
 	}
 
 	public int getInsuranceId() {
@@ -68,6 +71,14 @@ public class InsurancePlan {
 
 	public void setValidity(int validity) {
 		this.validity = validity;
+	}
+
+	public String getFileUrl() {
+		return fileUrl;
+	}
+
+	public void setFileUrl(String fileUrl) {
+		this.fileUrl = fileUrl;
 	}
 
 

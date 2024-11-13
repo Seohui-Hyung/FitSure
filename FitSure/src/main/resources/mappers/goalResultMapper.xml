@@ -5,7 +5,10 @@
   <mapper namespace="com.pretzero.fitsure.model.dao.GoalResultDao">
   
   
-  	
+  	<insert id="doneGoal" parameterType="GoalResult">
+    	INSERT INTO goal_result (goal_id, user_id, walking, attachment, achieve, achieve_date)
+    	VALUES (#{goalId}, #{userId}, #{walking}, #{attachment}, true, NOW())
+	</insert>
   
   
   

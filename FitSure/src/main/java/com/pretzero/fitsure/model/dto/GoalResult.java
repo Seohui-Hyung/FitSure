@@ -11,12 +11,13 @@ public class GoalResult {
     private boolean achieve;
     private Date achieveDate;
     
+    private int userId;
     
    
     public GoalResult() {}
     
     
-	public GoalResult(int resultId, int goalId, int walking, String attachment, boolean achieve, Date achieveDate) {
+	public GoalResult(int resultId, int goalId, int walking, String attachment, boolean achieve, Date achieveDate, int userId) {
 		super();
 		this.resultId = resultId;
 		this.goalId = goalId;
@@ -24,6 +25,7 @@ public class GoalResult {
 		this.attachment = attachment;
 		this.achieve = achieve;
 		this.achieveDate = achieveDate;
+		this.userId = userId;
 	}
 	
 	
@@ -62,6 +64,16 @@ public class GoalResult {
 	}
 	public void setAchieveDate(Date achieveDate) {
 		this.achieveDate = achieveDate;
+	}
+
+
+	public int getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }

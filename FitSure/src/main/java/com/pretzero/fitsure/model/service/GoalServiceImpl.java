@@ -20,9 +20,9 @@ public class GoalServiceImpl implements GoalService {
 	
 	@Override
 	public int createGoal(int user_id) {		
-		boolean list = findGoal(user_id);
+		int list = findGoal(user_id);
 		
-		if(list) {
+		if(list == 0) {
 			return goalDao.insertGoal(user_id);
 		} else {
 			return 0;
@@ -30,14 +30,10 @@ public class GoalServiceImpl implements GoalService {
 	}
 
 	@Override
-	public boolean findGoal(int user_id) {
+	public int findGoal(int user_id) {
 		int result = goalDao.selectGoal(user_id);
 		
-		if(result > 0) {
-			return false;
-		} else {
-			return true;
-		}
+		return result;
 	}
 
 	@Override

@@ -62,6 +62,6 @@ public class Comment {
 		this.content = content;
 	}
 
-    // Getters and Setters
+
 }
 
