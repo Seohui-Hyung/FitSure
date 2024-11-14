@@ -12,5 +12,11 @@ public interface GoalService {
 
 	void incrementWeekGoal();
 
+	boolean achievedWeekGoal(int userId);
+
+	boolean changeCoupon(int userId);
+
+	boolean cancelGoal(int userId);
+
 
 }
