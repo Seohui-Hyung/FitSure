@@ -8,4 +8,10 @@ public interface GoalDao {
 
 	void addWeekGoal();
 
+	int checkGoal(int userId);
+
+	int changeCoupon(int userId);
+
+	int cancelGoal(int userId);
+
 }

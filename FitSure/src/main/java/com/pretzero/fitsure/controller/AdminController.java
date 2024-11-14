@@ -81,7 +81,8 @@ public class AdminController {
 	public ResponseEntity<String> disableInsurance(@PathVariable int insuranceId) {
 		if (insurancePlanService.disableInsurance(insuranceId))
 			return ResponseEntity.status(HttpStatus.OK).body("insurance operation successfully terminated");
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FRequest application failed.");
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FRequ"
+				+ "est application failed.");
 	}
 
 	// 보험 상세 보기

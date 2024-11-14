@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pretzero.fitsure.model.dto.GoalResult;
+import com.pretzero.fitsure.model.service.CouponService;
 import com.pretzero.fitsure.model.service.GoalResultService;
 import com.pretzero.fitsure.model.service.GoalService;
 import com.pretzero.fitsure.model.service.UserService;
@@ -25,7 +29,7 @@ import com.pretzero.fitsure.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/goal")
+@RequestMapping("/user/goal")
 public class GoalController {
 	
 	@Autowired
@@ -37,11 +41,15 @@ public class GoalController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	CouponService couponService;
+	
 	private final String SECRET_KEY = "your-256-bit-secret"; // 암호화 키
 
     @Autowired
     private JwtUtil jwtUtil;
 	
+    // 목표 생성
 	@PostMapping("/create")
     public ResponseEntity<String> createGoal(HttpServletRequest request, @RequestBody Map<String, String> goalDetails) {
         String token = request.getHeader("Authorization").substring(7); // "Bearer " 제거
@@ -102,11 +110,59 @@ public class GoalController {
 		}
 	}
 
+	// 24주 달성 시, 쿠폰 발급 
+	@PostMapping("/change/coupon")
+	@Transactional(rollbackFor = Exception.class)
+	public ResponseEntity<String> changeCoupon(HttpServletRequest request, @RequestBody Map<String, String> goalDetails) {
+	    String token = request.getHeader("Authorization").substring(7); // "Bearer " 제거
+	    int userId = JwtUtil.getuserId(token);
+
+	    if (userId < 0 || JwtUtil.isExpired(token)) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+	    }
+
+	    boolean available = goalService.achievedWeekGoal(userId);
+
+	    try {
+	        if (available) {
+	            boolean check1 = couponService.awardCoupon(userId);
+	            boolean check2 = goalService.changeCoupon(userId);
+
+	            // cha1과 cha2가 모두 true인 경우에만 성공 처리
+	            if (check1 && check2) {
+	                return ResponseEntity.ok("Receive a coupon upon achieving the goal.");
+	            } else {
+	                // cha1이나 cha2가 false이면 롤백 처리
+	                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();  // 롤백 강제
+	                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: Coupon or goal update failed.");
+	            }
+	        } else {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot receive a coupon because the goal has not been completed.");
+	        }
+	    } catch (Exception e) {
+	        // 예외 발생 시 롤백 자동 처리
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+	    }
+	}
+
 	
-	
-	
-	
-	
+	@PatchMapping("/cancel")
+	public ResponseEntity<String> cancelGoal(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        int userId = JwtUtil.getuserId(token);
+
+        if (userId < 0 || JwtUtil.isExpired(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+        }
+
+        boolean goalCancel = goalService.cancelGoal(userId);
+
+        if (goalCancel) {
+            return ResponseEntity.ok("Goal cancel successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to cancel the objective. Please try again.");
+        }
+    }
 	
 	
 	
