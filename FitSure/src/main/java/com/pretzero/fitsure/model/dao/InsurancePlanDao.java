@@ -1,5 +1,7 @@
 package com.pretzero.fitsure.model.dao;
 
+import java.util.List;
+
 import com.pretzero.fitsure.model.dto.InsurancePlan;
 
 public interface InsurancePlanDao {
@@ -11,5 +13,7 @@ public interface InsurancePlanDao {
 	int changeInsurance(InsurancePlan insurancePlan);
 
 	InsurancePlan selectInsurance(int insuranceId);
+
+	List<InsurancePlan> allInsuranceList();
 
 }

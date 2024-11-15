@@ -27,6 +27,10 @@
 	  		WHERE insurance_id = #{insuranceId}
 	  </select>
 	  
+	  <select id="allInsuranceList" parameterType="InsurancePlan">
+	  		SELECT * 
+	  		FROM insurance_plans
+	  </select>
   
   
   </mapper>
