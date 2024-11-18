@@ -8,9 +8,19 @@
   			VALUES (#{userId}, NOW())
   		</insert>
   
+  		
+  		<select id="selectCoupon" parameterType="int" resultType="Coupon">
+  			SELECT *
+  			FROM coupon
+  			WHERE user_id = #{userId}
+
+  		</select>
   
-  
-  
+  		<update id="usedCoupon" parameterType="int">
+  			UPDATE coupon
+  			SET used = 1
+  			WHERE user_id = #{userId}
+  		</update>
   
   
   

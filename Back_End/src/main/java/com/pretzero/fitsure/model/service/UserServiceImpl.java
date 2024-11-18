@@ -76,9 +76,10 @@ public class UserServiceImpl implements UserService {
 		return userDao.getPassword(loginId);
 	}
 
+
 	@Override
-	public int findUserId(String userLoginId) {
-		return userDao.findUser(userLoginId);
+	public String findUserId(User user) {
+		return userDao.findUserId(user);
 	}
 	
 	

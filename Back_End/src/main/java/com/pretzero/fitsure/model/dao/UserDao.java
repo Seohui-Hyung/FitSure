@@ -20,4 +20,6 @@ public interface UserDao {
 	
 	public int findUser(String userLoginId);
 
+	public String findUserId(User user);
+
 }

@@ -4,6 +4,11 @@
   
   <mapper namespace="com.pretzero.fitsure.model.dao.PaymentDao">
   
+  		<insert id="insertPay" parameterType="Payment">
+  			INSERT INTO Payment (user_id, insurance_id, amount, payment_date, refund, payment_state)
+  			VALUES (#{userId}, #{insuranceId}, #{amount}, now(), 0, 0)
+  		
+  		</insert>
   
   
   
