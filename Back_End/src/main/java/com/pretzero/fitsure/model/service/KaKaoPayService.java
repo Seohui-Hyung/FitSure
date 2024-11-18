@@ -18,7 +18,7 @@ import com.pretzero.fitsure.model.dto.paymenttest.ReadyResponse;
 @Service
 public class KaKaoPayService {
 
-	private static final String ACCESS_TOKEN = "DEV1D95D3711948177A7048BE35C1E921868C71F";
+	private static final String ACCESS_TOKEN = "DEV1C0C9D143BD4A603237A94C1759AA12809291";
 
 	private HttpHeaders getHeaders() {
 		HttpHeaders headers = new HttpHeaders();

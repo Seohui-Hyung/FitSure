@@ -8,7 +8,7 @@
   			SELECT *
   			FROM subscribe
   			WHERE user_id=#{userId} AND insurance_id=#{insuranceId}
-  					end_date >= now()
+  				AND end_date >= now()
   		</select>
   		
   		<insert id="insertSub" parameterType="Subscribe">
