@@ -21,5 +21,5 @@ public interface UserService {
 
 	public String getPassword(String loginId);
 	
-	public int findUserId(String userLoginId);
+	public String findUserId(User user);
 }

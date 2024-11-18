@@ -6,7 +6,7 @@ public class Coupon {
     private int couponId;
     private int userId;
     private Date couponDate;
-    private boolean used;
+    private int used;
     
     
     
@@ -17,7 +17,7 @@ public class Coupon {
 
 
 
-	public Coupon(int couponId, int userId, Date couponDate, boolean used) {
+	public Coupon(int couponId, int userId, Date couponDate, int used) {
 		super();
 		this.couponId = couponId;
 		this.userId = userId;
@@ -63,13 +63,13 @@ public class Coupon {
 
 
 
-	public boolean isUsed() {
+	public int getUsed() {
 		return used;
 	}
 
 
 
-	public void setUsed(boolean used) {
+	public void setUsed(int used) {
 		this.used = used;
 	}
 

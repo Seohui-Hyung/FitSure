@@ -4,7 +4,24 @@
   
   <mapper namespace="com.pretzero.fitsure.model.dao.SubscribeDao">
   
-  
+  		<select id="selectSub" parameterType="Subscribe" resultType="Subscribe">
+  			SELECT *
+  			FROM subscribe
+  			WHERE user_id=#{userId} AND insurance_id=#{insuranceId}
+  					end_date >= now()
+  		</select>
+  		
+  		<insert id="insertSub" parameterType="Subscribe">
+		    INSERT INTO subscribe (user_id, insurance_id, end_date, discount_rate, discount_validate)
+		    VALUES (
+		        #{userId}, #{insuranceId}, DATE_ADD(NOW(), INTERVAL 12 MONTH), #{discountRate},
+		        CASE 
+		            WHEN #{discountRate} = 0.05 THEN DATE_ADD(NOW(), INTERVAL 6 MONTH)
+		            ELSE NULL
+		        END
+		    )
+		</insert>
+  		
   
   
   

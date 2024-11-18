@@ -46,6 +46,12 @@
 			FROM user 
 			WHERE user_loginid = #{userLoginId}
 		</select>
+		
+		<select id = "findUserId" parameterType="User" resultType="String">
+			SELECT user_loginid
+			FROM user
+			WHERE username = #{username} AND email = #{email} AND birth_date = #{birthDate}
+		</select>
   
   
   </mapper>

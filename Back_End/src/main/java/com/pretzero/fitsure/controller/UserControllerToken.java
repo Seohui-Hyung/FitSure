@@ -72,7 +72,7 @@ public class UserControllerToken {
     }
 
     // 회원 탈퇴
-    @DeleteMapping("/delete")
+    @PatchMapping("/delete")
     public ResponseEntity<String> deleteUser(HttpServletRequest request, @RequestBody Map<String, String> credentials) {
         String token = request.getHeader("access-token").substring(7); // "Bearer " 제거
         String loginId = JwtUtil.getLoginId(token);
@@ -99,4 +99,14 @@ public class UserControllerToken {
 //        
 //        return user != null ? ResponseEntity.ok(user) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 //    }
+    
+    @PostMapping("/findId")
+    public ResponseEntity<String> findUserId(@RequestBody User user) {
+
+        String userId = userService.findUserId(user);
+        return userId != null ? ResponseEntity.ok(userId) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to find account");
+    }
+    
+    
+    
 }
