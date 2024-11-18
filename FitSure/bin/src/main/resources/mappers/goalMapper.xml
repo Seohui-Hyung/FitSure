@@ -4,12 +4,45 @@
   
   <mapper namespace="com.pretzero.fitsure.model.dao.GoalDao">
   
+  		<select id="selectGoal" parameterType="int" resultType="int">
+		    SELECT COALESCE(goal_id, 0)
+		    FROM GOAL
+		    WHERE user_id=#{userId}
+		      AND expire_date >= now()
+		      AND cancel = 0
+		      AND exchange = 0
+		</select>
+
+  		<insert id="insertGoal" parameterType="int">
+    		INSERT INTO goal (user_id, start_day)
+    		VALUES (#{userId}, NOW())
+		</insert>
   
+  		<update id="addWeekGoal">
+		    UPDATE goal
+		    SET week_goal = week_goal + 1
+		    WHERE DATEDIFF(NOW(), start_day) >= 7 AND day_goal >= 5
+		</update>
+  		
   
-  
-  
-  
-  
-  
+  		<select id="checkGoal" parameterType="int" resultType="int">
+  			SELECT week_goal
+		    FROM GOAL
+		    WHERE user_id = #{userId}
+		      AND exchange = 0
+  		</select>
+  		
+  		<update id="changeCoupon" parameterType="int">
+  			UPDATE goal
+		    SET exchange = 1
+		    WHERE user_id = #{userId}
+  		</update>
+  		
+  		
+  		<update id = "cancelGoal" parameterType="int">
+  			UPDATE goal
+		    SET cancel = 1
+		    WHERE user_id = #{userId}
+  		</update>
   
   </mapper>

@@ -1,5 +1,7 @@
 package com.pretzero.fitsure.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,11 @@ public class InsurancePlanServiceImpl implements InsurancePlanService {
 		
 		if( result > 0) return true;
 		else return false;
+	}
+
+	@Override
+	public List<InsurancePlan> getInsuranceList() {
+		return insurancePlanDao.allInsuranceList();
 	}
 
 	

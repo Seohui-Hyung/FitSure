@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.pretzero.fitsure.model.dto.Admin;
 import com.pretzero.fitsure.model.dto.InsurancePlan;
 import com.pretzero.fitsure.model.service.AdminService;
+import com.pretzero.fitsure.model.service.CommentService;
 import com.pretzero.fitsure.model.service.InsurancePlanService;
 
 import jakarta.servlet.http.HttpSession;
@@ -36,6 +38,9 @@ public class AdminController {
 
 	@Autowired
 	private InsurancePlanService insurancePlanService;
+	
+	@Autowired
+	private CommentService commentService;
 
 	// 로그인
 	@PostMapping("/login")
@@ -77,7 +82,7 @@ public class AdminController {
 	}
 
 	// 보험 삭제
-	@PostMapping("/insurance/close/{insuranceId}")
+	@DeleteMapping("/insurance/delete/{insuranceId}")
 	public ResponseEntity<String> disableInsurance(@PathVariable int insuranceId) {
 		if (insurancePlanService.disableInsurance(insuranceId))
 			return ResponseEntity.status(HttpStatus.OK).body("insurance operation successfully terminated");
@@ -86,7 +91,7 @@ public class AdminController {
 	}
 
 	// 보험 상세 보기
-	@GetMapping("/board/{insuranceId}")
+	@GetMapping("/insurance/{insuranceId}")
 	public ResponseEntity<InsurancePlan> detail(@PathVariable int insuranceId) {
 		InsurancePlan insurancePlan = insurancePlanService.readInsurance(insuranceId);
 		if (insurancePlan != null) {
@@ -110,10 +115,15 @@ public class AdminController {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update insurance");
 	}
 
-	
-	
-	
-	
+	// 보험 댓글 삭제 	
+	@DeleteMapping("/insurance/{insuranceId}/comments/{commentId}")
+	public ResponseEntity<String> adminDeleteComment(@PathVariable int insuranceId, @PathVariable int commentId) {
+	    if (commentService.deleteComment(insuranceId, commentId)) {
+	        return ResponseEntity.ok("Comment deleted successfully");
+	    }
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found or does not belong to the insurance");
+	}
+
 	
 	
 	

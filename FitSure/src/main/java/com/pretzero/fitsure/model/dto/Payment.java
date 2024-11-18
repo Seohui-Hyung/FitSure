@@ -9,6 +9,7 @@ public class Payment {
     private double amount;
     private Date paymentDate;
     private boolean refund;
+    private int paymentState;
     
     
     
@@ -18,7 +19,7 @@ public class Payment {
 
 
 
-	public Payment(int paymentId, int userId, int insuranceId, double amount, Date paymentDate, boolean refund) {
+	public Payment(int paymentId, int userId, int insuranceId, double amount, Date paymentDate, boolean refund, int papaymentStateyment_state) {
 		super();
 		this.paymentId = paymentId;
 		this.userId = userId;
@@ -26,6 +27,7 @@ public class Payment {
 		this.amount = amount;
 		this.paymentDate = paymentDate;
 		this.refund = refund;
+		this.paymentState = paymentState;
 	}
 
 

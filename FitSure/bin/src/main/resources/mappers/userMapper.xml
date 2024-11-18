@@ -5,15 +5,48 @@
   <mapper namespace="com.pretzero.fitsure.model.dao.UserDao">
   
   		<select id="selectOne" parameterType = "Map" resultType="User">
-			SELECT user_loginId, password 
+			SELECT *
 			FROM user 
-			WHERE user_loginId = #{userLoginId} AND password  = #{password}
+			WHERE user_loginId = #{userLoginId} AND password = #{password} and available = 1
 		</select>
   
   
+  		<select id="checkValidEmail" parameterType = "String" resultType="Int">
+			SELECT count(*)
+			FROM user 
+			WHERE email = #{email}
+		</select>
+  		
+  		<insert id="insertUser" parameterType="User" >
+  			INSERT INTO user (user_loginid, password, username, email, birth_date, gender, available)
+  			VALUES (#{userLoginId}, #{password}, #{username}, #{email}, #{birthDate}, #{gender} , 1)
+  			
+  		
+  		</insert>
   
-  
-  
+  		<update id = "deleteUser" parameterType="int">
+    		UPDATE user SET available = 0 WHERE user_loginid = #{userLoginId}
+		</update>
+		
+  		
+  		<select id="checkPassword" parameterType = "Map" resultType="int">
+			SELECT count(*)
+			FROM user 
+			WHERE user_id = #{userId} and password = #{password}
+		</select>
+		
+		<select id="getPassword" parameterType = "String" resultType="String">
+			SELECT password
+			FROM user
+			WHERE user_loginid=#{loginId}
+		</select>
+		
+		<select id="userLoginId" parameterType="String" resultType="int">
+			SELECT user_id as userId
+			FROM user 
+			WHERE user_loginid = #{userLoginId}
+		</select>
   
   
   </mapper>
+  
