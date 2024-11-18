@@ -4,12 +4,31 @@
   
   <mapper namespace="com.pretzero.fitsure.model.dao.NoticeDao">
   
+  	<insert id="registNotice" parameterType="Notice">
+  		INSERT INTO notice (admin_id, importance, content, reg_date)
+  		VALUES (#{adminId}, #{importance}, #{content}, #{reg_date})
+  	</insert>
   
+  	<update id="changeNotice" >
+		UPDATE notice
+		SET importance = #{importance}, content = #{content}  	
+  		WHERE notice_id = #{noticeId}
+  	</update>
   
+  	<delete id="deleteNotice">
+  		DELETE FROM notice
+  		WHERE notice_id = #{noticeId}
+  	</delete>
   
-  
-  
-  
-  
+  	<select id="selectNotice" parameterType="int">
+  		SELECT *
+  		FROM notice
+  		WHERE notice_id = #{noticeId}
+  	</select>
+  	
+  	<select id="allNoticeList" parameterType="Notice">
+  		SELECT *
+  		FROM notice
+  	</select>
   
   </mapper>
