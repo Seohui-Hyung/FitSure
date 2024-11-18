@@ -1,0 +1,27 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.pretzero.fitsure.model.dao.CommentDao">
+  
+  		<select id="getList" parameterType="int" resultType="Comment">
+  			SELECT * FROM comment
+  			WHERE insurance_id = #{insuranceId}
+ 			ORDER BY comment_id desc 		
+  		</select>
+  
+  		<insert id="insertComment" parameterType="Comment">
+  			INSERT INTO comment (user_id, insurance_id, content)
+			VALUES (#{userId}, #{insurance_id}, #{content})  		
+  		</insert>
+  
+  
+  		<delete id="deleteComment" parameterType="Comment">
+		    DELETE FROM comment 
+		    WHERE insurance_id = #{insuranceId} AND comment_id = #{commentId}
+		</delete>
+
+  
+  
+  
+  </mapper>
