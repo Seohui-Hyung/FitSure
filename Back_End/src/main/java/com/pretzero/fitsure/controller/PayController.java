@@ -22,6 +22,8 @@ import com.pretzero.fitsure.model.service.PaymentService;
 import com.pretzero.fitsure.model.service.SubscribeService;
 import com.pretzero.fitsure.util.SessionUtils;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/pay")
 public class PayController {
@@ -34,12 +36,16 @@ public class PayController {
 	
 	@Autowired
 	private SubscribeService subscribeService;
+	
+	@Autowired
+	private PaymentService paymentService;
     
 	
     @PostMapping("/ready")
-    public @ResponseBody ReadyResponse payReady(@RequestBody Payment payment) {
+    public @ResponseBody ReadyResponse payReady(@RequestBody Payment payment, HttpSession session) {
     	
         int userId = payment.getUserId();
+        session.setAttribute("userId", userId);
         int insurance = payment.getInsuranceId();
         String insurancename = insurancePlanService.readInsurance(insurance).getInsuranceType();
         System.out.println(insurancename);
@@ -60,7 +66,7 @@ public class PayController {
     }
 
     @GetMapping("/completed")
-    public ResponseEntity<ApproveResponse> payCompleted(@RequestParam("pg_token") String pgToken) {
+    public ResponseEntity<ApproveResponse> payCompleted(@RequestParam("pg_token") String pgToken, HttpSession session) {
     
         String tid = SessionUtils.getStringAttributeValue("tid");
         System.out.println("결제승인 요청을 인증하는 토큰: " + pgToken);
@@ -69,6 +75,11 @@ public class PayController {
         // 카카오 결제 요청하기
         ApproveResponse approveResponse = kakaoPayService.payApprove(tid, pgToken);
         
+        
+        int userId = (Integer) session.getAttribute("userId");
+        paymentService.finishPayment(userId);
+        
+        session.removeAttribute("userId");
         
         
         return new ResponseEntity<>(approveResponse, HttpStatus.OK);

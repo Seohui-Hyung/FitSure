@@ -6,4 +6,6 @@ public interface PaymentDao {
 
 	void insertPay(Payment paytemp);
 
+	void finishPayment(int userId);
+
 }

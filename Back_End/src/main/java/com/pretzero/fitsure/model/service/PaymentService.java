@@ -6,5 +6,7 @@ public interface PaymentService {
 
 	void createPayment(Payment paytemp);
 
+	void finishPayment(int userId);
+
 
 }

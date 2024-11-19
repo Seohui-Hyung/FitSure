@@ -10,7 +10,12 @@
   		
   		</insert>
   
-  
+  		<update id="finishPayment" parameterType="int">
+  			UPDATE payment
+  			SET payment_state = 1
+  			WHERE user_id = #{userId}
+  		
+  		</update>
   
   
   
