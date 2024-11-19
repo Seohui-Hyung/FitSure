@@ -12,4 +12,6 @@ public interface CommentDao {
 
 	public int deleteComment(Comment com);
 
+	public int findUserId(Comment com);
+
 }

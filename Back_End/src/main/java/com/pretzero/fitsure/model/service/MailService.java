@@ -2,6 +2,8 @@ package com.pretzero.fitsure.model.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,9 @@ public class MailService {
     private final JavaMailSender javaMailSender;
     private static final String senderEmail = "monologue332@gmail.com";
     private static int number;
+    
+    @Autowired
+    private UserService userService;
 
     public MailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -36,7 +41,7 @@ public class MailService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
+        
         return message;
     }
 
@@ -44,6 +49,13 @@ public class MailService {
         MimeMessage message = createMail(mail);
         javaMailSender.send(message);
 
+        return number;
+    }
+    
+    public int sendMailForPassword(String userLogionId, String mail) {
+        MimeMessage message = createMail(mail);
+        javaMailSender.send(message);
+        userService.updatePassword(userLogionId, number);
         return number;
     }
 }

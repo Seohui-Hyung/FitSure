@@ -44,5 +44,17 @@
 		    SET cancel = 1
 		    WHERE user_id = #{userId}
   		</update>
+  		
+  		<select id="selectGoalList" parameterType="int" resultType="Goal">
+		    SELECT *
+		    FROM goal
+		    WHERE user_id = #{userId}
+		      AND cancel = 0
+		      AND (
+		          expire_day >= NOW()
+		          OR (week_goal = 24 AND exchange = 0)
+		      )
+		</select>
+
   
   </mapper>

@@ -1,6 +1,7 @@
 package com.pretzero.fitsure.model.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private MailService mailService;
 	
 	// 회원 로그인 
 	public User login(String userLoginId, String password) {
@@ -81,6 +85,36 @@ public class UserServiceImpl implements UserService {
 	public String findUserId(User user) {
 		return userDao.findUserId(user);
 	}
+
+	@Override
+	public List<User> getUserList() {
+		return userDao.selectUserList();
+		
+	}
+
+	@Override
+	public User userInfo(String userLoginId) {
+		return userDao.selectUser(userLoginId);
+	}
+
+	@Override
+	public boolean updateUserInfo(User existingUser) {
+		int result = userDao.updateUser(existingUser);
+		return result > 0 ? true : false;
+		
+	}
+
+
+	@Override
+	public boolean updatePassword(String userLoginId, int newPassword) {
+		User user = userDao.selectUser(userLoginId);
+		String newp = newPassword+"";
+		user.setPassword(newp);
+		return userDao.updatePassword(user) > 0 ? true : false;
+	}
+
+	
+	
 	
 	
 }

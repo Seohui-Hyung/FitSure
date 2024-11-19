@@ -34,4 +34,15 @@ public class CommentServiceImpl implements CommentService {
 		return commentDao.deleteComment(com) == 1;
 	}
 
+	@Override
+	public int findWriter(int insuranceId, int commentId) {
+		
+		Comment com = new Comment();
+		com.setInsuranceId(insuranceId);
+		com.setCommentId(commentId);
+		
+		return commentDao.findUserId(com);
+		
+	}
+
 }

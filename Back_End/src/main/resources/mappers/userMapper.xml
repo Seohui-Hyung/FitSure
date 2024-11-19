@@ -53,6 +53,30 @@
 			WHERE username = #{username} AND email = #{email} AND birth_date = #{birthDate}
 		</select>
   
+  		<select id="selectUserList" resultType="User">
+  			SELECT * 
+  			FROM user
+  		</select>
+  		
+  		<select id="userLoginId" resultType="User" parameterType="String">
+  			SELECT *
+  			FROM user
+  			WHERE user_loginid = #{userLoginId}
+  		</select>
+  		
+  		<update id="updateUser" parameterType="User">
+  			UPDATE user
+  			SET password = #{password} 
+  				AND email = #{email}
+  				AND birth_date = #{birthDate}
+  			WHERE user_id = #{userId}
+  		</update>
+  		
+  		<update id="updatePassword" parameterType="User">
+  			UPDATE user
+  			SET password = #{password}
+  			WHERE user_id = #{userId}
+  		</update>
   
   </mapper>
   

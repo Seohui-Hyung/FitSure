@@ -34,6 +34,9 @@ public class PayController {
 	
 	@Autowired
 	private SubscribeService subscribeService;
+	
+	@Autowired
+	private PaymentService paymentService;
     
 	
     @PostMapping("/ready")
@@ -69,7 +72,9 @@ public class PayController {
         // 카카오 결제 요청하기
         ApproveResponse approveResponse = kakaoPayService.payApprove(tid, pgToken);
         
+        Payment payment = (Payment) SessionUtils.getAttribute("payment");
         
+        paymentService.approvePayment(payment.getPaymentId());
         
         return new ResponseEntity<>(approveResponse, HttpStatus.OK);
     }

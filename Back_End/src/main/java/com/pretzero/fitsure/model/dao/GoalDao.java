@@ -1,5 +1,9 @@
 package com.pretzero.fitsure.model.dao;
 
+import java.util.List;
+
+import com.pretzero.fitsure.model.dto.Goal;
+
 public interface GoalDao {
 
 	int selectGoal(int user_id);
@@ -13,5 +17,7 @@ public interface GoalDao {
 	int changeCoupon(int userId);
 
 	int cancelGoal(int userId);
+
+	Goal selectGoalList(int userId);
 
 }

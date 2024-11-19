@@ -1,12 +1,14 @@
 package com.pretzero.fitsure.model.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pretzero.fitsure.model.dao.GoalDao;
+import com.pretzero.fitsure.model.dto.Goal;
 
 @Service
 public class GoalServiceImpl implements GoalService {
@@ -61,6 +63,12 @@ public class GoalServiceImpl implements GoalService {
 		int result = goalDao.cancelGoal(userId);
 		if(result != 0) return true;
 		else return false;
+	}
+
+	@Override
+	public Goal getGoalList(int userId) {
+		Goal goalList = goalDao.selectGoalList(userId);
+		return goalList;
 	}
 	
 	

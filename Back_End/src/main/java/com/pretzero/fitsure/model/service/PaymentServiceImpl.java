@@ -17,4 +17,10 @@ public class PaymentServiceImpl implements PaymentService {
 		paymentDao.insertPay(paytemp);
 	}
 
+	@Override
+	public void approvePayment(int paymentId) {
+		paymentDao.donePayment(paymentId);
+		
+	}
+
 }

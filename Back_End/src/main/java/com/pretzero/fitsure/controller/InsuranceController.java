@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -121,7 +122,7 @@ public class InsuranceController {
 	}
 	
 	// 보험 댓글 작성 
-	@PostMapping("/{insuranceId}")
+	@PostMapping("/comment/{insuranceId}")
 	public ResponseEntity<?> commentInsurance(@PathVariable int insuranceId, @RequestBody Comment comment, HttpServletRequest request){
 		String token = request.getHeader("access-token").substring(7); 
 		int userId = JwtUtil.getuserId(token);
@@ -140,6 +141,25 @@ public class InsuranceController {
 	}
 	
 	
+	// 보험 댓글 삭제 
+	@DeleteMapping("/comment/{insuranceId}/{commentId}")
+	public ResponseEntity<?> deleteComment(@PathVariable int insuranceId, @PathVariable int commentId,
+			HttpServletRequest request) {
+		String token = request.getHeader("access-token").substring(7);
+		int userId = JwtUtil.getuserId(token);
+
+		if (userId < 0 || JwtUtil.isExpired(token)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+		}
+
+		int writer = commentService.findWriter(insuranceId, commentId);
+
+		if (userId == writer) {
+			commentService.deleteComment(insuranceId, commentId);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Comment deleted successfully");
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add comment");
+	}
 	
 	
 	
