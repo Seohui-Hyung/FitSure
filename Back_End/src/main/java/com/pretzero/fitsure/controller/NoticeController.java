@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pretzero.fitsure.model.dto.Notice;
+import com.pretzero.fitsure.model.service.AdminService;
 import com.pretzero.fitsure.model.service.NoticeService;
 
 @RestController
@@ -19,6 +20,9 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
+	@Autowired
+	private AdminService adminService;
 	
 	// 공지 사항 등록
 	@PostMapping("/admin/notice/write")
@@ -57,6 +61,8 @@ public class NoticeController {
 	public ResponseEntity<Notice> morahazi(@PathVariable("notice_id") int noticeId) {
 		Notice notice = noticeService.readNotice(noticeId);
 		if (notice != null) {
+			String manager = adminService.getName(notice.getAdminId());
+			notice.setManager(manager);
 			return ResponseEntity.ok(notice);
 		} else {			
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -68,6 +74,8 @@ public class NoticeController {
 	public ResponseEntity<Notice> morahaji(@PathVariable("notice_id") int noticeId) {
 		Notice notice = noticeService.readNotice(noticeId);
 		if (notice != null) {
+			String manager = adminService.getName(notice.getAdminId());
+			notice.setManager(manager);
 			return ResponseEntity.ok(notice);
 		} else {			
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

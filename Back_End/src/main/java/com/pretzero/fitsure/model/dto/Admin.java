@@ -4,15 +4,17 @@ public class Admin {
     private int adminId;
     private String adminName;
     private String adminPassword;
+    private String manager;
     
     
 	public Admin() { super(); }
 	
-	public Admin(int adminId, String adminName, String adminPassword) {
+	public Admin(int adminId, String adminName, String adminPassword, String manager) {
 		super();
 		this.adminId = adminId;
 		this.adminName = adminName;
 		this.adminPassword = adminPassword;
+		this.manager = manager;
 	}
 	
 	public int getAdminId() {
@@ -32,6 +34,14 @@ public class Admin {
 	}
 	public void setAdminPassword(String adminPassword) {
 		this.adminPassword = adminPassword;
+	}
+
+	public String getManager() {
+		return manager;
+	}
+
+	public void setManager(String manager) {
+		this.manager = manager;
 	}
 
 }

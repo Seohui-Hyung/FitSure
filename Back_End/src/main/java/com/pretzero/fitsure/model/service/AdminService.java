@@ -6,4 +6,6 @@ public interface AdminService {
 	
 	// 로그인하기 
 	public Admin login(String adminName, String adminPassword);
+
+	public String getName(int adminId);
 }

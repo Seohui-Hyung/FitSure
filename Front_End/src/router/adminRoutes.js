@@ -1,10 +1,13 @@
-// 관리자 관련 라우트
 
 export default [
   {
-    path: '/admin',
-    name: 'ManageBoards',
-    component: () => import('@/views/Admin/ManageBoards.vue'),
-    meta: { requiresAuth: true, isAdmin: true },
-  },
-];
+    path: "/admin",
+    name: "AdminLoginForm",
+    component: () => import('@/components/forms/AdminLoginForm.vue')
+  },{
+    path: "/admin/home",
+    name: "AdminHome",
+    component: () => import('@/components/admin/UserList.vue')
+  }
+
+]
