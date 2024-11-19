@@ -20,6 +20,7 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public void finishPayment(int userId) {
 		paymentDao.finishPayment(userId);
+
 		
 	}
 

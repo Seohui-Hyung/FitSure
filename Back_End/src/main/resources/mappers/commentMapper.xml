@@ -20,7 +20,12 @@
 		    DELETE FROM comment 
 		    WHERE insurance_id = #{insuranceId} AND comment_id = #{commentId}
 		</delete>
-
+		
+		<select id="findUserId" parameterType="Comment" resultType="int">
+			SELECT user_id FROM comment
+			WHERE insurance_id = #{insuranceId} AND comment_id = #{commentId}
+		
+		</select>
   
   
   

@@ -75,12 +75,12 @@ public class PayController {
         // 카카오 결제 요청하기
         ApproveResponse approveResponse = kakaoPayService.payApprove(tid, pgToken);
         
-        
+
         int userId = (Integer) session.getAttribute("userId");
         paymentService.finishPayment(userId);
         
         session.removeAttribute("userId");
-        
+
         
         return new ResponseEntity<>(approveResponse, HttpStatus.OK);
     }
