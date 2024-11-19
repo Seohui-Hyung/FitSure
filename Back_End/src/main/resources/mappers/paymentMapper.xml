@@ -10,10 +10,10 @@
   		
   		</insert>
   
-  		<update id="donePayment" parameterType="int">
+  		<update id="finishPayment" parameterType="int">
   			UPDATE payment
   			SET payment_state = 1
-  			WHERE payment_id=#{paymentId}
+  			WHERE user_id = #{userId}
   		</update>
   
   
