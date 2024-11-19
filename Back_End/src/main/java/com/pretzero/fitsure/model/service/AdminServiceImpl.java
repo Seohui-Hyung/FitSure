@@ -25,4 +25,9 @@ public class AdminServiceImpl implements AdminService {
 		Admin tmp = adminDao.selectOne(info);
 		return tmp;
 	}
+
+	@Override
+	public String getName(int adminId) {
+		return adminDao.selectManager(adminId);
+	}
 }

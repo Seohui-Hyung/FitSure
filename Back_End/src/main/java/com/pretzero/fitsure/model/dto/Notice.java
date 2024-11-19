@@ -8,18 +8,20 @@ public class Notice {
     private int importance;
     private String content;
     private Date regDate;
+    private String manager;
     
     
 	public Notice() {	}
 
 
-	public Notice(int noticeId, int adminId, int importance, String content, Date regDate) {
+	public Notice(int noticeId, int adminId, int importance, String content, Date regDate, String manager) {
 		super();
 		this.noticeId = noticeId;
 		this.adminId = adminId;
 		this.importance = importance;
 		this.content = content;
 		this.regDate = regDate;
+		this.manager = manager;
 	}
 
 
@@ -70,6 +72,16 @@ public class Notice {
 
 	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
+	}
+
+
+	public String getManager() {
+		return manager;
+	}
+
+
+	public void setManager(String manager) {
+		this.manager = manager;
 	}
 
 	

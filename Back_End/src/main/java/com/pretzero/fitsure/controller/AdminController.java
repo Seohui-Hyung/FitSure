@@ -47,13 +47,18 @@ public class AdminController {
 	@Autowired
 	private CommentService commentService;
 
+	
 	// 로그인
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody Admin admin, HttpSession session) {
+	public ResponseEntity<?> login(@RequestBody Admin admin, HttpSession session) {
 		Admin loginAdmin = adminService.login(admin.getAdminName(), admin.getAdminPassword());
 		if (loginAdmin != null) {
 			session.setAttribute("admin", loginAdmin);
-			return new ResponseEntity<>("Login successful", HttpStatus.OK);
+			Map<String, String> response = new HashMap<>();
+	        response.put("message", "Login successful");
+	        response.put("name", loginAdmin.getAdminName());
+
+	        return ResponseEntity.ok(response);
 		} else {
 			return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
 		}

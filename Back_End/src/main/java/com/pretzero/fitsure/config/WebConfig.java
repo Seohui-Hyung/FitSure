@@ -17,7 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**") // 모든 엔드포인트에 대해 CORS를 허용합니다.
                 .allowedOrigins("http://localhost:5173") // Vue.js 애플리케이션의 주소
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드
-                .allowedHeaders("*"); // 모든 헤더 허용
+                .allowedHeaders("*") // 모든 헤더 허용
+                .allowCredentials(true);
     }
     
     
