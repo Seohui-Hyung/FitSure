@@ -12,4 +12,6 @@ public interface CommentService {
 
 	public boolean deleteComment(int insuranceId, int commentId);
 
+	public int findWriter(int insuranceId, int commentId);
+
 }

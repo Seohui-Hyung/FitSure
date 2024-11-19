@@ -1,22 +1,26 @@
 package com.pretzero.fitsure.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.pretzero.fitsure.model.service.MailService;
+import com.pretzero.fitsure.model.service.UserService;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class MailController {
 
-	private final MailService mailService;
+	@Autowired
+	private MailService mailService;
 	private int number;
 
-	// 생성자 주입
-	public MailController(MailService mailService) {
-		this.mailService = mailService;
-	}
+	@Autowired
+	private UserService userService;
 
 	// 인증 이메일 전송
 	@PostMapping("/mailSend")
@@ -44,4 +48,5 @@ public class MailController {
 		boolean isMatch = userNumber.equals(String.valueOf(number));
 		return ResponseEntity.ok(isMatch);
 	}
+	
 }
