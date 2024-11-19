@@ -19,9 +19,6 @@ public class MailController {
 	private MailService mailService;
 	private int number;
 
-	@Autowired
-	private UserService userService;
-
 	// 인증 이메일 전송
 	@PostMapping("/mailSend")
 	public HashMap<String, Object> mailSend(@RequestParam String mail) {

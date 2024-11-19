@@ -77,7 +77,7 @@ public class InsuranceController {
 	// 보험 결제의 경우 PayController로 별도 진행 
 	@PostMapping("/{insuranceId}/pay")
 	public String payInsurance(@PathVariable int insuranceId, @RequestParam(required = false) String couponCode, HttpServletRequest request){
-		String token = request.getHeader("access-token").substring(7); 
+		String token = request.getHeader("access-token"); 
 		int userId = JwtUtil.getuserId(token);
 		
 		if (userId < 0 || JwtUtil.isExpired(token)) {
@@ -124,7 +124,7 @@ public class InsuranceController {
 	// 보험 댓글 작성 
 	@PostMapping("/comment/{insuranceId}")
 	public ResponseEntity<?> commentInsurance(@PathVariable int insuranceId, @RequestBody Comment comment, HttpServletRequest request){
-		String token = request.getHeader("access-token").substring(7); 
+		String token = request.getHeader("access-token"); 
 		int userId = JwtUtil.getuserId(token);
 		
 		if (userId < 0 || JwtUtil.isExpired(token)) {
@@ -145,7 +145,7 @@ public class InsuranceController {
 	@DeleteMapping("/comment/{insuranceId}/{commentId}")
 	public ResponseEntity<?> deleteComment(@PathVariable int insuranceId, @PathVariable int commentId,
 			HttpServletRequest request) {
-		String token = request.getHeader("access-token").substring(7);
+		String token = request.getHeader("access-token");
 		int userId = JwtUtil.getuserId(token);
 
 		if (userId < 0 || JwtUtil.isExpired(token)) {

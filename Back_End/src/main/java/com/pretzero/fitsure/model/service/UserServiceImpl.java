@@ -16,9 +16,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	@Autowired
-	private MailService mailService;
-	
 	// 회원 로그인 
 	public User login(String userLoginId, String password) {
 		Map<String, String> info = new HashMap<>();

@@ -22,7 +22,6 @@ public class UserControllerToken {
     @Autowired
     private UserService userService;
 
-    private final String SECRET_KEY = "your-256-bit-secret"; // 암호화 키
     private final long EXPIRATION_TIME_MS = 86400000; // 토큰 만료 시간 (1일)
 
     @Autowired
@@ -55,7 +54,7 @@ public class UserControllerToken {
             // 응답 데이터 구성
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Login successful");
-            response.put("token", token);
+            response.put("access-token", token);
 
             return ResponseEntity.ok(response);
         } else {
@@ -79,7 +78,7 @@ public class UserControllerToken {
     // 마이 페이지 확인
     @GetMapping("/myPage")
     public ResponseEntity<?> getProfile(HttpServletRequest request) {
-    	 String token = request.getHeader("access-token").substring(7); 
+    	 String token = request.getHeader("access-token");
          String userLoginId = JwtUtil.getLoginId(token);
         
         if (userLoginId == null) {
@@ -123,7 +122,7 @@ public class UserControllerToken {
     // 비밀번호 확인 
     @PostMapping("/verifyPassword")
     public ResponseEntity<String> verifyPassword(HttpServletRequest request, @RequestBody User user) {
-        String token = request.getHeader("access-token").substring(7); 
+        String token = request.getHeader("access-token"); 
         String userLoginId = JwtUtil.getLoginId(token);
         
         // user 객체의 비밀번호를 비교
@@ -137,7 +136,7 @@ public class UserControllerToken {
     // 회원 탈퇴
     @PatchMapping("/delete")
     public ResponseEntity<String> deleteUser(HttpServletRequest request, @RequestBody User user) {
-        String token = request.getHeader("access-token").substring(7); 
+        String token = request.getHeader("access-token"); 
         String userLoginId = JwtUtil.getLoginId(token);
         
         if (userLoginId == null || !userService.getPassword(userLoginId).equals(user.getPassword())) {
@@ -152,7 +151,7 @@ public class UserControllerToken {
     
     @PatchMapping("/update")
     public ResponseEntity<String> updateUserInfo(HttpServletRequest request, @RequestBody User updatedUser) {
-        String token = request.getHeader("access-token").substring(7); 
+        String token = request.getHeader("access-token"); 
         String userLoginId = JwtUtil.getLoginId(token);
 
         if (userLoginId == null) {

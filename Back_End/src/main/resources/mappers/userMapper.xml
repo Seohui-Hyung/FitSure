@@ -11,7 +11,7 @@
 		</select>
   
   
-  		<select id="checkValidEmail" parameterType = "String" resultType="Int">
+  		<select id="checkValidEmail" parameterType = "String" resultType="int">
 			SELECT count(*)
 			FROM user 
 			WHERE email = #{email}
@@ -41,12 +41,6 @@
 			WHERE user_loginid=#{loginId}
 		</select>
 		
-		<select id="userLoginId" parameterType="String" resultType="int">
-			SELECT user_id as userId
-			FROM user 
-			WHERE user_loginid = #{userLoginId}
-		</select>
-		
 		<select id = "findUserId" parameterType="User" resultType="String">
 			SELECT user_loginid
 			FROM user
@@ -58,7 +52,7 @@
   			FROM user
   		</select>
   		
-  		<select id="userLoginId" resultType="User" parameterType="String">
+  		<select id="selectUser" resultType="User" parameterType="String">
   			SELECT *
   			FROM user
   			WHERE user_loginid = #{userLoginId}
@@ -66,11 +60,12 @@
   		
   		<update id="updateUser" parameterType="User">
   			UPDATE user
-  			SET password = #{password} 
-  				AND email = #{email}
-  				AND birth_date = #{birthDate}
+  			SET password = #{password}, 
+  				email = #{email},
+  				birth_date = #{birthDate}
   			WHERE user_id = #{userId}
   		</update>
+ 
   		
   		<update id="updatePassword" parameterType="User">
   			UPDATE user

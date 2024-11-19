@@ -2,14 +2,10 @@ package com.pretzero.fitsure.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,7 +76,7 @@ public class AdminController {
 	// 보험 등록
 	@PostMapping("/insurance/add")
 	public ResponseEntity<String> insuranceadd(@RequestBody InsurancePlan insurancePlan,
-			@RequestParam("file") MultipartFile file) {
+			@RequestParam MultipartFile file) {
 		try {
 
 			// 상세 페이지에서 보일 창은 이미지 대체하기 위한

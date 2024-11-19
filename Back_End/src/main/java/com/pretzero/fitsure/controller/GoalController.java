@@ -46,15 +46,11 @@ public class GoalController {
 	@Autowired
 	CouponService couponService;
 
-	private final String SECRET_KEY = "your-256-bit-secret"; // 암호화 키
-
-	@Autowired
-	private JwtUtil jwtUtil;
 
 	// 목표 생성
 	@PostMapping("/create")
-	public ResponseEntity<String> createGoal(HttpServletRequest request, @RequestBody Map<String, String> goalDetails) {
-		String token = request.getHeader("Authorization").substring(7); // "Bearer " 제거
+	public ResponseEntity<String> createGoal(HttpServletRequest request) {
+		String token = request.getHeader("Authorization"); // "Bearer " 제거
 		int userId = JwtUtil.getuserId(token);
 
 		// 토큰의 유효성을 검사하고 만료된 경우 Unauthorized 응답
@@ -75,7 +71,7 @@ public class GoalController {
 	@PostMapping("/done")
 	public ResponseEntity<String> completeGoal(HttpServletRequest request, @RequestParam("file") MultipartFile file,
 			@RequestParam("walking") int walking) throws IOException { // 추가된 걸음 수 파라미터
-		String token = request.getHeader("Authorization").substring(7);
+		String token = request.getHeader("Authorization");
 		int userId = JwtUtil.getuserId(token);
 
 		if (userId < 0 || JwtUtil.isExpired(token)) {
@@ -115,7 +111,7 @@ public class GoalController {
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<String> changeCoupon(HttpServletRequest request,
 			@RequestBody Map<String, String> goalDetails) {
-		String token = request.getHeader("Authorization").substring(7); // "Bearer " 제거
+		String token = request.getHeader("Authorization"); // "Bearer " 제거
 		int userId = JwtUtil.getuserId(token);
 
 		if (userId < 0 || JwtUtil.isExpired(token)) {
@@ -150,7 +146,7 @@ public class GoalController {
 
 	@PatchMapping("/cancel")
 	public ResponseEntity<String> cancelGoal(HttpServletRequest request) {
-		String token = request.getHeader("Authorization").substring(7);
+		String token = request.getHeader("Authorization");
 		int userId = JwtUtil.getuserId(token);
 
 		if (userId < 0 || JwtUtil.isExpired(token)) {
@@ -169,7 +165,7 @@ public class GoalController {
 
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> goalList(HttpServletRequest request) {
-		String token = request.getHeader("Authorization").substring(7);
+		String token = request.getHeader("Authorization");
 		int userId = JwtUtil.getuserId(token);
 
 		if (userId < 0 || JwtUtil.isExpired(token)) {
