@@ -35,3 +35,4 @@ application.properties
 
 # node_module
 Front_End/node_modules/
+Front_End_admin/node_modules/
