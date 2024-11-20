@@ -20,15 +20,25 @@
   		WHERE notice_id = #{noticeId}
   	</delete>
   
-  	<select id="selectNotice" parameterType="int">
+  	<select id="selectNotice" resultType="int">
   		SELECT *
   		FROM notice
   		WHERE notice_id = #{noticeId}
   	</select>
   	
-  	<select id="allNoticeList" parameterType="Notice">
+  	<select id="allNoticeList" resultType="Notice">
   		SELECT *
-  		FROM notice
+  		FROM notice 
+  		ORDER BY desc
+  	</select>
+  	
+  	<select id="searchNotice" parameterType="Condition" resultType="Notice">
+  		SELECT *
+  		FROM notice 
+  		ORDER BY desc
+  		<if test="key != null">
+			WHERE ${key} LIKE concat('%',${word},'%')
+		</if>
   	</select>
   
   </mapper>

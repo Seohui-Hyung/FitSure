@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.pretzero.fitsure.model.dao.NoticeDao;
 import com.pretzero.fitsure.model.dto.Notice;
+import com.pretzero.fitsure.model.dto.SearchCondition;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
@@ -43,6 +44,11 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public List<Notice> getNoticeList() {
 		return noticeDao.allNoticeList();
+	}
+
+	@Override
+	public List<Notice> search(SearchCondition condition) {
+		return noticeDao.searchNotice(condition);
 	}
 	
 	

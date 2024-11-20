@@ -3,6 +3,7 @@ package com.pretzero.fitsure.model.dao;
 import java.util.List;
 
 import com.pretzero.fitsure.model.dto.Notice;
+import com.pretzero.fitsure.model.dto.SearchCondition;
 
 public interface NoticeDao {
 
@@ -15,4 +16,6 @@ public interface NoticeDao {
 	Notice selectNotice(int noticeId);
 	
 	List<Notice> allNoticeList();
+
+	List<Notice> searchNotice(SearchCondition condition);
 }
