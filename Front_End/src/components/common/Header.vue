@@ -82,16 +82,36 @@ export default {
 </script>
   
 <style scoped>
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
+    format('woff');
+}
+
+body, html {
+  width: 100%; /* 전체 화면을 채우도록 설정 */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .header {
   background-color: #043873;
   color: white;
-  padding: 10px 20px;
+  padding: 20px 30px;
   position: relative;
+  font-family: 'GmarketSansMedium', Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  width: 100%;
+  height: auto; /* 헤더 높이를 내용에 맞게 자동 조정 */
+  max-width: none;
+  min-height: 80px; /* 최소 높이를 설정 */
 }
 
 .logo {
-  width: 100px;
-  height: 50px;
+  width: 150px;
+  height: 40px;
   background-image: url('@/assets/images/Fitsure_main.png');
   background-size: contain;
   background-repeat: no-repeat;
@@ -103,6 +123,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap; /* 줄바꿈을 허용 */
+  width: 100%;
+  gap: 20px;
 }
 
 .nav-menu {
@@ -145,29 +167,33 @@ export default {
   position: absolute;
   top: 100%;
   left: 0;
-  padding: 10px;
+  padding: 15px;
   border-radius: 4px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
+  width: 130px;
 }
 
 .dropdown ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .dropdown li {
-  margin: 5px 0;
-  font-size: 12px;
+  margin: 10px 0;
+  font-size: 10px;
 }
 
 .dropdown a {
   color: white;
   text-decoration: none;
-  font-size: 12px;
+  padding: 10px 20px;
+  display: block;
+  width: 100%;
 }
 
 .nav-item:hover .dropdown {
@@ -177,6 +203,33 @@ export default {
 }
 
 /* 반응형 스타일 */
+@media (min-width: 1024px) {
+  .header {
+    padding: 20px 40px; /* 큰 화면에서 패딩 증가 */
+    min-height: 120px; /* 헤더 최소 높이 증가 */
+    width: 100%;
+    max-width: none;
+  }
+
+  .logo {
+    width: 180px; /* 로고 크기 증가 */
+    height: 80px;
+  }
+
+  .nav-item a {
+    font-size: 16px; /* 텍스트 크기 증가 */
+  }
+
+  .nav-actions button {
+    padding: 20px 30px; /* 버튼 크기 증가 */
+    font-size: 16px; /* 텍스트 크기 증가 */
+  }
+
+  .dropdown {
+    width: 400px; /* 큰 화면에서 폭 증가 */
+  }
+}
+
 @media (max-width: 768px) {
   .nav {
     flex-direction: column; /* 세로 정렬로 변경 */
@@ -196,6 +249,7 @@ export default {
     position: static; /* 작은 화면에서 드롭다운 위치 고정 */
     transform: none;
     box-shadow: none;
+    width: 100%;
     opacity: 1;
     visibility: visible; /* 항상 보이도록 */
     background-color: rgba(4, 56, 115, 0.7); /* 약간 더 투명하게 */
@@ -215,7 +269,7 @@ export default {
   }
 
   .nav-actions button {
-    font-size: 14px; /* 버튼 크기 줄이기 */
+    font-size: 12px; /* 버튼 크기 줄이기 */
     padding: 8px 15px;
   }
 

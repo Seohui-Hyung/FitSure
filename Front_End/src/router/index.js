@@ -4,12 +4,13 @@ import authRoutes from './authRoutes';
 import adminRoutes from './adminRoutes';
 import userRoutes from './userRoutes';
 import axios from 'axios'; // 세션 확인용
+import Main from '@/views/Main.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/views/Main.vue'), // 경로 문제 확인
+    name: 'Main',
+    component: Main
   },
   ...authRoutes,
   ...adminRoutes,
