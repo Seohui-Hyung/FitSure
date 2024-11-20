@@ -1,22 +1,28 @@
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/">Home</RouterLink> |
-      <RouterLink v-if="!isAuthenticated" to="/login">로그인</RouterLink>
-      <button v-else="isAuthenticated" @click="logout">로그아웃</button> |
-      <RouterLink v-if="!isAuthenticated" to="/signup">회원가입</RouterLink> |
-      <RouterLink v-if="isAuthenticated" to="/profile">프로필</RouterLink>
-    </nav>
-  </header>
-  <RouterView />
+  <div class="app">
+    <Header />
+    <main class="main-content">
+      <RouterView />
+    </main>
+    <Footer />
+  </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { useRouter, RouterView, RouterLink } from 'vue-router'
+import Header from './components/common/Header.vue'
+import Footer from './components/common/Footer.vue'
 
 const router = useRouter()
 const isAuthenticated = computed(() => localStorage.getItem('auth') === 'true')
+
+// export default {
+//   components: {
+//     Header,
+//     Footer,
+//   }
+// }
 
 function logout() {
   localStorage.removeItem('auth')
@@ -24,3 +30,24 @@ function logout() {
   router.push({ name: 'home' })
 }
 </script>
+
+<style>
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 화면 전체 높이를 채우도록 설정 */
+}
+
+.main-content {
+  flex-grow: 1; /* 메인 콘텐츠가 남은 공간을 채움 */
+  padding: 20px;
+  background-color: #ffffff; /* 배경색 설정 */
+}
+
+footer {
+  background-color: #043873;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+}
+</style>

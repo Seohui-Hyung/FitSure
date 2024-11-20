@@ -1,1 +1,226 @@
 <!-- 모든 페이지에서 공통으로 사용되는 헤더 -->
+<template>
+    <header class="header">
+      <nav class="nav">
+        <RouterLink to="/" class="logo"></RouterLink>
+        
+        <!-- 보험 소개 메뉴 -->
+        <div class="nav-item" @mouseenter="toggleMenu('insurance')" @mouseleave="toggleMenu(null)">
+          <RouterLink to="#">보험 소개</RouterLink>
+          <transition name="fade">
+            <div v-show="activeMenu === 'insurance'" class="dropdown">
+              <ul>
+                <li><RouterLink to="/insurance-detail">여행자 보험</RouterLink></li>
+                <li><RouterLink to="/insurance-detail">건강 보험</RouterLink></li>
+                <li><RouterLink to="/insurance-detail">실손 보험</RouterLink></li>
+              </ul>
+            </div>
+          </transition>
+        </div>
+        
+        <!-- 이용 안내 메뉴 -->
+        <div class="nav-item" @mouseenter="toggleMenu('guide')" @mouseleave="toggleMenu(null)">
+          <RouterLink to="#">이용 안내</RouterLink>
+          <transition name="fade">
+            <div v-show="activeMenu === 'guide'" class="dropdown">
+              <ul>
+                <li><RouterLink to="/board">공지사항</RouterLink></li>
+                <li><RouterLink to="/live-support">실시간 상담 연결</RouterLink></li>
+                <li><RouterLink to="/challenge">24주 챌린지</RouterLink></li>
+              </ul>
+            </div>
+          </transition>
+        </div>
+        
+        <!-- 마이 페이지 메뉴 -->
+        <div class="nav-item" @mouseenter="toggleMenu('mypage')" @mouseleave="toggleMenu(null)">
+          <RouterLink to="#">마이 페이지</RouterLink>
+          <transition name="fade">
+            <div v-show="activeMenu === 'mypage'" class="dropdown">
+              <ul>
+                <li><RouterLink to="/mypage">회원 정보</RouterLink></li>
+              </ul>
+            </div>
+          </transition>
+        </div>
+  
+        <!-- 로그인/회원가입 버튼 -->
+        <div class="nav-actions">
+          <button @click="handleLogin">로그인/회원가입</button>
+        </div>
+      </nav>
+    </header>
+  </template>
+  
+
+<script>
+import { ref } from 'vue';
+import { RouterView, RouterLink } from 'vue-router';
+
+export default {
+  components: { RouterView, RouterLink },
+  setup() {
+    const activeMenu = ref(null);
+    const isAuthenticated = ref(false);
+
+    const toggleMenu = (menu) => {
+      activeMenu.value = menu;
+    };
+
+    return {
+      activeMenu,
+      isAuthenticated,
+      toggleMenu,
+    };
+  },
+  methods: {
+    handleLogin() {
+      console.log("Login clicked");
+    },
+  },
+};
+</script>
+  
+<style scoped>
+.header {
+  background-color: #043873;
+  color: white;
+  padding: 10px 20px;
+  position: relative;
+}
+
+.logo {
+  width: 100px;
+  height: 50px;
+  background-image: url('@/assets/images/Fitsure_main.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* 줄바꿈을 허용 */
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-item a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+}
+
+.nav-actions button {
+  background-color: #FFE492; /* 버튼 배경색 */
+  color: #043873; /* 버튼 텍스트 색상 */
+  border: none;
+  padding: 10px 20px;
+  font-size: 12px;
+  font-weight: bolder;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-actions button:hover {
+  background-color: #ffda70; /* 호버 시 색상 */
+}
+
+.dropdown {
+  background-color: rgba(4, 56, 115, 0.4);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dropdown li {
+  margin: 5px 0;
+  font-size: 12px;
+}
+
+.dropdown a {
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.nav-item:hover .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column; /* 세로 정렬로 변경 */
+    align-items: flex-start;
+  }
+
+  .nav-menu {
+    flex-direction: column; /* 메뉴를 세로로 나열 */
+    gap: 10px; /* 간격 조정 */
+  }
+
+  .nav-actions {
+    margin-top: 10px; /* 로그인 버튼 아래로 정렬 */
+  }
+
+  .dropdown {
+    position: static; /* 작은 화면에서 드롭다운 위치 고정 */
+    transform: none;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible; /* 항상 보이도록 */
+    background-color: rgba(4, 56, 115, 0.7); /* 약간 더 투명하게 */
+  }
+
+  .dropdown ul {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 80px; /* 로고 크기 조정 */
+    height: 40px;
+  }
+
+  .nav-actions button {
+    font-size: 14px; /* 버튼 크기 줄이기 */
+    padding: 8px 15px;
+  }
+
+  .nav-item a {
+    padding: 8px 12px; /* 메뉴 간격 줄이기 */
+  }
+}
+</style>
