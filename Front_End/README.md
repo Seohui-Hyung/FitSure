@@ -27,3 +27,8 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+```sh
+npm install bootstrap bootstrap-vue-3 bootstrap-icons
+```
