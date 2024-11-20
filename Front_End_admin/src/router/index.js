@@ -1,52 +1,31 @@
 // router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import authRoutes from './authRoutes';
-import adminRoutes from './adminRoutes';
-import userRoutes from './userRoutes';
 import axios from 'axios'; // 세션 확인용
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: () => import('@/views/Main.vue'), // 경로 문제 확인
-  },
-  ...authRoutes,
-  ...adminRoutes,
-  ...userRoutes,
-];
-
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/admin/login',
+      name: 'adminLogin',
+      component: () => import('@/views/Auth/AdminLogin.vue'),
+    },
+    {
+      path: '/admin',
+      name: 'MainAdmin',
+      component: () => import('@/views/AdminMain.vue'),
+      children: [
+        {
+          path: "",
+          name: "UserList",
+          component: () => import('@/components/user/UserList.vue')
+        }
+      ]
+    }
+  ]
 
-// 세션 및 토큰 기반 인증 확인
-router.beforeEach(async (to, from, next) => {
-  const userToken = localStorage.getItem('access-token'); // 사용자 토큰
-  const isAdminSessionValid = await checkAdminSession(); // 관리자 세션 확인
+})
 
-  if (to.meta.requiresAuth && !userToken) {
-    // 사용자가 인증이 필요한 페이지에 접근하려는 경우
-    alert('로그인이 필요합니다.');
-    next({ name: 'UserLogin' });
-  } else if (to.meta.isAdmin && !isAdminSessionValid) {
-    // 관리자가 인증이 필요한 페이지에 접근하려는 경우
-    alert('관리자 권한이 필요합니다.');
-    next({ name: 'AdminLogin' });
-  } else {
-    next();
-  }
-});
 
-// 관리자 세션 확인 함수
-async function checkAdminSession() {
-  try {
-    const response = await axios.get('/api/admin/session-check'); // 서버의 세션 확인 API
-    return response.status === 200; // 세션이 유효하면 true
-  } catch (error) {
-    return false; // 세션이 유효하지 않으면 false
-  }
-}
 
 export default router;

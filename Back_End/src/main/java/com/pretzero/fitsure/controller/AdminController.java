@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.pretzero.fitsure.model.dto.Admin;
 import com.pretzero.fitsure.model.dto.Comment;
 import com.pretzero.fitsure.model.dto.InsurancePlan;
+import com.pretzero.fitsure.model.dto.SearchCondition;
 import com.pretzero.fitsure.model.dto.User;
 import com.pretzero.fitsure.model.service.AdminService;
 import com.pretzero.fitsure.model.service.CommentService;
 import com.pretzero.fitsure.model.service.InsurancePlanService;
 import com.pretzero.fitsure.model.service.UserService;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -77,6 +81,27 @@ public class AdminController {
 		return new ResponseEntity<>(userList, HttpStatus.OK);
 	}
 	
+	@GetMapping("/users/search")
+	public ResponseEntity<?> search(@ModelAttribute SearchCondition condition, Model model) {
+		
+		if(condition.getKey().equals("gender")) {
+			if (condition.getWord().equals("남성")) {
+				condition.setWord("M");
+			} else {
+				condition.setWord("Y");
+			}
+		} else if (condition.getKey().equals("available")) {
+			if (condition.getWord().equals("탈퇴 회원")) {
+				condition.setWord("0");
+			} else {
+				condition.setWord("1");
+			}
+		}
+
+		List<User> userList = userService.search(condition);
+		System.out.println();
+		return new ResponseEntity<>(userList, HttpStatus.OK);
+	}
 
 	// 보험 등록
 	@PostMapping("/insurance/add")

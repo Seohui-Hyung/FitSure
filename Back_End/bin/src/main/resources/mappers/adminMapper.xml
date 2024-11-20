@@ -7,5 +7,11 @@
         FROM admin 
         WHERE admin_name = #{adminName} AND admin_password = #{adminPassword}
     </select>
+    
+    <select id="selectManager" parameterType="int" resultType="String">
+    	SELECT manager
+    	FROM admin
+    	WHERE admin_id = #{adminId}
+    </select>
   
 </mapper>

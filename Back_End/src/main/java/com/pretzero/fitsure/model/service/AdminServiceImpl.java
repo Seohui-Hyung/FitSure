@@ -17,12 +17,11 @@ public class AdminServiceImpl implements AdminService {
 	
 	// 로그인하기
 	public Admin login(String adminName, String adminPassword) {
-		Map<String, String> info = new HashMap<>();
+		Admin admin = new Admin();
+		admin.setAdminName(adminName);
+		admin.setAdminPassword(adminPassword);
 
-		info.put("adminName", adminName);
-		info.put("password", adminPassword);
-
-		Admin tmp = adminDao.selectOne(info);
+		Admin tmp = adminDao.selectOne(admin);
 		return tmp;
 	}
 

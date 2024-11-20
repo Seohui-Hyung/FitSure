@@ -3,6 +3,7 @@ package com.pretzero.fitsure.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.pretzero.fitsure.model.dto.SearchCondition;
 import com.pretzero.fitsure.model.dto.User;
 
 public interface UserDao {
@@ -30,5 +31,7 @@ public interface UserDao {
 	public int updateUser(User user);
 
 	public int updatePassword(User user);
+
+	public List<User> searchUser(SearchCondition condition);
 
 }

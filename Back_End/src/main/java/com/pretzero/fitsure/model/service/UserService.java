@@ -2,6 +2,7 @@ package com.pretzero.fitsure.model.service;
 
 import java.util.List;
 
+import com.pretzero.fitsure.model.dto.SearchCondition;
 import com.pretzero.fitsure.model.dto.User;
 
 public interface UserService {
@@ -35,6 +36,8 @@ public interface UserService {
 	public boolean updateUserInfo(User existingUser);
 
 	public boolean updatePassword(String userLogionId, int newPassword);
+
+	public List<User> search(SearchCondition condition);
 	
 	
 }

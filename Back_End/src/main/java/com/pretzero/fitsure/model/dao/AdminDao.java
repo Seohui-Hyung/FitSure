@@ -6,7 +6,7 @@ import com.pretzero.fitsure.model.dto.Admin;
 
 public interface AdminDao {
 	
-	public Admin selectOne(Map<String, String> info);
+	public Admin selectOne(Admin admin);
 
 	public String selectManager(int adminId);
 }

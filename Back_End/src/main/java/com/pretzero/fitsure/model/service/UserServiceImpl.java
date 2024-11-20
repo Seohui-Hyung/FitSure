@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pretzero.fitsure.model.dao.UserDao;
+import com.pretzero.fitsure.model.dto.SearchCondition;
 import com.pretzero.fitsure.model.dto.User;
 
 @Service
@@ -108,6 +109,12 @@ public class UserServiceImpl implements UserService {
 		String newp = newPassword+"";
 		user.setPassword(newp);
 		return userDao.updatePassword(user) > 0 ? true : false;
+	}
+
+	@Override
+	public List<User> search(SearchCondition condition) {
+		
+		return userDao.searchUser(condition);
 	}
 
 	
