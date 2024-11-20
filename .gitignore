@@ -33,6 +33,23 @@ replay_pid*
 # application 
 application.properties
 
-# node_module
-Front_End/node_modules/
-Front_End_admin/node_modules/
+# Vue 3 Front-end
+Front_End/node_modules/           # Node.js 패키지 폴더
+Front_End/.env                    # 환경 변수 파일
+Front_End/.env.*                  # 환경 변수 파일 (여러 환경 지원)
+Front_End/dist                    # 빌드 결과 폴더
+Front_End/public/favicon.ico      # 기본 파비콘 (필요에 따라 추가)
+Front_End/vite.config.js          # Vite 관련 빌드 설정 파일
+Front_End/vue.config.js           # Vue CLI 빌드 설정 파일 (Vue CLI 사용 시)
+Front_End/package-lock.json       # npm 종속성 고정 파일 (선택적)
+
+# Vue 3 Front-end Admin
+Front_End_admin/node_modules/     # Node.js 패키지 폴더
+Front_End_admin/.env              # 환경 변수 파일
+Front_End_admin/.env.*            # 환경 변수 파일 (여러 환경 지원)
+Front_End_admin/dist              # 빌드 결과 폴더
+Front_End_admin/public/favicon.ico # 기본 파비콘 (필요에 따라 추가)
+Front_End_admin/vite.config.js    # Vite 관련 빌드 설정 파일
+Front_End_admin/vue.config.js     # Vue CLI 빌드 설정 파일 (Vue CLI 사용 시)
+Front_End_admin/package-lock.json # npm 종속성 고정 파일 (선택적)
+
