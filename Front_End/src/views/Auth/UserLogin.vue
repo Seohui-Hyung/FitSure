@@ -14,7 +14,7 @@
         </div>
       </form>
       <div class="login-footer">
-        <RouterLink to="/find-id" class="link">아이디 / 비밀번호 찾기</RouterLink>
+        <RouterLink to="/findIdPw" class="link">아이디 / 비밀번호 찾기</RouterLink>
         <pre>     |     </pre>
         <RouterLink to="/signup" class="link">회원가입</RouterLink>
       </div>

@@ -1,6 +1,6 @@
 // 인증 관련 라우트 (로그인, 회원가입 등)
 import UserLogin from '@/views/Auth/UserLogin.vue';
-import FindId from '@/views/Auth/FindId.vue';
+import Find_IDPW from '@/views/Auth/Find_IDPW.vue';
 
 export default [
   {
@@ -19,13 +19,8 @@ export default [
     component: () => import('@/views/Auth/Signup.vue'),
   },
   {
-    path: '/reset',
-    name: 'PasswordReset',
-    component: () => import('@/views/Auth/PasswordReset.vue'),
+    path: '/findIdPw',
+    name: 'Find_IDPW',
+    component: Find_IDPW,
   },
-  {
-    path: '/find-id',
-    name: 'FindId',
-    component: FindId,
-  }
 ];
