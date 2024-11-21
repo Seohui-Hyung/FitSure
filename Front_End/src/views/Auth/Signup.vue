@@ -37,6 +37,21 @@
           <p v-if="!isEmailValid && email.length > 0" class="error-message">유효한 이메일 주소를 입력해주세요.</p>
         </div>
       </div>
+      <div v-if="isVerificationSent" class="form-group-row">
+        <label for="verificationCode">인증번호</label>
+        <div class="input-container verification-container">
+          <input
+            id="verificationCode"
+            v-model="verificationCode"
+            type="text"
+            placeholder="인증번호 입력"
+            required
+          />
+          <button type="button" class="email-verify-button" @click="verifyCode">제출</button>
+          <p v-if="verificationError" class="error-message">잘못된 인증번호입니다.</p>
+          <p v-if="isVerified" class="success-message">인증이 완료되었습니다!</p>
+        </div>
+      </div>
       <div class="form-group-row">
         <label for="dob">생년월일</label>
         <input id="dob" v-model="dob" type="date" placeholder="생년월일" required />
@@ -49,7 +64,7 @@
         </select>
       </div>
       <div class="button-group">
-        <button type="submit" class="btn-primary" :disabled="!passwordsMatch">확인</button>
+        <button type="submit" class="btn-primary" :disabled="!passwordsMatch || !isVerified">확인</button>
         <button type="button" class="btn-secondary" @click="confirmCancel">취소</button>
       </div>
     </form>
@@ -68,9 +83,13 @@ const confirmPassword = ref("");
 const email = ref("");
 const dob = ref("");
 const gender = ref("");
+const verificationCode = ref("");
 const errorMessage = ref("");
 const successMessage = ref("");
+const verificationError = ref(false);
 const isEmailValid = ref(false);
+const isVerificationSent = ref(false);
+const isVerified = ref(false);
 const router = useRouter();
 
 // 비밀번호가 일치하는지 확인하는 computed 속성
@@ -81,9 +100,32 @@ function validateEmail() {
   isEmailValid.value = emailPattern.test(email.value);
 }
 
+function sendVerificationEmail() {
+  alert("이메일 인증 링크가 전송되었습니다.");
+  isVerificationSent.value = true; // 인증번호 입력 필드 표시
+}
+
+function verifyCode() {
+  if (verificationCode.value === "123456") {
+    // 인증번호가 올바른 경우 (임시값 "123456")
+    isVerified.value = true;
+    verificationError.value = false;
+    alert("인증이 완료되었습니다!");
+  } else {
+    // 인증번호가 잘못된 경우
+    verificationError.value = true;
+  }
+}
+
 function signup() {
   if (!passwordsMatch.value) {
     errorMessage.value = "비밀번호가 일치하지 않습니다.";
+    successMessage.value = "";
+    return;
+  }
+
+  if (!isVerified.value) {
+    errorMessage.value = "이메일 인증을 완료해주세요.";
     successMessage.value = "";
     return;
   }
@@ -115,10 +157,6 @@ function confirmCancel() {
   if (confirmCancel) {
     router.push({ name: "Main" });
   }
-}
-
-function sendVerificationEmail() {
-  alert("이메일 인증 링크가 전송되었습니다.");
 }
 </script>
 
@@ -182,15 +220,16 @@ function sendVerificationEmail() {
 }
 
 /* 이메일 input-container를 상대 위치로 설정 */
-.email-container {
+.email-container,
+.verification-container {
   position: relative;
 }
 
-/* 이메일 인증 버튼을 이메일 input 오른쪽 위로 겹치게 설정 */
+/* 인증번호 제출 버튼과 이메일 인증 버튼 공통 */
 .email-verify-button {
   position: absolute;
-  top: 8px; /* 버튼을 위로 조금 올림 */
-  right: 5px; /* 오른쪽으로 밀착 */
+  top: 8px;
+  right: 5px;
   background-color: #043873;
   color: white;
   border: none;
@@ -198,7 +237,7 @@ function sendVerificationEmail() {
   padding: 5px 10px;
   font-size: 12px;
   cursor: pointer;
-  z-index: 1; /* 버튼이 input 위에 표시되도록 */
+  z-index: 1;
 }
 
 .email-verify-button:hover {
@@ -214,12 +253,11 @@ function sendVerificationEmail() {
   color: red;
   font-size: 12px;
   margin-top: 5px;
-  margin-left: 5px;
 }
 
 .success-message {
   color: green;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
   margin-top: 10px;
 }
