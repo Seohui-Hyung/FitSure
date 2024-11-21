@@ -5,23 +5,25 @@ import java.util.Date;
 public class Notice {
     private int noticeId;
     private int adminId;
-    private int importance;
+    private String title;
     private String content;
     private Date regDate;
+    private int viewCnt;
     private String manager;
     
     
 	public Notice() {	}
 
 
-	public Notice(int noticeId, int adminId, int importance, String content, Date regDate, String manager) {
+	public Notice(int noticeId, int adminId, String title, String content, Date regDate, String manager, int viewCnt) {
 		super();
 		this.noticeId = noticeId;
 		this.adminId = adminId;
-		this.importance = importance;
+		this.title = title;
 		this.content = content;
 		this.regDate = regDate;
 		this.manager = manager;
+		this.viewCnt = viewCnt;
 	}
 
 
@@ -45,13 +47,13 @@ public class Notice {
 	}
 
 
-	public int getImportance() {
-		return importance;
+	public String getTitle() {
+		return title;
 	}
 
 
-	public void setImportance(int importance) {
-		this.importance = importance;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 
@@ -82,6 +84,16 @@ public class Notice {
 
 	public void setManager(String manager) {
 		this.manager = manager;
+	}
+
+
+	public int getViewCnt() {
+		return viewCnt;
+	}
+
+
+	public void setViewCnt(int viewCnt) {
+		this.viewCnt = viewCnt;
 	}
 
 	

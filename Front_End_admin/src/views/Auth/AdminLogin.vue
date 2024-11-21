@@ -2,7 +2,7 @@
     <div class="blurred-box">
       <div class="user-login-box">
         <span class="user-icon"></span>
-        <div class="user-name">관리자 로그인 사이트 입니다.</div>
+        <div class="user-name">관리자 로그인 페이지 입니다.</div>
         <input
           class="user-password"
           type="text"

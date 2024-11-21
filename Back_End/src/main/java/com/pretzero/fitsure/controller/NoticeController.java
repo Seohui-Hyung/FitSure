@@ -34,6 +34,7 @@ public class NoticeController {
 	@PostMapping("/admin/notice/write")
 	public ResponseEntity<String> noticeWrite(@RequestBody Notice notice) {
 		try {
+			System.out.println("Received someField: " + notice);
 			noticeService.writenotice(notice);
 			return ResponseEntity.ok("공지사항이 등록되었습니다.");
 		} catch (Exception e) {
@@ -62,7 +63,22 @@ public class NoticeController {
 		}
 	}
 	
-	// 공지 사항 조회 (관리자)
+	// 공지사항 목록 조회 (관리자) 
+	@GetMapping("/admin/notice")
+	public ResponseEntity<?> getAdminList(){
+		List<Notice> noticeList = noticeService.getNoticeList();
+		return new ResponseEntity<>(noticeList, HttpStatus.OK);
+	}
+	
+	// 공지사항 목록 조회 (사용자) 
+	@GetMapping("/notice")
+	public ResponseEntity<?> getAdminListU(){
+		List<Notice> noticeList = noticeService.getNoticeList();
+		return new ResponseEntity<>(noticeList, HttpStatus.OK);
+	}
+	
+	
+	// 공지 사항 상세 조회 (관리자)
 	@GetMapping("/admin/notice/{notice_id}")
 	public ResponseEntity<Notice> morahazi(@PathVariable("notice_id") int noticeId) {
 		Notice notice = noticeService.readNotice(noticeId);
@@ -75,10 +91,10 @@ public class NoticeController {
 		}
 	}
 	
-	// 공지 사항 조회 (고객)
+	// 공지 사항 상세 조회 (고객)
 	@GetMapping("/notice/{notice_id}")
 	public ResponseEntity<Notice> morahaji(@PathVariable("notice_id") int noticeId) {
-		Notice notice = noticeService.readNotice(noticeId);
+		Notice notice = noticeService.userReadNotice(noticeId);
 		if (notice != null) {
 			String manager = adminService.getName(notice.getAdminId());
 			notice.setManager(manager);
@@ -88,8 +104,20 @@ public class NoticeController {
 		}
 	}
 	
-	@GetMapping("/admin/notice/{notice_id}")
+	
+	
+	
+	
+	@GetMapping("/admin/notice/search")
 	public ResponseEntity<?> searchAdmin(@ModelAttribute SearchCondition condition, Model model) {
+
+		List<Notice> noticeList = noticeService.search(condition);
+		System.out.println();
+		return new ResponseEntity<>(noticeList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/notice/search")
+	public ResponseEntity<?> searchUser(@ModelAttribute SearchCondition condition, Model model) {
 
 		List<Notice> noticeList = noticeService.search(condition);
 		System.out.println();

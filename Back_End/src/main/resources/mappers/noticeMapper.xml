@@ -5,8 +5,8 @@
   <mapper namespace="com.pretzero.fitsure.model.dao.NoticeDao">
   
   	<insert id="registNotice" parameterType="Notice">
-  		INSERT INTO notice (admin_id, importance, content, reg_date)
-  		VALUES (#{adminId}, #{importance}, #{content}, #{reg_date})
+  		INSERT INTO notice (admin_id, title, content, reg_date)
+  		VALUES (#{adminId}, #{title}, #{content}, NOW())
   	</insert>
   
   	<update id="changeNotice" >
@@ -29,16 +29,22 @@
   	<select id="allNoticeList" resultType="Notice">
   		SELECT *
   		FROM notice 
-  		ORDER BY desc
+  		ORDER BY reg_date desc
   	</select>
   	
-  	<select id="searchNotice" parameterType="Condition" resultType="Notice">
+  	<select id="searchNotice" parameterType="SearchCondition" resultType="Notice">
   		SELECT *
   		FROM notice 
   		ORDER BY desc
   		<if test="key != null">
-			WHERE ${key} LIKE concat('%',${word},'%')
+			WHERE #{key} LIKE concat('%',#{word},'%')
 		</if>
   	</select>
+  	
+  	<update id="updateViewCnt" parameterType="int">
+		UPDATE board
+		SET view_cnt = view_cnt+1
+		WHERE notice_id = #{noticeId}
+	</update>
   
   </mapper>

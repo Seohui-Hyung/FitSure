@@ -40,6 +40,12 @@ public class NoticeServiceImpl implements NoticeService {
 	public Notice readNotice(int noticeId) {
 		return noticeDao.selectNotice(noticeId);
 	}
+	
+	@Override
+	public Notice userReadNotice(int noticeId) {
+		noticeDao.updateViewCnt(noticeId);
+		return noticeDao.selectNotice(noticeId);
+	}
 
 	@Override
 	public List<Notice> getNoticeList() {

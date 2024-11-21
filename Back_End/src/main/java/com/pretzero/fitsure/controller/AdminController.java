@@ -32,7 +32,6 @@ import com.pretzero.fitsure.model.service.CommentService;
 import com.pretzero.fitsure.model.service.InsurancePlanService;
 import com.pretzero.fitsure.model.service.UserService;
 
-
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -41,7 +40,7 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -51,18 +50,16 @@ public class AdminController {
 	@Autowired
 	private CommentService commentService;
 
-	
 	// 로그인
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody Admin admin, HttpSession session) {
 		Admin loginAdmin = adminService.login(admin.getAdminName(), admin.getAdminPassword());
 		if (loginAdmin != null) {
 			session.setAttribute("admin", loginAdmin);
-			Map<String, String> response = new HashMap<>();
-	        response.put("message", "Login successful");
-	        response.put("name", loginAdmin.getAdminName());
+			Map<String, Integer> response = new HashMap<>();
+			response.put("name", loginAdmin.getAdminId());
 
-	        return ResponseEntity.ok(response);
+			return ResponseEntity.ok(response);
 		} else {
 			return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
 		}
@@ -70,28 +67,28 @@ public class AdminController {
 
 	@PostMapping("/logout")
 	public ResponseEntity<String> logout(HttpSession session) {
+		System.out.println("testdone");
 		session.invalidate();
 		return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
 	}
-	
-	
+
 	@GetMapping("/users")
-	public ResponseEntity<?> getUserList(){
+	public ResponseEntity<?> getUserList() {
 		List<User> userList = userService.getUserList();
 		return new ResponseEntity<>(userList, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/users/search")
 	public ResponseEntity<?> search(@ModelAttribute SearchCondition condition, Model model) {
-		
-		if(condition.getKey().equals("gender")) {
+
+		if (condition.getKey().equals("gender")) {
 			if (condition.getWord().equals("남성")) {
 				condition.setWord("M");
 			} else {
 				condition.setWord("Y");
 			}
 		} else if (condition.getKey().equals("available")) {
-			if (condition.getWord().equals("탈퇴 회원")) {
+			if (condition.getWord().equals("X")) {
 				condition.setWord("0");
 			} else {
 				condition.setWord("1");
@@ -127,6 +124,14 @@ public class AdminController {
 		if (insurancePlanService.disableInsurance(insuranceId))
 			return ResponseEntity.status(HttpStatus.OK).body("insurance operation successfully terminated");
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Request application failed.");
+	}
+
+	// 보험 목록 보기
+	@GetMapping("/insurance")
+	public ResponseEntity<?> insuranceList() {
+		List<InsurancePlan> list = insurancePlanService.getInsuranceList();
+		return new ResponseEntity<>(list, HttpStatus.OK);
+
 	}
 
 	// 보험 상세 보기
@@ -171,22 +176,6 @@ public class AdminController {
 				.body("Comment not found or does not belong to the insurance");
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	// 파일 저장 메서드
 	private String saveFile(MultipartFile file) throws IOException {
 		String filePath = "src/main/resources/static/img/" + file.getOriginalFilename(); // 예: 서버 경로에 파일 저장

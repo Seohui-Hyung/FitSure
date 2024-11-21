@@ -16,6 +16,8 @@ public interface NoticeService {
 	
 	Notice readNotice(int noticeId);
 	
+	Notice userReadNotice(int noticeId);
+	
 	List<Notice> getNoticeList();
 
 	List<Notice> search(SearchCondition condition);

@@ -1,35 +1,31 @@
 <template>
-    <div class="user-list-page">
+    <div class="insurance-list-page">
         <!-- 제목 -->
-        <h3 class="page-title">USER LIST</h3>
+        <h3 class="page-title">INSURANCE LIST</h3>
         <hr />
 
         <!-- 검색 바 컴포넌트 -->
-        <UserSearchInput />
+        <InsuranceSearchInput />
 
         <!-- 테이블 -->
-        <table class="user-table">
+        <table class="insurance-table">
             <thead>
                 <tr>
-                    <th>아이디</th>
-                    <th>이름</th>
-                    <th>이메일</th>
-                    <th>생일</th>
-                    <th>성별</th>
-                    <th>가입 여부</th>
+                    <th>보험 번호</th>
+                    <th>보험 종류</th>
+                    <th>보험 가격</th>
+                    <th>보험 운영 여부</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="store.userList.length === 0">
-                    <td colspan="6" class="no-data">검색 결과가 없습니다.</td>
+                <tr v-if="store.insuranceList.length === 0">
+                    <td colspan="4" class="no-data">검색 결과가 없습니다.</td>
                 </tr>
-                <tr v-for="user in paginatedUsers" :key="user.userLoginId">
-                    <td>{{ user.userLoginId }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ formatDate(user.birthDate) }}</td>
-                    <td>{{ user.gender === 'M' ? '남성' : '여성' }}</td>
-                    <td>{{ user.available === 1 ? 'O' : 'X' }}</td>
+                <tr v-for="insurance in paginatedinsurance" :key="insurance.insuranceId">
+                    <td>{{ insurance.insuranceId }}</td>
+                    <td>{{ insurance.insuranceType }}</td>
+                    <td>{{ insurance.premium }}</td>
+                    <td>{{ insurance.validity === 1 ? 'O' : 'X' }}</td>
                 </tr>
             </tbody>
         </table>
@@ -64,24 +60,25 @@
 <script setup>
 import { useAdminStore } from "@/store/useAdminStore";
 import { computed, onMounted, ref } from "vue";
-import UserSearchInput from "./userSearchInput.vue";
+import InsuranceSearchInput from "./InsuranceSearchInput.vue";
 
 // 스토어 초기화
 const store = useAdminStore();
+
 onMounted(() => {
-    store.getUserList();
+    store.getInsuranceList();
 });
 
 const currentPage = ref(1); 
 const itemsPerPage = 8; 
 
-const paginatedUsers = computed(() => {
+const paginatedinsurance = computed(() => {
     const startIndex = (currentPage.value - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return store.userList.slice(startIndex, endIndex);
+    return store.insuranceList.slice(startIndex, endIndex);
 });
 
-const totalPages = computed(() => Math.ceil(store.userList.length / itemsPerPage));
+const totalPages = computed(() => Math.ceil(store.insuranceList.length / itemsPerPage));
 
 const changePage = (page) => {
     if (page > 0 && page <= totalPages.value) {
@@ -96,7 +93,7 @@ function formatDate(dateString) {
 
 
 <style scoped>
-.user-list-page {
+.notice-list-page {
     padding: 20px;
     background-color: #fcfcfc;
     border-radius: 8px;
@@ -108,7 +105,7 @@ function formatDate(dateString) {
     color: #000000;
 }
 
-.user-table {
+.insurance-table {
     width: 100%;
     border-collapse: collapse;
     background-color: #ffffff;
@@ -117,29 +114,29 @@ function formatDate(dateString) {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.user-table thead {
+.insurance-table thead {
     text-align: center;
     background-color: #043873;
     color: #ffffff;
 }
 
-.user-table th {
+.insurance-table th {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
-.user-table td {
+.insurance-table td {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
-.user-table tr:last-child td {
+.insurance-table tr:last-child td {
     border-bottom: none;
 }
 
-.user-table .no-data {
+.insurance-table .no-data {
     text-align: center;
     font-style: italic;
     color: #999;

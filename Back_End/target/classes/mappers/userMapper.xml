@@ -78,7 +78,7 @@
 		    FROM user
 		    <where>
 		        <choose>
-		            <when test="key == 'name'">
+		            <when test="key == 'username'">
 		                username LIKE concat('%', #{word}, '%')
 		            </when>
 		            <when test="key == 'email'">
@@ -86,6 +86,9 @@
 		            </when>
 		            <when test="key == 'gender'">
 		                gender LIKE concat('%', #{word}, '%')
+		            </when>
+		            <when test="key == 'available'">
+		                available LIKE concat('%', #{word}, '%')
 		            </when>
 		        </choose>
 		    </where>

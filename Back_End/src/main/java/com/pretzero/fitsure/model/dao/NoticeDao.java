@@ -18,4 +18,6 @@ public interface NoticeDao {
 	List<Notice> allNoticeList();
 
 	List<Notice> searchNotice(SearchCondition condition);
+	
+	void updateViewCnt(int noticeId);
 }
