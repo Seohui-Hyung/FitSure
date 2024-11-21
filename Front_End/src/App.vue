@@ -13,6 +13,7 @@ import { computed } from 'vue'
 import { useRouter, RouterView, RouterLink } from 'vue-router'
 import Header from './components/common/Header.vue'
 import Footer from './components/common/Footer.vue'
+// import Main from './views/Main.vue'
 
 const router = useRouter()
 const isAuthenticated = computed(() => localStorage.getItem('auth') === 'true')
@@ -49,5 +50,17 @@ footer {
   color: white;
   text-align: center;
   padding: 20px 0;
+}
+
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'GmarketSansMedium', Arial, Helvetica, sans-serif;
 }
 </style>

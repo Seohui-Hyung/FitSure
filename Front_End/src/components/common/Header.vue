@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     handleLogin() {
+      this.$router.push('/login');
       console.log("Login clicked");
     },
   },
@@ -98,7 +99,7 @@ body, html {
 .header {
   background-color: #043873;
   color: white;
-  padding: 20px 30px;
+  padding: 10px 20px;
   position: relative;
   font-family: 'GmarketSansMedium', Arial, Helvetica, sans-serif;
   font-weight: normal;
@@ -106,7 +107,7 @@ body, html {
   width: 100%;
   height: auto; /* 헤더 높이를 내용에 맞게 자동 조정 */
   max-width: none;
-  min-height: 80px; /* 최소 높이를 설정 */
+  min-height: 60px; /* 최소 높이를 설정 */
 }
 
 .logo {
@@ -163,11 +164,12 @@ body, html {
 }
 
 .dropdown {
-  background-color: rgba(4, 56, 115, 0.4);
+  background-color: rgba(4, 56, 115, 0.5);
   position: absolute;
   top: 100%;
   left: 0;
   padding: 15px;
+  z-index: 1000;
   border-radius: 4px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   opacity: 0;
@@ -191,6 +193,7 @@ body, html {
 .dropdown a {
   color: white;
   text-decoration: none;
+  font-size: 14px;
   padding: 10px 20px;
   display: block;
   width: 100%;
@@ -205,15 +208,15 @@ body, html {
 /* 반응형 스타일 */
 @media (min-width: 1024px) {
   .header {
-    padding: 20px 40px; /* 큰 화면에서 패딩 증가 */
-    min-height: 120px; /* 헤더 최소 높이 증가 */
+    padding: 15px 30px; /* 큰 화면에서 패딩 증가 */
+    min-height: 80px; /* 헤더 최소 높이 증가 */
     width: 100%;
     max-width: none;
   }
 
   .logo {
     width: 180px; /* 로고 크기 증가 */
-    height: 80px;
+    height: 40px;
   }
 
   .nav-item a {
@@ -226,7 +229,11 @@ body, html {
   }
 
   .dropdown {
-    width: 400px; /* 큰 화면에서 폭 증가 */
+    width: 180px; /* 큰 화면에서 폭 증가 */
+  }
+
+  .dropdown a {
+    font-size: 12px;
   }
 }
 

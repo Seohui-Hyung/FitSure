@@ -22,6 +22,7 @@
   .footer-content {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 10px;
   }
   
@@ -30,6 +31,12 @@
     display: flex;
     justify-content: center;
     gap: 15px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-links li {
+    margin: 0;
   }
   
   .footer-links a {

@@ -24,6 +24,10 @@ const router = createRouter({
 
 // 세션 및 토큰 기반 인증 확인
 router.beforeEach(async (to, from, next) => {
+  console.log('Navigating to:', to.name);
+  console.log('Requires Auth:', to.meta.requiresAuth);
+  console.log('User Token:', localStorage.getItem('access-token'));
+  
   const userToken = localStorage.getItem('access-token'); // 사용자 토큰
   const isAdminSessionValid = await checkAdminSession(); // 관리자 세션 확인
 
