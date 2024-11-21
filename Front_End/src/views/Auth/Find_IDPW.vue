@@ -1,5 +1,8 @@
 <template>
     <div class="find-container">
+      <div class="header">
+        <h2>아이디 / 비밀번호 찾기</h2>
+      </div>
       <div class="tabs">
         <!-- 탭 버튼 -->
         <button 
@@ -18,35 +21,29 @@
   
       <!-- 아이디 찾기 -->
       <div v-if="activeTab === 'findId'" class="tab-content">
-        <h2>아이디 찾기</h2>
         <form @submit.prevent="findId">
-          <label for="name">이름</label>
-          <input id="name" v-model="name" type="text" placeholder="이름 입력" required />
+          <input id="name" v-model="name" type="text" placeholder="이름을 입력해주세요" required />
+          <input id="dob" v-model="dob" type="text" placeholder="생년월일 8자리 입력해주세요" required />
+          <input id="email" v-model="email" type="email" placeholder="이메일을 입력해주세요" required />
   
-          <label for="dob">생년월일</label>
-          <input id="dob" v-model="dob" type="date" placeholder="생년월일 입력" required />
-  
-          <label for="email">이메일</label>
-          <input id="email" v-model="email" type="email" placeholder="이메일 입력" required />
-  
-          <button type="submit">아이디 찾기</button>
+          <div class="buttons">
+            <button type="submit">아이디 찾기</button>
+            <button type="button" @click="cancel">취소</button>
+          </div>
         </form>
       </div>
   
       <!-- 비밀번호 찾기 -->
       <div v-if="activeTab === 'findPassword'" class="tab-content">
-        <h2>비밀번호 찾기</h2>
         <form @submit.prevent="findPassword">
-          <label for="username">아이디</label>
-          <input id="username" v-model="username" type="text" placeholder="아이디 입력" required />
+          <input id="username" v-model="username" type="text" placeholder="아이디를 입력해주세요" required />
+          <input id="dob-password" v-model="dob" type="text" placeholder="생년월일 8자리 입력해주세요" required />
+          <input id="email-password" v-model="email" type="email" placeholder="이메일을 입력해주세요" required />
   
-          <label for="dob">생년월일</label>
-          <input id="dob-password" v-model="dob" type="date" placeholder="생년월일 입력" required />
-  
-          <label for="email-password">이메일</label>
-          <input id="email-password" v-model="email" type="email" placeholder="이메일 입력" required />
-  
-          <button type="submit">비밀번호 찾기</button>
+          <div class="buttons">
+            <button type="submit">비밀번호 찾기</button>
+            <button type="button" @click="cancel">취소</button>
+          </div>
         </form>
       </div>
     </div>
@@ -54,7 +51,9 @@
   
   <script setup>
   import { ref } from "vue";
+  import { useRouter } from "vue-router";
   
+  const router = useRouter();
   const activeTab = ref("findId"); // 현재 활성화된 탭 ("findId" 또는 "findPassword")
   const name = ref("");
   const dob = ref("");
@@ -68,6 +67,12 @@
   function findPassword() {
     alert(`비밀번호 찾기 진행: 아이디(${username.value}), 생년월일(${dob.value}), 이메일(${email.value})`);
   }
+
+  function cancel() {
+    if (confirm("취소하시겠습니까?")) {
+      router.push("/login");
+    }
+  }
   </script>
   
   <style scoped>
@@ -75,6 +80,17 @@
     text-align: center;
   }
   
+  /* 상단 제목 스타일 */
+  .header {
+    background-color: #043873;
+    color: white;
+    padding: 80px 0;
+  }
+
+  .header h2 {
+    margin-bottom: 0px;
+  }
+
   .tabs {
     display: flex;
     justify-content: center;
@@ -82,8 +98,8 @@
   }
   
   button {
+    flex: 1;
     padding: 10px 20px;
-    margin: 0 10px;
     background-color: #ccc;
     border: none;
     cursor: pointer;
@@ -100,6 +116,7 @@
   }
   
   form {
+    margin-top: 100px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -112,18 +129,42 @@
     width: 300px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    text-align: center;
   }
-  
-  button[type="submit"] {
-    padding: 10px 20px;
-    background-color: #043873;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-  </style>  
+
+  input::placeholder {
+  text-align: center; /* placeholder 가운데 정렬 */
+  color: #999;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #043873;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="button"] {
+  padding: 10px 20px;
+  background-color: #999;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+button[type="button"]:hover {
+  background-color: #ccc;
+}
+</style>  

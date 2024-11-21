@@ -174,7 +174,11 @@ function confirmCancel() {
   color: white;
   width: 100%;
   text-align: center;
-  padding: 20px 0;
+  padding: 80px 0;
+}
+
+.signup-header h2 {
+  margin-bottom: 0px;
 }
 
 .signup-form {
@@ -183,7 +187,8 @@ function confirmCancel() {
   width: 100%;
   max-width: 800px;
   gap: 15px;
-  padding: 30px;
+  padding: 60px;
+  margin-top: 30px;
 }
 
 .form-group-row {
