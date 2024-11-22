@@ -69,6 +69,19 @@ export const useAdminStore = defineStore('admin', () => {
     });
   }
 
+  const noticeDetail = (noticeId) => {
+    return axios
+        .get(`${REST_API_URL}/notice/${noticeId}`)
+        .then((res) => {
+          notice.value = res.data
+          return notice.value
+        }) // 반드시 데이터를 반환
+        .catch((error) => {
+            console.error("API 호출 중 오류 발생:", error);
+            throw error;
+        });
+  };
+
   const searchNoticeList = function (searchCondition){
     axios.get(`${REST_API_URL}/notice/search`, {
       params: searchCondition
@@ -103,6 +116,15 @@ export const useAdminStore = defineStore('admin', () => {
       });
   };
 
+  const deleteNotice = function(noticeId){
+    console.log("delete notice")
+    axios.delete(`${REST_API_URL}/notice/remove/${noticeId}`)
+    .then((res)=>{
+      console.log("공지 삭제 성공:", res.data);
+      getNoticeList();
+    })
+  }
+
 
   // 보험 조회 관련 
   const insuranceList = ref([]);
@@ -115,9 +137,74 @@ export const useAdminStore = defineStore('admin', () => {
     });
   }
 
+  const detailInsurance = function(insuranceId){
+    return axios.get(`${REST_API_URL}/insurance/${insuranceId}`)
+    .then((res)=>{
+      insurance.value = res.data.insurancePlan
+      console.log(res.data.insurancePlan)
+      return insurance.value
+    });
+  }
+
+  const insertInsurance = function (insuranceData, file) {
+    const formData = new FormData();
+    formData.append("insurancePlan", new Blob([JSON.stringify(insuranceData)], { type: "application/json" }));
+    formData.append("file", file);
+    
+    axios.post(`${REST_API_URL}/insurance/add`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    })
+    .then((res) => {
+        console.log("보험 등록 성공:", res.data);
+        alert("보험 등록이 성공적으로 완료되었습니다.");
+        router.push({ name: "InsuranceList" });
+    })
+    .catch((err) => {
+        console.error("보험 등록 실패:", err.response.data);
+        alert("보험 등록에 실패했습니다.");
+    });
+  };
+
+
+
+  const deleteInsurance = function(insuranceId){
+    console.log("delete")
+    axios.delete(`${REST_API_URL}/insurance/delete/${insuranceId}`)
+    .then((res)=>{
+      console.log("보험 제외 성공:", res.data);
+      getInsuranceList();
+    })
+  }
+  
+
+  const updateInsurance = function (insuranceId, insuranceData, file) {
+    const formData = new FormData();
+    formData.append("insurancePlan", new Blob([JSON.stringify(insuranceData)], { type: "application/json" }));
+    if (file) {
+        formData.append("file", file);
+    }
+
+    axios.put(`${REST_API_URL}/insurance/${insuranceId}`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    })
+    .then((res) => {
+        console.log("보험 수정 성공:", res.data);
+        alert("보험 수정이 성공적으로 완료되었습니다.");
+        router.push({ name: "InsuranceList" });
+    })
+    .catch((err) => {
+        console.error("보험 수정 실패:", err.response.data);
+        alert("보험 수정에 실패했습니다.");
+    });
+  };
+
 
 
   return { admin, adminLogin, userList, getUserList, searchUserList, adminLogout,
-            noticeList, notice, getNoticeList, searchNoticeList, insertNotice,
-            insuranceList, insurance, getInsuranceList }
+            noticeList, notice, getNoticeList, searchNoticeList, insertNotice, deleteNotice, noticeDetail,
+            insuranceList, insurance, getInsuranceList, insertInsurance, deleteInsurance, updateInsurance, detailInsurance }
 })

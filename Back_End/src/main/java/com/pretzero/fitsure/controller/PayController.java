@@ -47,7 +47,7 @@ public class PayController {
         int userId = payment.getUserId();
         session.setAttribute("userId", userId);
         int insurance = payment.getInsuranceId();
-        String insurancename = insurancePlanService.readInsurance(insurance).getInsuranceType();
+        String insurancename = insurancePlanService.readInsurance(insurance).getInsuranceName();
         System.out.println(insurancename);
         int totalPrice = (int) payment.getAmount();
 

@@ -20,7 +20,7 @@
   		WHERE notice_id = #{noticeId}
   	</delete>
   
-  	<select id="selectNotice" resultType="int">
+  	<select id="selectNotice" parameterType="int" resultType="Notice">
   		SELECT *
   		FROM notice
   		WHERE notice_id = #{noticeId}
@@ -29,7 +29,7 @@
   	<select id="allNoticeList" resultType="Notice">
   		SELECT *
   		FROM notice 
-  		ORDER BY reg_date desc
+  		ORDER BY notice_id desc 
   	</select>
   	
   	<select id="searchNotice" parameterType="SearchCondition" resultType="Notice">

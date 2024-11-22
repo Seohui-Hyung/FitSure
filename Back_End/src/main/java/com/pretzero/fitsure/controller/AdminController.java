@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pretzero.fitsure.model.dto.Admin;
@@ -102,21 +104,21 @@ public class AdminController {
 
 	// 보험 등록
 	@PostMapping("/insurance/add")
-	public ResponseEntity<String> insuranceadd(@RequestBody InsurancePlan insurancePlan,
-			@RequestParam MultipartFile file) {
-		try {
-
-			// 상세 페이지에서 보일 창은 이미지 대체하기 위한
-			String insuranceDetail = saveFile(file);
-			insurancePlan.setDetail(insuranceDetail);
-
-			insurancePlanService.addinsurance(insurancePlan);
-			return new ResponseEntity<>("Insurance registration was successful", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<String>("등록에 실패했습니다: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
+	public ResponseEntity<String> insuranceadd(
+			@RequestPart("insurancePlan") InsurancePlan insurancePlan,
+	        @RequestParam(value = "file", required = false) MultipartFile file) {
+	    try {
+	        String insuranceDetail = saveFile(file);
+	        insurancePlan.setDetail(insuranceDetail);
+	        System.out.println(insurancePlan.getInsuranceName());
+	        
+	        insurancePlanService.addinsurance(insurancePlan);
+	        return new ResponseEntity<>("Insurance registration was successful", HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>("등록에 실패했습니다: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	}
+
 
 	// 보험 삭제
 	@DeleteMapping("/insurance/delete/{insuranceId}")
@@ -156,16 +158,30 @@ public class AdminController {
 
 	}
 
-	// 보험 수정 (JSON 형태로 보낸다)
-	@PutMapping("/insurance")
-	public ResponseEntity<String> modifyInsurance(@RequestBody InsurancePlan insurancePlan) {
+	@PutMapping("/insurance/{insuranceId}")
+	public ResponseEntity<String> modifyInsurance(
+	    @PathVariable("insuranceId") int insuranceId,
+	    @RequestPart("insurancePlan") InsurancePlan insurancePlan,
+	    @RequestPart(value = "file", required = false) MultipartFile file) {
 
-		if (insurancePlanService.modifyInsurance(insurancePlan)) {
-			return ResponseEntity.ok("Insurance updated successfully");
-		}
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update insurance");
+	    try {
+	        // 파일 저장 처리
+	        if (file != null) {
+	            String insuranceDetail = saveFile(file);
+	            insurancePlan.setDetail(insuranceDetail);
+	        }
+
+	        // 보험 수정 처리
+	        insurancePlanService.modifyInsurance(insurancePlan);
+	        return new ResponseEntity<>("Insurance modification was successful", HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>("수정에 실패했습니다: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	}
 
+
+
+	
 	// 보험 댓글 삭제
 	@DeleteMapping("/insurance/{insuranceId}/comments/{commentId}")
 	public ResponseEntity<String> adminDeleteComment(@PathVariable int insuranceId, @PathVariable int commentId) {
@@ -176,12 +192,18 @@ public class AdminController {
 				.body("Comment not found or does not belong to the insurance");
 	}
 
-	// 파일 저장 메서드
 	private String saveFile(MultipartFile file) throws IOException {
-		String filePath = "src/main/resources/static/img/" + file.getOriginalFilename(); // 예: 서버 경로에 파일 저장
-		File destination = new File(filePath);
-		file.transferTo(destination);
-		return filePath; // 저장된 파일 경로 반환
+	    String uploadDir = "C:/upload/img"; // 외부 디렉터리
+	    File dir = new File(uploadDir);
+	    if (!dir.exists()) {
+	        dir.mkdirs(); // 디렉터리가 없으면 생성
+	    }
+
+	    String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+	    File destination = new File(dir, uniqueFileName);
+	    file.transferTo(destination);
+
+	    return destination.getAbsolutePath(); // 저장된 파일의 절대 경로 반환
 	}
 
 }

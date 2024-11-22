@@ -30,8 +30,7 @@ public class InsurancePlanServiceImpl implements InsurancePlanService {
 
 	@Override
 	public InsurancePlan readInsurance(int insuranceId) {
-		InsurancePlan insurancePlan = new InsurancePlan();
-		return insurancePlan = insurancePlanDao.selectInsurance(insuranceId);
+		return insurancePlanDao.selectInsurance(insuranceId);
 	}
 	
 	@Override
@@ -46,6 +45,7 @@ public class InsurancePlanServiceImpl implements InsurancePlanService {
 	public List<InsurancePlan> getInsuranceList() {
 		return insurancePlanDao.allInsuranceList();
 	}
+
 
 	
 

@@ -16,4 +16,6 @@ public interface InsurancePlanDao {
 
 	List<InsurancePlan> allInsuranceList();
 
+	int updateInsurance(InsurancePlan insurancePlan);
+
 }

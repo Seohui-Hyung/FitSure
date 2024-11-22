@@ -54,8 +54,9 @@ public class NoticeController {
 	}
 	
 	// 공지 사항 삭제
-	@DeleteMapping("/admin/notice/{notice_id}/remove")
+	@DeleteMapping("/admin/notice/remove/{notice_id}")
 	public ResponseEntity<String> noticeRemove(@PathVariable("notice_id") int noticeId) {
+		System.out.println("삭제 debug");
 		if (noticeService.removeNotice(noticeId)) {
 			return ResponseEntity.ok("삭제되었습니다.");
 		} else {
@@ -85,6 +86,7 @@ public class NoticeController {
 		if (notice != null) {
 			String manager = adminService.getName(notice.getAdminId());
 			notice.setManager(manager);
+			System.out.println(notice);
 			return ResponseEntity.ok(notice);
 		} else {			
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

@@ -5,8 +5,8 @@
   <mapper namespace="com.pretzero.fitsure.model.dao.InsurancePlanDao">
   
 	  <insert id="registInsurance" parameterType="InsurancePlan">
-	  		INSERT INTO insurance_plans (insurance_type, premium, detail, validate)
-	  		VALUES (#{insuranceType}, #{premium}, #{detail}, #{validate})
+	  		INSERT INTO insurance_plans (insurance_type, insurance_name, premium, detail, validity)
+	  		VALUES (#{insuranceType}, #{insuranceName}, #{premium}, #{detail}, #{validity})
 	  </insert>
 	  
 	  <update id="stopInsurance" parameterType="int">
@@ -17,7 +17,7 @@
 	  
 	  <update id="changeInsurance">
 	  		UPDATE insurance_plans
-			SET insurance_type = #{insuranceType}, premium = #{premium}, detail = #{detail}
+			SET insurance_type = #{insuranceType},  insurance_name = #{insuranceName}, premium = #{premium}, detail = #{detail}, validity = #{validity}
 			WHERE insurance_id = #{insuranceId}
 	  </update>
 	  
