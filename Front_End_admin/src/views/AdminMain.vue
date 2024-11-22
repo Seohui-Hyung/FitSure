@@ -1,18 +1,26 @@
 <template>
     <div class="main-layout">
-        <div class="sidebar">
-            <Sidebar />
-        </div>
-        <div class="content">
-            <RouterView />
+        <!-- Header -->
+        <Header />
+
+        <div class="body-layout">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <Sidebar />
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <RouterView />
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import Sidebar from '@/components/common/Sidebar.vue'
+import Sidebar from '@/components/common/Sidebar.vue';
+import Header from '@/components/common/HeaderBar.vue';
 </script>
-
 
 <style scoped>
 @font-face {
@@ -29,23 +37,25 @@ body {
 
 .main-layout {
     display: flex;
+    flex-direction: column; /* 상단 헤더와 콘텐츠를 수직으로 배치 */
     height: 100vh;
     width: 100vw;
 }
 
+.body-layout {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 60px); /* 헤더 높이를 제외한 나머지 */
+    overflow: hidden;
+}
+
 .sidebar {
     width: 250px;
-    height: 100vh;
+    height: 100%;
     background-color: #f8f9fa;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     padding: 20px;
-    color: #000;
-    display: block; /* 요소를 보이게 설정 */
-    visibility: visible;
-    opacity: 1;
-    font-weight: small;
-    font-style: small;
 }
 
 .content {
