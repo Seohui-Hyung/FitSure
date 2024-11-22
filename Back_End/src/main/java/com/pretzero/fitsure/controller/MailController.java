@@ -20,24 +20,25 @@ public class MailController {
 	private int number;
 
 	// 인증 이메일 전송
-	@PostMapping("/mailSend")
-	public HashMap<String, Object> mailSend(@RequestParam String mail) {
-		HashMap<String, Object> map = new HashMap<>();
-		System.out.println("done");
+    @PostMapping("/mailSend")
+    public HashMap<String, Object> mailSend(@RequestBody Map<String, String> payload) {
+        HashMap<String, Object> map = new HashMap<>();
+        System.out.println("done");
 
-		try {
-			number = mailService.sendMail(mail);
-			String num = String.valueOf(number);
+        try {
+            String mail = payload.get("mail"); // JSON에서 'mail' 값 추출
+            number = mailService.sendMail(mail);
+            String num = String.valueOf(number);
 
-			map.put("success", true);
-			map.put("number", num);
-		} catch (Exception e) {
-			map.put("success", false);
-			map.put("error", e.getMessage());
-		}
+            map.put("success", true);
+            map.put("number", num);
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("error", e.getMessage());
+        }
 
-		return map;
-	}
+        return map;
+    }
 
 	// 인증번호 일치여부 확인
 	@GetMapping("/mailCheck")

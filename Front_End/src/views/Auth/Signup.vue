@@ -74,7 +74,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import { useUserStore } from "@/store/useUserStore";
 
 const name = ref("");
 const username = ref("");
@@ -90,7 +90,7 @@ const verificationError = ref(false);
 const isEmailValid = ref(false);
 const isVerificationSent = ref(false);
 const isVerified = ref(false);
-const router = useRouter();
+const userStore = useUserStore();
 
 // 비밀번호가 일치하는지 확인하는 computed 속성
 const passwordsMatch = computed(() => password.value === confirmPassword.value);
@@ -100,22 +100,43 @@ function validateEmail() {
   isEmailValid.value = emailPattern.test(email.value);
 }
 
-function sendVerificationEmail() {
-  alert("이메일 인증 링크가 전송되었습니다.");
-  isVerificationSent.value = true; // 인증번호 입력 필드 표시
-}
+async function sendVerificationEmail() {
+  if (!isEmailValid.value) {
+    alert("유효한 이메일을 입력해주세요.");
+    return;
+  }
 
-function verifyCode() {
-  if (verificationCode.value === "123456") {
-    // 인증번호가 올바른 경우 (임시값 "123456")
-    isVerified.value = true;
-    verificationError.value = false;
-    alert("인증이 완료되었습니다!");
-  } else {
-    // 인증번호가 잘못된 경우
-    verificationError.value = true;
+  try {
+    await userStore.sendVerificationCode(email.value); // email.value를 매개변수로 전달
+    isVerificationSent.value = true; // 인증번호 입력 필드 표시
+    if (userStore.verificationError) {
+      alert("서버 오류: " + userStore.verificationError); // 오류 메시지 표시
+    } else {
+      alert("이메일 인증 링크가 전송되었습니다.");
+    }
+  } catch (error) {
+    console.error("인증 요청 중 오류 발생:", error);
+    alert("인증 요청 실패");
   }
 }
+
+
+async function verifyCode() {
+  try {
+    await userStore.verifyCode(verificationCode.value);
+    isVerified.value = userStore.isVerified;
+    verificationError.value = userStore.verificationError;
+    if (isVerified.value) {
+      alert("인증이 완료되었습니다!");
+    } else {
+      alert(verificationError.value || "인증 실패");
+    }
+  } catch (error) {
+    console.error("인증 번호 확인 중 오류 발생:", error);
+    alert("인증 실패");
+  }
+}
+
 
 function signup() {
   if (!passwordsMatch.value) {
