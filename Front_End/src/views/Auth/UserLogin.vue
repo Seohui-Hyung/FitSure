@@ -1,48 +1,63 @@
 <template>
-  <div class="login-container">
-    <div class="login-box">
-      <div class="login-header">
-        <img src="@/assets/images/Fitsure_login_Blue.png" alt="Fitsure Logo" class="logo" />
-      </div>
-      <form @submit.prevent="login" class="login-form">
-        <div class="input-group">
-          <div class="input-container">
-            <input id="username" v-model="username" type="text" placeholder="아이디" class="input-box" required />
-            <input id="password" v-model="password" type="password" placeholder="비밀번호" class="input-box" required />
-          </div>
-          <button type="submit" class="login-button">Login</button>
+    <div class="login-container">
+      <div class="login-box">
+        <div class="login-header">
+          <img src="@/assets/images/Fitsure_login_Blue.png" alt="Fitsure Logo" class="logo" />
         </div>
-      </form>
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      <div class="login-footer">
-        <RouterLink to="/findIdPw" class="link">아이디 / 비밀번호 찾기</RouterLink>
-        <pre>     |     </pre>
-        <RouterLink to="/signup" class="link">회원가입</RouterLink>
+        <form @submit.prevent="handleLogin" class="login-form">
+          <div class="input-group">
+            <div class="input-container">
+              <input
+                id="username"
+                v-model="username"
+                type="text"
+                placeholder="아이디"
+                class="input-box"
+                required
+              />
+              <input
+                id="password"
+                v-model="password"
+                type="password"
+                placeholder="비밀번호"
+                class="input-box"
+                required
+              />
+            </div>
+            <button type="submit" class="login-button">Login</button>
+          </div>
+        </form>
+        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+        <div class="login-footer">
+          <RouterLink to="/findIdPw" class="link">아이디 / 비밀번호 찾기</RouterLink>
+          <pre>     |     </pre>
+          <RouterLink to="/signup" class="link">회원가입</RouterLink>
+        </div>
       </div>
     </div>
-  </div>
-</template>
+  </template>
   
-<script setup>
-import { useRouter } from 'vue-router'
-import { ref } from 'vue';
-
-const router = useRouter()
-const username = ref('')
-const password = ref('')
-const errorMessage = ref('')
-
-function login() {
-  // 간단한 인증 시뮬레이션
-  if (username.value === 'zee' && password.value === '123') {
-    localStorage.setItem('auth', 'true') // 인증 상태 저장
-    alert('로그인 성공!')
-    router.push({ name: 'Main' }) // 프로필 화면으로 이동
-  } else {
-    errorMessage.value = '아이디 또는 비밀번호가 잘못되었습니다.'
+  <script setup>
+  import { ref, computed } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useUserStore } from '@/store/useUserStore';
+  
+  const router = useRouter();
+  const store = useUserStore();
+  
+  const username = ref('');
+  const password = ref('');
+  
+  const errorMessage = computed(() => store.errorMessage);
+  
+  async function handleLogin() {
+    const success = await store.login(username.value, password.value);
+    if (success) {
+      alert('로그인 성공!');
+      router.push({ name: 'Main' });
+    }
   }
-}
-</script>
+  </script>
 
 <style scoped>
 /* 전체 컨테이너 */

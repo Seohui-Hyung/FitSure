@@ -12,7 +12,7 @@
   const router = useRouter()
   
   function logout() {
-    localStorage.removeItem('auth') // 인증 상태 제거
+    localStorage.removeItem('access-token') // 인증 상태 제거
     router.push({ name: 'login' }) // 로그인 화면으로 리다이렉트
   }
   </script>

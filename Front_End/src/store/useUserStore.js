@@ -1,64 +1,65 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import axios from 'axios';
-// import router from '@/router'
+import router from '@/router'
 
-// const REST_API_URL = "http://localhost:8080"; // API 서버 주소
+const REST_API_URL = "http://localhost:8080"; // API 서버 주소
 
 export const useUserStore = defineStore('user', () => {
-  // // 로그인 관련 상태
-  // const isAuthenticated = ref(false); // 로그인 여부
-  // const loggedInUser = ref(""); // 로그인된 사용자 이름
-  // const authToken = ref(""); // JWT 토큰
-  
-  // //상태
-  // const username = ref("");
-  // const email = ref("");
-  // const userLoginId = ref("");
-  // const foundId = ref(null);
-  // const foundPassword = ref(null);
-  // const searchAttempted = ref(false);
+  // 로그인 관련 상태
+  const isAuthenticated = ref(false); // 로그인 여부
+  const loggedInUser = ref(""); // 로그인된 사용자 이름
+  const authToken = ref(""); // JWT 토큰
+
+  //상태
+  const username = ref("");
+  const email = ref("");
+  const userLoginId = ref("");
+  const foundId = ref(null);
+  const foundPassword = ref(null);
+  const searchAttempted = ref(false);
 
   // 인증 관련 상태
   const verificationCode = ref(""); // 서버에서 받은 인증번호
   const verificationError = ref(""); // 인증 오류 메시지
   const isVerified = ref(false); // 인증 성공 여부
 
-  // // 로그인 관련 로직
-  // async function login(username, password) {
-  //   try {
-  //     const response = await axios.post(`${API_URL}/auth/login`, {
-  //       username,
-  //       password,
-  //     });
-
-  //     // JWT 토큰 저장
-  //     const token = response.data.token;
-  //     authToken.value = token;
-  //     localStorage.setItem("authToken", token);
-
-  //     // 사용자 정보 업데이트
-  //     loggedInUser.value = response.data.username; // 서버가 반환하는 사용자 이름
-  //     isAuthenticated.value = true;
-
-  //     return true;
-  //   } catch (error) {
-  //     console.error("로그인 실패:", error);
-  //     return false;
-  //   }
-  // }
+  // 로그인 관련 로직
+  async function login(userLoginId, password) {
+    try {
+      const response = await axios.post(`${REST_API_URL}/user/token/login`, {
+        userLoginId,
+        password,
+      });
+  
+      // JWT 토큰 저장
+      const token = response.data["access-token"];
+      authToken.value = token;
+  
+      // 세션에 토큰 저장
+      sessionStorage.setItem("access-token", token);
+      
+      // 사용자 정보 업데이트
+      isAuthenticated.value = true;
+  
+      return true;
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      return false;
+    }
+  }
 
   // // 로그아웃 메서드
   // function logout() {
   //   isAuthenticated.value = false;
   //   loggedInUser.value = "";
   //   authToken.value = "";
-  //   localStorage.removeItem("authToken");
+  //   localStorage.removeItem("access-token");
   // }
 
   // // 토큰 검증 (페이지 새로고침 시 로그인 상태 유지)
   // function checkAuth() {
-  //   const token = localStorage.getItem("authToken");
+  //   const token = localStorage.getItem("access-token");
   //   if (token) {
   //     authToken.value = token;
   //     isAuthenticated.value = true;
@@ -175,10 +176,10 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     // // 로그인 토큰
-    // isAuthenticated,
-    // loggedInUser,
-    // authToken,
-    // login,
+    isAuthenticated,
+    loggedInUser,
+    authToken,
+    login,
     // logout,
     // checkAuth,
     // // 상태
