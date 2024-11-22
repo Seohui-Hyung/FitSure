@@ -9,11 +9,6 @@ export default [
     component: UserLogin,
   },
   {
-    path: '/admin-login',
-    name: 'AdminLogin',
-    component: () => import('@/views/Auth/AdminLogin.vue'),
-  },
-  {
     path: '/signup',
     name: 'Signup',
     component: () => import('@/views/Auth/Signup.vue'),

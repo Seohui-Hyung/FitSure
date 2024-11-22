@@ -15,6 +15,31 @@
         </div>
       </div>
 
+      <!-- 로그인 폼 또는 로그인 후 상태
+      <div class="login-status">
+        <div v-if="isAuthenticated" class="logged-in">
+          <p class="welcome-message">
+            <span>{{ loggedInUser }}</span>님, <br />
+            일일 목표 {{ stepsGoal }} 걸음
+          </p>
+          <div class="circle-container">
+            <div v-for="n in 5" :key="n" :class="['circle', { active: n === currentStep }]">
+              {{ n }}
+            </div>
+          </div>
+          <button class="action-button">현재 3주째 달성 중 🎉</button>
+        </div>
+
+        <div v-else class="login-box">
+          <p class="login-prompt">안녕하세요<br />로그인 해주세요</p>
+          <form @submit.prevent="handleLogin" class="login-form">
+            <input id="username" v-model="username" type="text" placeholder="아이디" class="input-box" required />
+            <input id="password" v-model="password" type="password" placeholder="비밀번호" class="input-box" required />
+            <button type="submit" class="login-button">Login</button>
+          </form>
+        </div>
+      </div> -->
+
       <!-- 로그인 폼 -->
       <div class="login-form">
         <h2>안녕하세요<br>로그인 해주세요</h2>
@@ -119,6 +144,8 @@
 </template>
 
 <script>
+// import { ref } from "vue";
+// import { useUserStore } from "@/store/useUserStore";
 export default {
   data() {
     return {
@@ -126,15 +153,15 @@ export default {
         '/images/promotion/tmp1.jpg',
         '/images/promotion/tmp2.jpg',
         '/images/promotion/tmp3.png',
-        '/images/promotion/tmp4.png',
+        '/images/promotion/tmp4.jpg',
       ],
       currentSlide: 0,
       sliderInterval: null,
       testimonials: [
-      { text: "여러 보험을 한눈에 모아주고 맞춤형 추천까지 해주는 점이 너무 좋아요!", name: "YOONJUNE, UM" },
-      { text: "직관적이고 사용하기 편리합니다. 500만원을 아꼈습니다!", name: "JIEUN LEE, IU" },
-      { text: "비대면이라 가서 직접 계약하지 않아도 되니 편했어요!", name: "BYUNGHEE, YOON" }
-    ],
+        { text: "여러 보험을 한눈에 모아주고 맞춤형 추천까지 해주는 점이 너무 좋아요!", name: "YOONJUNE, UM" },
+        { text: "직관적이고 사용하기 편리합니다. 500만원을 아꼈습니다!", name: "JIEUN LEE, IU" },
+        { text: "비대면이라 가서 직접 계약하지 않아도 되니 편했어요!", name: "BYUNGHEE, YOON" }
+      ],
     currentTestimonial: 0
     };
   },
