@@ -10,9 +10,9 @@
           <transition name="fade">
             <div v-show="activeMenu === 'insurance'" class="dropdown">
               <ul>
-                <li><RouterLink to="/insurance-detail">여행자 보험</RouterLink></li>
-                <li><RouterLink to="/insurance-detail">건강 보험</RouterLink></li>
-                <li><RouterLink to="/insurance-detail">실손 보험</RouterLink></li>
+                <li><RouterLink to="/traveler">여행자 보험</RouterLink></li>
+                <li><RouterLink to="/health">건강 보험</RouterLink></li>
+                <li><RouterLink to="/actualexpense">실손 보험</RouterLink></li>
               </ul>
             </div>
           </transition>

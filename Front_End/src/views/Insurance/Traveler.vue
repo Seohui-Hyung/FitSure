@@ -1,12 +1,9 @@
 <template>
     <div class="health-insurance-container">
-      <!-- Header 컴포넌트 -->
-      <Header />
-  
       <!-- 페이지 내용 -->
       <div class="content">
         <!-- 건강 보험 제목 -->
-        <h2 class="title">건강 보험</h2>
+        <h2 class="title">여행자 보험</h2>
   
         <!-- 네비게이션 탭 -->
         <nav class="tab-nav">
@@ -27,25 +24,18 @@
           <p class="image-placeholder" v-if="!tabs[activeTab].image">대응 이미지</p>
         </div>
   
-        <!-- 보험 가입 버튼 -->
-        <button class="subscribe-button">보험 가입하기</button>
       </div>
-  
-      <!-- Footer 컴포넌트 -->
-      <Footer />
+      <!-- 보험 가입 버튼 -->
+      <button class="subscribe-button">보험 가입하기</button>
     </div>
   </template>
   
   <script setup>
   import { ref } from "vue";
-  import Header from "@/components/common/Header.vue";
-  import Footer from "@/components/common/Footer.vue";
   
   // 탭 정보 정의
   const tabs = ref([
-    { label: "건강 보험(6~40)", image: "/assets/health1.jpg" }, // 실제 이미지 경로로 대체
-    { label: "건강 보험(41~70)", image: "/assets/health2.jpg" },
-    { label: "일 보험", image: "/assets/daily.jpg" },
+    { label: "해외 여행 보험", image: "/assets/health1.jpg" },
   ]);
   
   const activeTab = ref(0); // 기본 탭 설정
@@ -55,30 +45,25 @@
   }
   </script>
   
-  <style scoped>
-  /* 전체 컨테이너 스타일 */
-  .health-insurance-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100vh;
-    background-color: #f5f5f5;
-  }
-  
+  <style scoped>  
   /* 제목 스타일 */
   .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     font-size: 24px;
-    margin: 20px 0;
-    color: #043873;
+    background-color: #043873;
+    color: white;
+    height: 150px;
+    margin: 0;
   }
-  
+
   /* 네비게이션 탭 스타일 */
   .tab-nav {
     display: flex;
     justify-content: center;
     background-color: #043873;
-    padding: 10px 0;
   }
   
   .tab-button {
@@ -97,7 +82,7 @@
   }
   
   .tab-button:hover {
-    background-color: #0056b3;
+    background-color: #3670ad;
     color: white;
   }
   
@@ -132,7 +117,7 @@
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
-    background-color: #ffd700;
+    background-color: #FFE492;
     color: black;
     font-size: 18px;
     border: none;
@@ -141,6 +126,6 @@
   }
   
   .subscribe-button:hover {
-    background-color: #ffc107;
+    background-color: #ffda70;
   }
   </style>  

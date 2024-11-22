@@ -4,6 +4,7 @@ import authRoutes from './authRoutes';
 import userRoutes from './userRoutes';
 import axios from 'axios'; // 세션 확인용
 import Main from '@/views/Main.vue';
+import boardRoutes from './boardRoutes';
 import insuranceRoutes from './insuranceRoutes';
 
 const routes = [
@@ -13,7 +14,7 @@ const routes = [
     component: Main
   },
   ...authRoutes,
-  // ...boardRoutes,
+  ...boardRoutes,
   ...userRoutes,
   ...insuranceRoutes,
 ];
