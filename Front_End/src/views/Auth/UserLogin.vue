@@ -13,13 +13,13 @@
           <button type="submit" class="login-button">Login</button>
         </div>
       </form>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       <div class="login-footer">
         <RouterLink to="/findIdPw" class="link">아이디 / 비밀번호 찾기</RouterLink>
         <pre>     |     </pre>
         <RouterLink to="/signup" class="link">회원가입</RouterLink>
       </div>
     </div>
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </template>
   
@@ -34,10 +34,10 @@ const errorMessage = ref('')
 
 function login() {
   // 간단한 인증 시뮬레이션
-  if (username.value === 'user' && password.value === 'password') {
+  if (username.value === 'zee' && password.value === '123') {
     localStorage.setItem('auth', 'true') // 인증 상태 저장
     alert('로그인 성공!')
-    router.push({ name: 'profile' }) // 프로필 화면으로 이동
+    router.push({ name: 'Main' }) // 프로필 화면으로 이동
   } else {
     errorMessage.value = '아이디 또는 비밀번호가 잘못되었습니다.'
   }

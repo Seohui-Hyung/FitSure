@@ -50,13 +50,15 @@
         </div>
       </nav>
     </header>
-  </template>
+</template>
   
-
 <script>
 import { ref } from 'vue';
 import { RouterView, RouterLink } from 'vue-router';
+import { useUserStore } from "@/store/useUserStore";
 
+// const { isAuthenticated, loggedInUser, logout } = useUserStore();
+ 
 export default {
   components: { RouterView, RouterLink },
   setup() {
@@ -203,6 +205,21 @@ body, html {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+.logout-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #e60000;
 }
 
 /* 반응형 스타일 */

@@ -1,10 +1,10 @@
 // router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import authRoutes from './authRoutes';
-import adminRoutes from './adminRoutes';
 import userRoutes from './userRoutes';
 import axios from 'axios'; // 세션 확인용
 import Main from '@/views/Main.vue';
+import insuranceRoutes from './insuranceRoutes';
 
 const routes = [
   {
@@ -13,8 +13,9 @@ const routes = [
     component: Main
   },
   ...authRoutes,
-  ...adminRoutes,
+  // ...boardRoutes,
   ...userRoutes,
+  ...insuranceRoutes,
 ];
 
 const router = createRouter({

@@ -9,12 +9,11 @@ import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 import BootstrapVue3 from 'bootstrap-vue-3';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-
-
 const app = createApp(App)
+const pinia = createPinia();
 
-app.use(createPinia())
 app.use(BootstrapVue3);
+app.use(pinia)
 app.use(router)
 
 app.mount('#app')

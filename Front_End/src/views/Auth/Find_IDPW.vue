@@ -22,8 +22,7 @@
       <!-- 아이디 찾기 -->
       <div v-if="activeTab === 'findId'" class="tab-content">
         <form @submit.prevent="findId">
-          <input id="name" v-model="name" type="text" placeholder="이름을 입력해주세요" required />
-          <input id="dob" v-model="dob" type="text" placeholder="생년월일 8자리 입력해주세요" required />
+          <input id="username" v-model="username" type="text" placeholder="이름을 입력해주세요" required />
           <input id="email" v-model="email" type="email" placeholder="이메일을 입력해주세요" required />
   
           <div class="buttons">
@@ -31,13 +30,17 @@
             <button type="button" @click="cancel">취소</button>
           </div>
         </form>
+        <!-- 결과 출력 -->
+        <div v-if="searchAttempted">
+          <p v-if="foundId">아이디: {{ foundId }}</p>
+          <p v-else>일치하는 아이디가 없습니다.</p>
+        </div>
       </div>
   
       <!-- 비밀번호 찾기 -->
       <div v-if="activeTab === 'findPassword'" class="tab-content">
         <form @submit.prevent="findPassword">
-          <input id="username" v-model="username" type="text" placeholder="아이디를 입력해주세요" required />
-          <input id="dob-password" v-model="dob" type="text" placeholder="생년월일 8자리 입력해주세요" required />
+          <input id="userLoginId" v-model="userLoginId" type="text" placeholder="아이디를 입력해주세요" required />
           <input id="email-password" v-model="email" type="email" placeholder="이메일을 입력해주세요" required />
   
           <div class="buttons">
@@ -51,26 +54,34 @@
   
   <script setup>
   import { ref } from "vue";
-  import { useRouter } from "vue-router";
-  
-  const router = useRouter();
+  import { useUserStore } from "@/store/useUserStore";
+
   const activeTab = ref("findId"); // 현재 활성화된 탭 ("findId" 또는 "findPassword")
-  const name = ref("");
-  const dob = ref("");
-  const email = ref("");
-  const username = ref("");
+  const userStore = useUserStore();
+
+  const {
+    username,
+    email,
+    userLoginId,
+    foundId,
+    foundPassword,
+    searchAttempted,
+    findId,
+    findPassword,
+    resetForm,
+  } = userStore;
   
-  function findId() {
-    alert(`아이디 찾기 진행: 이름(${name.value}), 생년월일(${dob.value}), 이메일(${email.value})`);
-  }
+  // function findId() {
+  //   alert(`아이디 찾기 진행: 이름(${name.value}), 생년월일(${dob.value}), 이메일(${email.value})`);
+  // }
   
-  function findPassword() {
-    alert(`비밀번호 찾기 진행: 아이디(${username.value}), 생년월일(${dob.value}), 이메일(${email.value})`);
-  }
+  // function findPassword() {
+  //   alert(`비밀번호 찾기 진행: 아이디(${username.value}), 생년월일(${dob.value}), 이메일(${email.value})`);
+  // }
 
   function cancel() {
     if (confirm("취소하시겠습니까?")) {
-      router.push("/login");
+      window.location.href = "/login";
     }
   }
   </script>
@@ -126,7 +137,7 @@
   input {
     padding: 10px;
     font-size: 14px;
-    width: 300px;
+    width: 310px;
     border: 1px solid #ccc;
     border-radius: 5px;
     text-align: center;
@@ -139,7 +150,8 @@
 
 .buttons {
   display: flex;
-  gap: 10px;
+  gap: 20px;
+  margin-top: 25px;
 }
 
 button[type="submit"] {
@@ -149,6 +161,7 @@ button[type="submit"] {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 220px;
 }
 
 button[type="button"] {
