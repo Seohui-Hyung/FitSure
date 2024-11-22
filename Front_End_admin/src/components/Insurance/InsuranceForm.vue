@@ -1,198 +1,199 @@
 <template>
     <div class="insurance-form-page">
-      <h3 class="page-title">INSURANCE FORM</h3>
+      <h3 class="form-title">보험 등록</h3>
       <hr />
-      <!-- 제목 입력 -->
-      <div class="title-container">
-        <input
-          v-model="state.title"
-          type="text"
-          class="title-input"
-          placeholder="제목을 입력해주세요"
-        />
-      </div>
-      <!-- 에디터 -->
-      <div class="editor-container">
-        <div ref="quillEditorContainer">
-          <QuillEditor
-            :options="state.editorOption"
-            @error="handleEditorError"
-          />
-        </div>
-      </div>
-      <!-- 제출 버튼 -->
-      <div class="button-container">
-        <button class="submit-button" @click="submit">
-          올리기
-        </button>
+      <div class="form-container">
+        <form @submit.prevent="handleSubmit">
+          <!-- 보험 종류 -->
+          <div class="form-row">
+            <label for="insurance-type" class="form-label">보험 종류</label>
+            <select id="insurance-type" v-model="formData.insuranceType" class="form-input">
+              <option value="" disabled>보험 종류 선택</option>
+              <option value="1">여행자 보험</option>
+              <option value="2">건강 보험</option>
+              <option value="3">실손 보험</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="insurance-name" class="form-label">보험 이름</label>
+            <input
+              id="insurance-name"
+              type="text"
+              v-model="formData.insuranceName"
+              class="form-input"
+              placeholder="보험 이름을 입력해주세요"
+            />
+          </div>
+          <!-- 가격 -->
+          <div class="form-row">
+            <label for="premium" class="form-label">가격</label>
+            <input
+              id="premium"
+              type="number"
+              v-model="formData.premium"
+              class="form-input"
+              placeholder="금액을 입력해주세요"
+            />
+          </div>
+          <!-- 설명 파일 첨부 -->
+          <div class="form-row">
+            <label for="description-file" class="form-label">설명 파일 첨부</label>
+            <input
+              id="description-file"
+              type="file"
+              @change="handleFileChange"
+              class="form-input"
+            />
+          </div>
+          <!-- 운영 여부 -->
+          <div class="form-row">
+            <label for="validity" class="form-label">운영 여부</label>
+            <select id="validity" v-model="formData.validity" class="form-input">
+              <option value="" disabled>운영 여부</option>
+              <option value="1">운영</option>
+              <option value="0">미운영</option>
+            </select>
+          </div>
+          <!-- 제출 버튼 -->
+          <div class="form-row submit-button-container">
+            <button type="submit" class="submit-button">등록</button>
+          </div>
+        </form>
       </div>
     </div>
   </template>
   
   <script>
-  import { reactive, ref, onMounted } from "vue";
+  import { reactive,ref } from "vue";
   import { useAdminStore } from "@/store/useAdminStore";
   
   export default {
     name: "InsuranceForm",
     setup() {
-      const adminStore = useAdminStore();
-      const quillEditorContainer = ref(null); // Quill 에디터 컨테이너 참조
-  
-      const state = reactive({
-        title: "",
-        content: "",
-        editorOption: {
-          placeholder: "내용을 입력해주세요...",
-          modules: {
-            toolbar: [
-              ["bold", "italic", "underline", "strike"],
-              ["blockquote", "code-block"],
-              [{ list: "ordered" }, { list: "bullet" }],
-              [{ indent: "-1" }, { indent: "+1" }],
-              [{ size: ["small", false, "large", "huge"] }],
-              [{ header: [1, 2, 3, 4, 5, 6, false] }],
-              [{ color: [] }, { background: [] }],
-              [{ font: [] }],
-              [{ align: [] }],
-              ["clean"],
-            ],
-          },
-        },
+      const formData = reactive({
+        insuranceType: "",
+        insuranceName: "",
+        premium: null,
+        validity: "",
       });
+
+        const file = ref(null);
+
+        const handleFileChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            file.value = event.target.files[0];
+        }
+        };
+
+      const store = useAdminStore();
   
-      const handleEditorError = (error) => {
-        console.error("QuillEditor Error:", error);
-        alert("에디터 오류가 발생했습니다. 다시 시도해주세요.");
-      };
-  
-      const submit = async () => {
-        const { title } = state;
-  
-        // QuillEditor에서 HTML 콘텐츠 가져오기
-        if (quillEditorContainer.value) {
-          try {
-            // DOM 내부에서 에디터 콘텐츠를 찾습니다.
-            const editorRoot = quillEditorContainer.value.querySelector(".ql-editor");
-            if (editorRoot) {
-              state.content = editorRoot.innerHTML; // 에디터의 HTML 내용 가져오기
-            } else {
-              throw new Error("Failed to find .ql-editor in QuillEditor.");
-            }
-          } catch (error) {
-            console.error("Failed to retrieve Quill instance:", error);
-            alert("에디터에서 내용을 가져오는 데 실패했습니다.");
+      const handleSubmit = () => {
+        if (!formData.insuranceType || !formData.insuranceName || !formData.premium || !formData.validity ) {
+            alert("모든 필드를 입력하세요.");
             return;
-          }
-        } else {
-          console.error("QuillEditor container is null.");
-          alert("에디터가 초기화되지 않았습니다.");
-          return;
         }
-  
-        const { content } = state;
-  
-        if (!title || !content) {
-          alert("제목과 내용을 모두 입력해주세요!");
-          return;
-        }
-  
-        console.log("content의 값:", content);
-        try {
-          adminStore.insertNotice({ title }, content);
-          alert("공지사항이 등록되었습니다.");
-        } catch (error) {
-          console.error("Error submitting notice:", error);
-          alert("공지 등록에 실패했습니다.");
-        }
-      };
+
+        const insuranceData = {
+            insuranceType: formData.insuranceType,
+            insuranceName: formData.insuranceName.trim(),
+            premium: formData.premium,
+            validity: formData.validity,
+        };
+
+        console.log("폼 데이터:", insuranceData);
+        console.log("파일:", file.value);
+
+        store.insertInsurance(insuranceData, file.value);
+        alert("보험이 성공적으로 등록되었습니다!");
+        };
   
       return {
-        state,
-        handleEditorError,
-        submit,
-        quillEditorContainer,
+        formData,
+        file,
+        handleFileChange,
+        handleSubmit,
       };
     },
   };
   </script>
   
-  <style>
+  <style scoped>
   .insurance-form-page {
     padding: 20px;
-    background-color: #fcfcfc;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 1200px;
-    margin: 0 auto;
+    background-color: #f9f9f9; 
+    min-height: 90vh; 
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: flex-start;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .page-title {
-    margin-bottom: 20px;
+  .form-container {
+    background-color: #ffffff; /* 흰색 배경 */
+    border-radius: 10px; /* 둥근 모서리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    padding: 30px; /* 내부 여백 */
+    width: 100%; /* 가로 크기를 부모 요소에 맞춤 */
+    max-width: 1800px; /* 최대 너비 설정 */
+  }
+  
+  .form-title {
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%; 
     color: #000000;
-    text-align: left !important;
   }
   
-  .title-container {
+  hr {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 20px;
   }
   
-  .title-input {
-    width: 100%;
+  .form-label {
+    flex: 1;
+    font-weight: bold;
+    margin-right: 20px;
+    text-align: left;
+    font-size: 16px;
+  }
+  
+  .form-input {
+    flex: 2;
     padding: 10px;
     font-size: 16px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
     box-sizing: border-box;
-    outline: none;
   }
   
-  .title-input:focus {
-    border-color: #043873;
-  }
-  
-  .editor-container {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
-  height: 500px;
-  display: flex;
-  flex-direction: column; 
-}
-
-.ql-container {
-  flex: 1; 
-  border: 2px solid #ddd; 
-  box-sizing: border-box; 
-}
-  
-.ql-editor {
-  padding: 10px;
-  font-size: 16px;
-  line-height: 1.6;
-  height: 100%; 
-}
-  .button-container {
-    text-align: right;
+  .submit-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
   }
   
   .submit-button {
-    border: none;
-    border-radius: 7px;
-    width: 120px;
-    height: 40px;
-    font-size: 16px;
     background-color: #043873;
-    color: #ffffff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
   }
   
   .submit-button:hover {
     background-color: #0056b3;
   }
   </style>
+  

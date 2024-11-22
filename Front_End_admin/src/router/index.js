@@ -8,6 +8,8 @@ import NoticeList from '@/components/notice/NoticeList.vue';
 import NoticeForm from '@/components/notice/NoticeForm.vue';
 import InsuranceList from '@/components/Insurance/InsuranceList.vue';
 import InsuranceForm from '@/components/Insurance/InsuranceForm.vue';
+import InsuranceUpdate from '@/components/Insurance/InsuranceUpdate.vue';
+import NoticeDetail from '@/components/notice/NoticeDetail.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,14 +41,26 @@ const router = createRouter({
           component: NoticeForm
         },
         {
-          path: "insurance", 
+          path: "notice/:noticeId",
+          name: "NoticeDetail",
+          component: NoticeDetail, 
+          props: true, 
+        },
+        {
+          path: "insurance/list", 
           name: "InsuranceList",
           component: InsuranceList
         },
         {
-          path: "insurance", 
+          path: "insurance/form", 
           name: "InsuranceForm",
           component: InsuranceForm
+        }, 
+        {
+          path: "insurance/update/:insuranceId",
+          name: "InsuranceUpdate",
+          component: InsuranceUpdate, // 실제 컴포넌트 이름
+          props: true, // params를 props로 전달
         }
       ]
     }

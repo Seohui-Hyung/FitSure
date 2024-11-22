@@ -123,7 +123,7 @@
     background-color: #fcfcfc;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 1200px;
+    max-width: 1800px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;

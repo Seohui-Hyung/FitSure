@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.pretzero.fitsure.model.dto.Comment;
 import com.pretzero.fitsure.model.dto.Coupon;
 import com.pretzero.fitsure.model.dto.InsurancePlan;
+import com.pretzero.fitsure.model.dto.Notice;
 import com.pretzero.fitsure.model.dto.Payment;
 import com.pretzero.fitsure.model.service.CommentService;
 import com.pretzero.fitsure.model.service.CouponService;
@@ -161,7 +163,7 @@ public class InsuranceController {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add comment");
 	}
 	
-	
+
 	
 	
 	

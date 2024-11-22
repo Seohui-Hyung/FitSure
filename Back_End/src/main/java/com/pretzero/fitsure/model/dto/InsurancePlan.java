@@ -3,7 +3,8 @@ package com.pretzero.fitsure.model.dto;
 
 public class InsurancePlan {
     private int insuranceId;
-    private String insuranceType;
+    private int insuranceType;
+    private String insuranceName;
     private int adminId;
     private int premium;
     private String detail;
@@ -14,10 +15,11 @@ public class InsurancePlan {
 
 	public InsurancePlan() {	}
 	
-	public InsurancePlan(int insuranceId, String insuranceType, int adminId, int premium, String detail, int validity, String fileUrl) {
+	public InsurancePlan(int insuranceId, int insuranceType, String insuranceName, int adminId, int premium, String detail, int validity, String fileUrl) {
 		super();
 		this.insuranceId = insuranceId;
 		this.insuranceType = insuranceType;
+		this.insuranceName = insuranceName;
 		this.adminId = adminId;
 		this.premium = premium;
 		this.detail = detail;
@@ -33,12 +35,20 @@ public class InsurancePlan {
 		this.insuranceId = insuranceId;
 	}
 
-	public String getInsuranceType() {
+	public int getInsuranceType() {
 		return insuranceType;
 	}
 
-	public void setInsuranceType(String insuranceType) {
+	public void setInsuranceType(int insuranceType) {
 		this.insuranceType = insuranceType;
+	}
+
+	public String getInsuranceName() {
+		return insuranceName;
+	}
+
+	public void setInsuranceName(String insuranceName) {
+		this.insuranceName = insuranceName;
 	}
 
 	public int getAdminId() {

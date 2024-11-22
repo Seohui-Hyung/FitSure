@@ -16,4 +16,5 @@ public interface InsurancePlanService {
 
 	List<InsurancePlan> getInsuranceList();
 
+
 }
