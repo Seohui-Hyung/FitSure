@@ -24,9 +24,9 @@
 import { ref } from "vue";
 
 // 단계별 컴포넌트 import
-import Step1 from "./components/payment/Step1.vue"; // 고객 정보, 선택 보험 정보 확인 (피보험자와 계약자가 동일해야 한다)
-import Step2 from "./components/payment/Step2.vue"; // 알릴 사항
-import Step3 from "./components/payment/Step3.vue"; // 쿠폰 적용 및 결제 금액 안내 후 결제하기 
+import Step1 from "@/components/payment/Step1.vue"; // 고객 정보, 선택 보험 정보 확인 (피보험자와 계약자가 동일해야 한다)
+import Step2 from "@/components/payment/Step2.vue"; // 알릴 사항
+import Step3 from "@/components/payment/Step3.vue"; // 쿠폰 적용 및 결제 금액 안내 후 결제하기 
 
 
 // 현재 단계를 관리하는 변수
