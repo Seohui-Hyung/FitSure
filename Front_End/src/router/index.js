@@ -6,6 +6,7 @@ import axios from 'axios'; // 세션 확인용
 import Main from '@/views/Main.vue';
 import boardRoutes from './boardRoutes';
 import insuranceRoutes from './insuranceRoutes';
+import payRoutes from './payRoutes';
 
 const routes = [
   {
@@ -17,6 +18,7 @@ const routes = [
   ...boardRoutes,
   ...userRoutes,
   ...insuranceRoutes,
+  ...payRoutes
 ];
 
 const router = createRouter({

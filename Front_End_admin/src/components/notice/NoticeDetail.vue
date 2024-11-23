@@ -38,7 +38,7 @@ const route = useRoute();
 const router = useRouter();
 
  // 공지 ID 가져오기
-const notice = route.params.noticeId; // 공지 데이터
+const noticeId = route.params.noticeId; // 공지 데이터
 
 onMounted(() => {
     console.log(noticeId)
