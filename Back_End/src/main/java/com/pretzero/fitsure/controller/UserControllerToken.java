@@ -170,7 +170,39 @@ public class UserControllerToken {
                        : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user information");
     }
 
-    
+    // 인증된 사용자 정보 반환
+    @GetMapping("/auth/me")
+    public ResponseEntity<?> getAuthenticatedUser(HttpServletRequest request) {
+        // 클라이언트로부터 토큰 가져오기
+        String token = request.getHeader("Authorization");
+        if (token == null || !token.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Access token is missing or invalid");
+        }
+        
+        token = token.substring(7); // "Bearer " 제거
+
+        try {
+            // 토큰에서 사용자 정보 추출
+            int userId = jwtUtil.getuserId(token);
+            User loginUser = userService.findUserName(userId);
+
+            if (userId == 0 || loginUser == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Invalid token");
+            }
+
+            // 사용자 정보 반환
+            Map<String, User> userInfo = new HashMap<>();
+            userInfo.put("loginUser", loginUser);
+
+            return ResponseEntity.ok(userInfo);
+        } catch (Exception e) {
+            // 토큰 검증 실패 처리
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Token verification failed: " + e.getMessage());
+        }
+    }
     
     
 }

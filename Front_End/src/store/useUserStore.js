@@ -57,73 +57,73 @@ export const useUserStore = defineStore('user', () => {
   //   localStorage.removeItem("access-token");
   // }
 
-  // // 토큰 검증 (페이지 새로고침 시 로그인 상태 유지)
-  // function checkAuth() {
-  //   const token = localStorage.getItem("access-token");
-  //   if (token) {
-  //     authToken.value = token;
-  //     isAuthenticated.value = true;
+  // 토큰 검증 (페이지 새로고침 시 로그인 상태 유지)
+  function checkAuth() {
+    const token = localStorage.getItem("access-token");
+    if (token) {
+      authToken.value = token;
+      isAuthenticated.value = true;
 
-  //     // 서버에 사용자 정보를 요청하여 상태를 업데이트
-  //     axios
-  //       .get(`${API_URL}/auth/me`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       })
-  //       .then((response) => {
-  //         loggedInUser.value = response.data.username; // 서버에서 사용자 이름 반환
-  //       })
-  //       .catch((error) => {
-  //         console.error("인증 실패:", error);
-  //         logout();
-  //       });
-  //   }
-  // }
+      // 서버에 사용자 정보를 요청하여 상태를 업데이트
+      axios
+        .get(`${REST_API_URL}/user/token/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          loggedInUser.value = response.data.username; // 서버에서 사용자 이름 반환
+        })
+        .catch((error) => {
+          console.error("인증 실패:", error);
+          logout();
+        });
+    }
+  }
 
-  // // 아이디 찾기 로직  
-  // const findId = () => {
-  //   if (!username.value || !email.value) {
-  //     console.error("모든 필드를 입력해야 합니다.");
-  //     return;
-  //   }
+  // 아이디 찾기 로직  
+  const findId = () => {
+    if (!username.value || !email.value) {
+      console.error("모든 필드를 입력해야 합니다.");
+      return;
+    }
 
-  //   searchAttempted.value = true;
-  //   axios
-  //     .post(`${REST_API_URL}/user/token/findId`, {
-  //       username: username.value,
-  //       email: email.value,
-  //     })
-  //     .then((response) => {
-  //       foundId.value = response.data.id || null; // 서버에서 반환된 아이디 저장
-  //     })
-  //     .catch((error) => {
-  //       console.error("아이디 찾기 실패:", error);
-  //       foundId.value = null;
-  //     });
-  // };  
+    searchAttempted.value = true;
+    axios
+      .post(`${REST_API_URL}/user/token/findId`, {
+        username: username.value,
+        email: email.value,
+      })
+      .then((response) => {
+        foundId.value = response.data.id || null; // 서버에서 반환된 아이디 저장
+      })
+      .catch((error) => {
+        console.error("아이디 찾기 실패:", error);
+        foundId.value = null;
+      });
+  };  
 
-  // // 비밀번호 찾기 로직
-  // const findPassword = () => {
-  //   if (!userLoginId.value || !email.value) {
-  //     console.error("모든 필드를 입력해야 합니다.");
-  //     return;
-  //   }
+  // 비밀번호 찾기 로직
+  const findPassword = () => {
+    if (!userLoginId.value || !email.value) {
+      console.error("모든 필드를 입력해야 합니다.");
+      return;
+    }
 
-  //   searchAttempted.value = true;
-  //   axios
-  //     .post(`${REST_API_URL}/user/token/resetpassword`, {
-  //       userLoginId: userLoginId.value,
-  //       email: email.value,
-  //     })
-  //     .then((response) => {
-  //       foundPassword.value = response.data.message || null; // 서버에서 반환된 메시지 저장
-  //     })
-  //     .catch((error) => {
-  //       console.error("비밀번호 찾기 실패:", error);
-  //       foundPassword.value = null;
-  //     });
-  // };
+    searchAttempted.value = true;
+    axios
+      .post(`${REST_API_URL}/user/token/resetpassword`, {
+        userLoginId: userLoginId.value,
+        email: email.value,
+      })
+      .then((response) => {
+        foundPassword.value = response.data || null; // 서버에서 반환된 메시지 저장
+      })
+      .catch((error) => {
+        console.error("비밀번호 찾기 실패:", error);
+        foundPassword.value = null;
+      });
+  };
 
   // 인증번호 전송
   const sendVerificationCode = (email) => {
@@ -161,6 +161,13 @@ export const useUserStore = defineStore('user', () => {
       });
   };
 
+
+  // 결제 
+  const payment = function(){
+    
+  }
+
+
   //  // 입력 초기화
   //  const resetForm = () => {
   //   username.value = "";
@@ -181,9 +188,9 @@ export const useUserStore = defineStore('user', () => {
     authToken,
     login,
     // logout,
-    // checkAuth,
+    checkAuth,
     // // 상태
-    // username,
+    username,
     // email,
     // userLoginId,
     // foundId,
@@ -193,7 +200,7 @@ export const useUserStore = defineStore('user', () => {
     verificationError,
     isVerified,
     // 메서드
-    // findId,
+    findId,
     // findPassword,
     sendVerificationCode,
     verifyCode,

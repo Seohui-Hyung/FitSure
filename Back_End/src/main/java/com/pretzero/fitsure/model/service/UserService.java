@@ -39,5 +39,7 @@ public interface UserService {
 
 	public List<User> search(SearchCondition condition);
 	
+	public User findUserName(int userId);
+	
 	
 }

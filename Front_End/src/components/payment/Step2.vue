@@ -35,8 +35,7 @@
     <p v-if="alertMessage" class="alert-message">{{ alertMessage }}</p>
 
     <!-- 다음 버튼 -->
-    <button class="next-button" :disabled="!isCompleted()" @click="$emit('nextStep')">다음</button>
-  </div>
+    </div>
 </template>
 
 <script setup>

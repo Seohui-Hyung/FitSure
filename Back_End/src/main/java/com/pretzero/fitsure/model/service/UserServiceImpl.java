@@ -117,6 +117,12 @@ public class UserServiceImpl implements UserService {
 		return userDao.searchUser(condition);
 	}
 
+	@Override
+	public User findUserName(int userId) {
+		
+		return userDao.getUserName(userId);
+	}
+
 	
 	
 	

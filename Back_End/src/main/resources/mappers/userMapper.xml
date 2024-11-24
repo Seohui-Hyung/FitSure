@@ -93,6 +93,12 @@
 		        </choose>
 		    </where>
 		</select>
+		
+		<select id="getUserName" parameterType="int" resultType="User">
+			SELECT * 
+			FROM user	
+			WHERE user_id = #{userId}
+		</select>
 
   
   </mapper>

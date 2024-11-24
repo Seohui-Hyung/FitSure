@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 입력 폼 -->
     <div>
       <h2>피보험자/계약자 정보를 입력해 주세요</h2>
       <p>피보험자와 계약자가 동일해야 합니다.</p>
@@ -19,12 +20,14 @@
       </div>
     </div>
 
+    <!-- 확인 버튼 -->
     <div>
       <h3>필수 확인 사항</h3>
-      <button @click="showModal = true">확인</button>
+      <button @click="openModal">확인</button>
     </div>
 
-    <div v-if="showModal" class="modal">
+    <!-- 모달 -->
+    <div v-show="showModal" class="modal">
       <div class="modal-content">
         <h2>고객정보 관리 및 가입설계를 위해 동의가 필요합니다.</h2>
         <div>
@@ -78,13 +81,16 @@ const updateAllChecked = () => {
   allChecked.value = agreements.value.every((item) => item.checked);
 };
 
-// 팝업 닫기
+// 모달 열기/닫기 함수
+const openModal = () => {
+  // console.log("test modal")
+  showModal.value = true;
+};
+
 const closeModal = () => {
   showModal.value = false;
 };
 </script>
-
-
 
 <style>
 .modal {

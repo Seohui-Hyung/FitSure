@@ -34,4 +34,6 @@ public interface UserDao {
 
 	public List<User> searchUser(SearchCondition condition);
 
+	public User getUserName(int userId);
+
 }
