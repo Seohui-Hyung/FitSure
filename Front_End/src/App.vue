@@ -39,9 +39,12 @@ function logout() {
   min-height: 100vh; /* 화면 전체 높이를 채우도록 설정 */
 }
 
+div {
+  margin-bottom: 0px;
+}
+
 .main-content {
   flex-grow: 1; /* 메인 콘텐츠가 남은 공간을 채움 */
-  padding: 20px;
   background-color: #ffffff; /* 배경색 설정 */
 }
 

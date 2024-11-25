@@ -64,7 +64,7 @@
     <section id="travel-insurance" class="insurance-section">
       <h3>여행자 보험</h3>
       <p>안전한 여행을 위한 준비</p>
-      <button class="button2">
+      <button class="button2" @click="navigateTo('/traveler')">
         <span class="button-title">해외 여행 보험</span>
         <br>
         <span class="button-description">분실~ 병원~ 전부 보장!</span>
@@ -74,17 +74,17 @@
     <section id="health-insurance" class="insurance-section">
       <h3>건강 보험</h3>
       <p>질병에 필요한 보장, 최대 100세까지 든든하게</p>
-      <button class="button2">
+      <button class="button2" @click="navigateWithTab('/health', 0)">
         <span class="button-title">건강 보험(16~40)</span>
         <br>
         <span class="button-description">고혈압, 당뇨 특약</span>
       </button>
-      <button class="button2">
+      <button class="button2" @click="navigateWithTab('/health', 1)">
         <span class="button-title">건강 보험(41~70)</span>
         <br>
         <span class="button-description">고혈압, 당뇨 특약</span>
       </button>
-      <button class="button2">
+      <button class="button2" @click="navigateWithTab('/health', 2)">
         <span class="button-title">암 보험</span>
         <br>
         <span class="button-description">췌장암, 대장암, 유방암 보장</span>
@@ -94,12 +94,12 @@
     <section id="medical-insurance" class="insurance-section">
       <h3>실손 의료비 보험</h3>
       <p>상해/질병 보장</p>
-      <button class="button2">
+      <button class="button2" @click="navigateWithTab('/actualexpense', 0)">
         <span class="button-title">실손 의료비 보험</span>
         <br>
         <span class="button-description">이것저것 다 보장!</span>
       </button>
-      <button class="button2">
+      <button class="button2" @click="navigateWithTab('/actualexpense', 1)">
         <span class="button-title">유병자 실손 보험</span>
         <br>
         <span class="button-description">병이 있나?? 이거 하라</span>
@@ -144,6 +144,7 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
 // import { ref } from "vue";
 // import { useUserStore } from "@/store/useUserStore";
 export default {
@@ -162,7 +163,29 @@ export default {
         { text: "직관적이고 사용하기 편리합니다. 500만원을 아꼈습니다!", name: "JIEUN LEE, IU" },
         { text: "비대면이라 가서 직접 계약하지 않아도 되니 편했어요!", name: "BYUNGHEE, YOON" }
       ],
-    currentTestimonial: 0
+    currentTestimonial: 0,
+    };
+  },
+
+  setup() {
+    const router = useRouter(); // useRouter를 setup에서 선언
+
+    // 경로로 단순 이동
+    const navigateTo = (path) => {
+      router.push(path);
+    };
+
+    // 경로 및 쿼리 파라미터로 이동
+    const navigateWithTab = (path, tabIndex) => {
+      router.push({
+        path: path,
+        query: { tab: tabIndex }, // 쿼리 파라미터로 탭 전달
+      });
+    };
+
+    return {
+      navigateTo,
+      navigateWithTab,
     };
   },
 
@@ -209,7 +232,7 @@ export default {
     },
     prevTestimonial() {
       this.currentTestimonial = (this.currentTestimonial - 1 + this.testimonials.length) % this.testimonials.length;
-    }
+    },
   }
 };
 </script>
@@ -229,6 +252,8 @@ export default {
   font-family: 'GmarketSansMedium', Arial, Helvetica, sans-serif;
   font-weight: normal;
   font-style: normal;
+  margin: 0;
+  padding: 0;
 }
 
 h2 {
@@ -267,7 +292,7 @@ input {
 
 .pagination {
   position: absolute;
-  bottom: 10px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -290,6 +315,7 @@ input {
 
 .login-form {
   width: 50%;
+  height: 100%;
   max-width: 50%;
   background-color: #C4DEFD;
   padding: 20px;
@@ -309,7 +335,7 @@ input {
 .input-container {
   display: flex; /* 입력창들을 수직으로 정렬 */
   flex-direction: column;
-  gap: 5px; /* 입력창 사이 간격 */
+  gap: 10px; /* 입력창 사이 간격 */
   flex: 1; /* 버튼과 균형을 맞추기 위해 공간을 차지 */
 }
 
@@ -389,7 +415,7 @@ input {
   border-radius: 4px; /* 모서리를 둥글게 설정 */
   cursor: pointer; /* 마우스 포인터 변경 */
   width: 80px; /* 버튼 너비 */
-  height: 100%;
+  height: 80%;
   display: flex; /* Flexbox로 텍스트 정렬 */
   justify-content: center; /* 텍스트를 가로 중앙 정렬 */
   align-items: center; /* 텍스트를 세로 중앙 정렬 */

@@ -37,7 +37,7 @@
   const tabs = ref([
     { label: "건강 보험(6~40)", image: "/assets/health1.jpg" }, // 실제 이미지 경로로 대체
     { label: "건강 보험(41~70)", image: "/assets/health2.jpg" },
-    { label: "일 보험", image: "/assets/daily.jpg" },
+    { label: "암 보험", image: "/assets/daily.jpg" },
   ]);
   
   const activeTab = ref(0); // 기본 탭 설정
@@ -95,9 +95,6 @@
     justify-content: center;
     align-items: center;
     width: 80%;
-    background-color: #e8eaf0;
-    border: 1px solid #ccc;
-    border-radius: 10px;
     margin: 20px auto;
     padding: 20px;
   }
@@ -105,7 +102,6 @@
   .insurance-image {
     max-width: 100%;
     max-height: 100%;
-    border-radius: 10px;
   }
   
   .image-placeholder {
@@ -120,7 +116,7 @@
     margin: 20px auto;
     padding: 10px 20px;
     background-color: #FFE492;
-    color: black;
+    color: #043873;
     font-size: 18px;
     border: none;
     border-radius: 5px;

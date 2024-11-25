@@ -35,7 +35,7 @@
   
   // 탭 정보 정의
   const tabs = ref([
-    { label: "해외 여행 보험", image: "/assets/health1.jpg" },
+    { label: "해외 여행 보험", image: "/images/insurance/여행자 보험.png" },
   ]);
   
   const activeTab = ref(0); // 기본 탭 설정
@@ -93,9 +93,6 @@
     justify-content: center;
     align-items: center;
     width: 80%;
-    background-color: #e8eaf0;
-    border: 1px solid #ccc;
-    border-radius: 10px;
     margin: 20px auto;
     padding: 20px;
   }
@@ -103,7 +100,6 @@
   .insurance-image {
     max-width: 100%;
     max-height: 100%;
-    border-radius: 10px;
   }
   
   .image-placeholder {
@@ -118,7 +114,7 @@
     margin: 20px auto;
     padding: 10px 20px;
     background-color: #FFE492;
-    color: black;
+    color: #043873;
     font-size: 18px;
     border: none;
     border-radius: 5px;
