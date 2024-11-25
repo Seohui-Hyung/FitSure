@@ -60,19 +60,12 @@ public class InsuranceController {
 	
 	// 보험 상세 내역 조회 
 	@GetMapping("/{insuranceId}")
-	public ResponseEntity<Map<String, Object>> detailInsurance(@PathVariable int insuranceId) {
+	public ResponseEntity<?> detailInsurance(@PathVariable int insuranceId) {
 	    InsurancePlan insurancePlan = insuranceService.readInsurance(insuranceId);
-	    List<Comment> comments = commentService.getCommentList(insuranceId);
 
-	    if (insurancePlan != null) {
-	        Map<String, Object> response = new HashMap<>();
-	        response.put("insurancePlan", insurancePlan);
-	        response.put("comments", comments);
-
-	        return new ResponseEntity<>(response, HttpStatus.OK);
-	    }
-
-	    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    return insurancePlan == null
+			    ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No coupon found.") 
+			    : ResponseEntity.ok(insurancePlan); 
 	}
 
 	

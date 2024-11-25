@@ -1,5 +1,7 @@
 package com.pretzero.fitsure.model.service;
 
+import java.util.List;
+
 import com.pretzero.fitsure.model.dto.Coupon;
 
 public interface CouponService {
@@ -9,5 +11,9 @@ public interface CouponService {
 	Coupon findCoupon(int userId);
 
 	void useCoupon(int userId);
+
+	List<Coupon> getCouponList(int userId);
+
+	List<Coupon> selectUnused(int userId);
 
 }

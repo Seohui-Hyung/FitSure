@@ -13,7 +13,7 @@
   			SELECT *
   			FROM coupon
   			WHERE user_id = #{userId}
-
+				AND coupon_id=#{couponId}
   		</select>
   
   		<update id="usedCoupon" parameterType="int">
@@ -22,7 +22,18 @@
   			WHERE user_id = #{userId}
   		</update>
   
+  		<select id="unUsedCoupon" parameterType="int" resultType="Coupon">
+  			SELECT *
+  			FROM coupon
+  			WHERE user_id = #{userId}
+  				AND used = 0
+  		</select>
   
+  		<select id="selectCouponlist" parameterType="int" resultType="Coupon">
+  			SELECT *
+  			FROM coupon
+  			WHERE user_id = #{userId}
+  		</select>
   
   
   </mapper>

@@ -40,6 +40,9 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useUserStore } from "@/store/useUserStore";
+
+const store = useUserStore();
 
 // 질문 목록과 상태 관리
 const questions = ref([
@@ -74,46 +77,21 @@ const isCompleted = () => {
 };
 
 // 상태 관리 변수
-const userName = ref("");
-
-// JWT 디코드 함수
-const decodeToken = (token) => {
-  if (!token) return null;
-
-  try {
-    const base64Url = token.split('.')[1]; // JWT의 Payload 부분
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-        .join('')
-    );
-    return JSON.parse(jsonPayload); // 디코딩된 Payload 반환
-  } catch (error) {
-    console.error("Failed to decode token:", error);
-    return null;
-  }
-};
-
+const username = ref("");
 
 onMounted(() => {
-  const token = localStorage.getItem("access-token"); 
-
-  if (!token) {
-    console.error("Access token not found");
-    return;
-  }
-
-  const payload = decodeToken(token); 
-
-  if (payload && payload.userName) {
-    userName.value = payload.userName; 
-    console.log(`Welcome, ${userName.value}`);
-  } else {
-    console.error("userName not found in token");
+  try {
+    store.checkAuth()
+    .then((loggedInUser)=>{
+        console.log(loggedInUser)
+        username.value = loggedInUser.username;
+    })
+  } catch (error) {
+    console.error("Error during authentication:", error);
   }
 });
+
+
 </script>
 
 <style scoped>

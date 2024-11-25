@@ -59,7 +59,7 @@ const steps = [
     flex-wrap: nowrap;
     gap: 20px;
     width: 100%;
-    max-width: 1200px;
+    /* max-width: 1200px; */
     padding-top: 20px;
     padding-bottom: 40px;
 }

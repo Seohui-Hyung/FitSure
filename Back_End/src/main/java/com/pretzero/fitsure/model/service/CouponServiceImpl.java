@@ -1,5 +1,7 @@
 package com.pretzero.fitsure.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,16 @@ public class CouponServiceImpl implements CouponService {
 	public void useCoupon(int userId) {
 		couponDao.usedCoupon(userId);
 		
+	}
+
+	@Override
+	public List<Coupon> getCouponList(int userId) {
+		return couponDao.selectCouponlist(userId);
+	}
+
+	@Override
+	public List<Coupon> selectUnused(int userId) {
+		return couponDao.unUsedCoupon(userId);
 	}
 	
 

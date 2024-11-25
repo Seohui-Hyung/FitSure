@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pretzero.fitsure.model.dto.Coupon;
 import com.pretzero.fitsure.model.dto.Goal;
 import com.pretzero.fitsure.model.dto.GoalResult;
 import com.pretzero.fitsure.model.service.CouponService;
@@ -165,7 +166,7 @@ public class GoalController {
 
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> goalList(HttpServletRequest request) {
-		String token = request.getHeader("Authorization");
+		String token = request.getHeader("access-token");
 		int userId = JwtUtil.getuserId(token);
 
 		if (userId < 0 || JwtUtil.isExpired(token)) {
@@ -185,9 +186,44 @@ public class GoalController {
 		
 	}
 
+
+	@GetMapping("/getCoupon")
+	public ResponseEntity<?> couponList(HttpServletRequest request){
+		String token = request.getHeader("access-token");
+		int userId = JwtUtil.getuserId(token);
+		
+		if (userId < 0 || JwtUtil.isExpired(token)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+		}
+		
+		List<Coupon> coupons = couponService.getCouponList(userId);
+		
+		
+		return coupons.isEmpty() 
+			    ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No coupon found.") 
+			    : ResponseEntity.ok(coupons); 
+		
+	}
 	
 	
-	
+	@GetMapping("/getCoupon/unused")
+	public ResponseEntity<?> unUsed(HttpServletRequest request){
+		String token = request.getHeader("access-token");
+		int userId = JwtUtil.getuserId(token);
+		
+		if (userId < 0 || JwtUtil.isExpired(token)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+		}
+		
+		List<Coupon> coupons = couponService.selectUnused(userId);
+		
+		
+		return coupons.isEmpty() 
+			    ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No coupon found.") 
+			    : ResponseEntity.ok(coupons); 
+		
+		
+	}
 	
 	
 	
