@@ -20,9 +20,9 @@ export default [
     name: 'ActualExpense',
     component: ActualExpense,
   },
-  {
-    path: '/insurance-signup',
-    name: 'InsuranceSignUp',
-    component: () => import('@/views/Insurance/InsuranceSignUp.vue')
-  }
+  // {
+  //   path: '/insurance-signup',
+  //   name: 'InsuranceSignUp',
+  //   component: () => import('@/views/Insurance/InsuranceSignUp.vue')
+  // }
 ]

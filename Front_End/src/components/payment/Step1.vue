@@ -1,123 +1,139 @@
 <template>
-  <div>
-    <!-- 입력 폼 -->
     <div>
-      <h2>피보험자/계약자 정보를 입력해 주세요</h2>
-      <p>피보험자와 계약자가 동일해야 합니다.</p>
+      <!-- 입력 폼 -->
       <div>
-        <label>이름</label>
-        <input type="text" placeholder="이름을 입력하세요" />
-      </div>
-      <div>
-        <label>주민등록번호</label>
-        <input type="text" placeholder="앞자리 입력" maxlength="6" />
-        -
-        <input type="password" placeholder="뒷자리 입력" maxlength="7" />
-      </div>
-      <div>
-        <label>이메일</label>
-        <input type="email" placeholder="이메일을 입력하세요" />
-      </div>
-    </div>
-
-    <!-- 확인 버튼 -->
-    <div>
-      <h3>필수 확인 사항</h3>
-      <button @click="openModal">확인</button>
-    </div>
-
-    <!-- 모달 -->
-    <div v-show="showModal" class="modal">
-      <div class="modal-content">
-        <h2>고객정보 관리 및 가입설계를 위해 동의가 필요합니다.</h2>
-        <div>
-          <input type="checkbox" v-model="allChecked" @change="toggleAll" />
-          <label>모두 동의하기</label>
-        </div>
-        <div v-for="item in agreements" :key="item.id">
+        <h2>피보험자/계약자 정보를 입력해 주세요</h2>
+        <p>피보험자와 계약자가 동일해야 합니다.</p>
+        <div class="form-group">
+          <label :class="{ active: activeField === 'name' }">이름</label>
           <input
-            type="checkbox"
-            v-model="item.checked"
-            @change="updateAllChecked"
+            type="text"
+            placeholder="이름을 입력하세요"
+            v-model="name"
+            @focus="setActiveField('name')"
+            @input="handleInput('name')"
           />
-          <label>{{ item.label }}</label>
         </div>
-        <div>
-          <button @click="closeModal">취소</button>
-          <button @click="closeModal">확인</button>
+        <div v-if="showFields.idNumber" class="form-group">
+          <label :class="{ active: activeField === 'idNumber' }">주민등록번호</label>
+          <div class="id-number-inputs">
+            <input
+              type="text"
+              placeholder="앞자리 입력"
+              maxlength="6"
+              v-model="idNumberPart1"
+              @focus="setActiveField('idNumber')"
+              @input="handleInput('idNumber')"
+            />
+            -  
+            <input
+              type="password"
+              placeholder="뒷자리 입력"
+              maxlength="7"
+              v-model="idNumberPart2"
+              @focus="setActiveField('idNumber')"
+            />
+          </div>
+        </div>
+        <div v-if="showFields.email" class="form-group">
+          <label :class="{ active: activeField === 'email' }">이메일</label>
+          <input
+            type="email"
+            placeholder="이메일을 입력하세요"
+            v-model="email"
+            @focus="setActiveField('email')"
+            @input="handleInput('email')"
+          />
         </div>
       </div>
+  
+      <!-- 확인 버튼 -->
+      <div v-if="allFieldsCompleted" class="button-container">
+        <h3>필수 확인 사항</h3>
+        <button @click="openModal">확인</button>
+      </div>
     </div>
-  </div>
-</template>
-
-<script setup>
-import { ref } from "vue";
-
-// 모달 표시 상태 관리
-const showModal = ref(false);
-
-// 체크박스 데이터 관리
-const agreements = ref([
-  { id: 1, label: "개인(신용)정보의 수집·이용에 관한 사항", checked: false },
-  { id: 2, label: "개인(신용)정보의 제공에 관한 사항", checked: false },
-  { id: 3, label: "개인(신용)정보의 조회에 관한 사항", checked: false },
-  { id: 4, label: "소비자 권익 보호에 관한 사항", checked: false },
-]);
-
-// 모두 동의 상태 관리
-const allChecked = ref(false);
-
-// 모두 동의 버튼 처리
-const toggleAll = () => {
-  allChecked.value = !allChecked.value;
-  agreements.value.forEach((item) => {
-    item.checked = allChecked.value;
+  </template>
+  
+  <script setup>
+  import { ref } from "vue";
+  
+  const name = ref("");
+  const idNumberPart1 = ref("");
+  const idNumberPart2 = ref("");
+  const email = ref("");
+  
+  const activeField = ref("");
+  const showFields = ref({
+    idNumber: false,
+    email: false,
   });
+  const allFieldsCompleted = ref(false);
+  
+  const setActiveField = (field) => {
+    activeField.value = field;
+  };
+  
+  const handleInput = (field) => {
+  if (field === "name" && name.value.trim() !== "") {
+    showFields.value.idNumber = true;
+  } else if (
+    field === "idNumber" &&
+    idNumberPart1.value.length === 6 &&
+    /^[0-9]+$/.test(idNumberPart1.value) 
+  ) {
+    showFields.value.email = true;
+  } else if (field === "email" && email.value.trim() !== "") {
+    allFieldsCompleted.value = true;
+  }
 };
 
-// 개별 체크박스 변경 처리
-const updateAllChecked = () => {
-  allChecked.value = agreements.value.every((item) => item.checked);
-};
-
-// 모달 열기/닫기 함수
-const openModal = () => {
-  // console.log("test modal")
-  showModal.value = true;
-};
-
-const closeModal = () => {
-  showModal.value = false;
-};
-</script>
-
-<style>
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 100%;
-}
-
-.modal-content h2 {
-  margin-bottom: 20px;
-}
-
-.modal-content div {
-  margin-bottom: 10px;
-}
-</style>
+  </script>
+  
+  <style>
+  /* 기본 레이아웃 스타일 */
+  div {
+    margin-bottom: 24px;
+  }
+  
+  .form-group {
+    display: flex;
+    align-items: center;
+    margin-left: 25px;
+  }
+  
+  label {
+    width: 150px; /* 레이블의 고정 너비 */
+    font-size: 14px;
+    color: black;
+    transition: color 0.3s;
+  }
+  
+  label.active {
+    color: blue;
+  }
+  
+  input {
+    flex: 1; 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .id-number-inputs {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+  }
+  
+  .id-number-inputs input {
+    width: 140px; 
+    margin-right: 5px;
+    text-align: center;
+  }
+  
+  .button-container {
+    margin-top: 20px;
+  }
+  </style>
+  
