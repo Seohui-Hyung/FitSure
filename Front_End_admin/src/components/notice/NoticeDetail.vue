@@ -5,20 +5,20 @@
         <hr />
 
         <!-- 공지 내용 -->
-        <div class="notice-detail">
+         <div class="notice-detail">
             <div class="notice-header">
-                <h4 class="notice-title">{{ notice.title }}</h4>
+                <h4 class="notice-title">{{ store.notice.title }}</h4>
                 <div class="notice-meta">
-                    <span>작성일: {{ formatDate(notice.regDate) }}</span>
-                    <span>조회수: {{ notice.viewCnt }}</span>
+                    <!-- <span>작성일: {{ formattedRegDate(store.notice.regDate) }}</span> -->
+                    <span>조회수: {{ store.notice.viewCnt }}</span>
                 </div>
             </div>
             <hr />
             <div class="notice-content">
-                <p v-if="notice.content">{{ notice.content }}</p>
+                <div v-if="store.notice.content" v-html="store.notice.content"></div>
                 <p v-else class="no-data">내용이 없습니다.</p>
             </div>
-        </div>
+        </div> 
 
         <!-- 버튼 -->
         <div class="detail-footer">
@@ -30,7 +30,7 @@
 
 <script setup>
 import { useAdminStore } from "@/store/useAdminStore";
-import { onMounted, ref } from "vue";
+import { reactive, onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const store = useAdminStore();
@@ -38,40 +38,45 @@ const route = useRoute();
 const router = useRouter();
 
  // 공지 ID 가져오기
-const noticeId = route.params.noticeId; // 공지 데이터
+
 
 onMounted(() => {
+    const noticeId = route.params.noticeId; // 공지 데이터
     console.log(noticeId)
-    fetchNoticeDetail();
+    fetchNoticeDetail(noticeId);
 });
 
 // 공지 상세 정보 가져오기
 const fetchNoticeDetail = (noticeId) => {
     try{
         store.noticeDetail(noticeId)
-        .then((noticeId) => {
-            notice = data
-            console.log(notice.value)
+        .then((notice)=>{
+            notice.title = notice.title;
+            notice.content = notice.content
+            notice.regDate = notice.regDate
+            notice.viewCnt = notice.viewCnt
         })
-    }catch (error) {
+        
+    } catch (error) {
         console.error("공지 데이터를 가져오는 중 오류 발생:", error);
     }
 };
 
-// 날짜 포맷 함수
-function formatDate(dateString) {
-    return new Date(dateString).toISOString().split("T")[0];
-}
+const formattedRegDate = computed(() => {
+    const regDate = store.notice.regDate; 
+    return new Date(regDate).toISOString().split("T")[0]; // 날짜 포맷팅
+});
 
 // 뒤로가기 버튼
 const goBack = () => {
-    router.push("/notice");
+    router.push("/admin/notice");
 };
 
 // 삭제 버튼
 const handleDelete = async () => {
     if (confirm("이 공지를 삭제하시겠습니까?")) {
-        await store.deleteNotice(noticeId); // 삭제 API 호출
+        console.log(route.params.noticeId)
+        store.deleteNotice(route.params.noticeId); 
         alert("삭제되었습니다.");
         goBack();
     }

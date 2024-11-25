@@ -1,6 +1,6 @@
 <template>
   <div class="insurance-form-page">
-    <h3 class="form-title">보험 수정</h3>
+    <h3 class="form-title">Insurance Modify</h3>
     <hr />
     <div class="form-container">
       <form @submit.prevent="handleSubmit">

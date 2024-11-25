@@ -69,17 +69,14 @@ export const useAdminStore = defineStore('admin', () => {
     });
   }
 
-  const noticeDetail = (noticeId) => {
-    return axios
-        .get(`${REST_API_URL}/notice/${noticeId}`)
+  const noticeDetail = function(noticeId){
+    console.log("호출")
+    return axios.get(`${REST_API_URL}/notice/${noticeId}`)
         .then((res) => {
           notice.value = res.data
+          console.log(res.data)
           return notice.value
-        }) // 반드시 데이터를 반환
-        .catch((error) => {
-            console.error("API 호출 중 오류 발생:", error);
-            throw error;
-        });
+        }) 
   };
 
   const searchNoticeList = function (searchCondition){

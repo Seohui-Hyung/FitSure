@@ -43,11 +43,11 @@ import { ref, onMounted } from "vue";
 
 // 질문 목록과 상태 관리
 const questions = ref([
-  { id: 1, text: "자동차(건설기계, 농기계 포함) 및 의료자동차를 운전하시나요?", answer: null },
-  { id: 2, text: "전동킥보드, 전동이륜평행차 등 원동기장치 자전거를 사용하시나요?", answer: null },
+  { id: 1, text: "자동차 및 원동기장치(전동킥보드, 전동이륜평행차 포함) 및 의료자동차를 운전하시나요?", answer: null },
+  { id: 2, text: "격렬한 운동(클라이밍, 산악자전거 등)을 자주 하시나요?", answer: null },
   { id: 3, text: "현재 지병을 가지고 계신가요?", answer: null },
-  { id: 4, text: "최근 1년 이내 질병으로 치료를 받은 적이 있습니까?", answer: null },
-  { id: 5, text: "최근 5년 이내 질병으로 진단받거나 치료받은 적이 있습니까?", answer: null },
+  { id: 4, text: "최근 1년 이내 질병으로 치료를 받은 적이 있으신가요?", answer: null },
+  { id: 5, text: "최근 5년 이내 질병으로 진단받거나 치료받은 적이 있으신가요?", answer: null },
 ]);
 
 // 경고 메시지 관리
