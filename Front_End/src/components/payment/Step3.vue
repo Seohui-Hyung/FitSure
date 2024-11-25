@@ -95,8 +95,7 @@ const applyCoupon = () => {
         return;
     }
 
-    console.log(coupon)
-    if (coupon) {
+    if (selectedCoupon.value) {
         const discount = originalAmount.value * (5 / 100);
         finalAmount.value = originalAmount.value - discount;
         alert(`쿠폰이 적용되었습니다! 할인 금액: ${discount.toLocaleString()}원`);
