@@ -19,7 +19,7 @@
   		<update id="usedCoupon" parameterType="int">
   			UPDATE coupon
   			SET used = 1
-  			WHERE user_id = #{userId}
+  			WHERE coupon_id = #{couponId}
   		</update>
   
   		<select id="unUsedCoupon" parameterType="int" resultType="Coupon">

@@ -27,8 +27,8 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public void useCoupon(int userId) {
-		couponDao.usedCoupon(userId);
+	public void useCoupon(int couponId) {
+		couponDao.usedCoupon(couponId);
 		
 	}
 

@@ -10,7 +10,7 @@ public interface CouponDao {
 
 	Coupon selectCoupon(int userId);
 
-	void usedCoupon(int userId);
+	void usedCoupon(int couponId);
 
 	List<Coupon> selectCouponlist(int userId);
 

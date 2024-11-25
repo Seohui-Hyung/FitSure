@@ -1,18 +1,14 @@
 package com.pretzero.fitsure.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.pretzero.fitsure.model.dto.Comment;
-import com.pretzero.fitsure.model.dto.Coupon;
 import com.pretzero.fitsure.model.dto.InsurancePlan;
-import com.pretzero.fitsure.model.dto.Notice;
 import com.pretzero.fitsure.model.dto.Payment;
 import com.pretzero.fitsure.model.service.CommentService;
 import com.pretzero.fitsure.model.service.CouponService;
@@ -71,7 +65,8 @@ public class InsuranceController {
 	
 	// 보험 결제의 경우 PayController로 별도 진행 
 	@PostMapping("/{insuranceId}/pay")
-	public String payInsurance(@PathVariable int insuranceId, @RequestParam(required = false) String couponCode, HttpServletRequest request){
+	public String payInsurance(@PathVariable int insuranceId, @RequestParam(required = false,  defaultValue = "0") int couponCode, 
+							@RequestParam(required = true) int finalAmount, HttpServletRequest request){
 		String token = request.getHeader("access-token"); 
 		int userId = JwtUtil.getuserId(token);
 		
@@ -82,28 +77,19 @@ public class InsuranceController {
 		Payment paytemp = new Payment();
 		paytemp.setUserId(userId);
 		paytemp.setInsuranceId(insuranceId);
-		
+		System.out.println(finalAmount);
 		
 		InsurancePlan insurance = insuranceService.readInsurance(insuranceId);
 		
 		double originalAmount = insurance.getPremium();
-		double discountAmount = 0.0;
+
 		
 		// 쿠폰 사용하는 경우, 5% 할인을 위하여 
-		if (couponCode != null && !couponCode.isEmpty()) {
-	        Coupon coupon = couponService.findCoupon(userId); // 쿠폰 조회
-
-	        if (coupon == null || coupon.getUsed() == 0) {
-	        	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid or expired coupon");
-	        }
-	        
-	        // 할인 계산 (예: 5% 할인)
-	        discountAmount = originalAmount * 0.05;
-	        originalAmount -= discountAmount; // 최종 결제 금액 계산
-	        couponService.useCoupon(userId);
+		if (couponCode != 0) {
+	        couponService.useCoupon(couponCode);
 	    }
 		
-		paytemp.setAmount(originalAmount); // 적용된 쿠폰 코드 저장
+		paytemp.setAmount(finalAmount); // 적용된 쿠폰 코드 저장
 		
 		paymentService.createPayment(paytemp);
 		

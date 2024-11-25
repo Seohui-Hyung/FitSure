@@ -10,7 +10,7 @@ public interface CouponService {
 
 	Coupon findCoupon(int userId);
 
-	void useCoupon(int userId);
+	void useCoupon(int couponId);
 
 	List<Coupon> getCouponList(int userId);
 

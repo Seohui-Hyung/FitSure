@@ -46,7 +46,7 @@ const coupons = ref([]);
 const insurance = ref([]);
 const selectedCoupon = ref(0);
 const originalAmount = ref(0); // 초기 금액
-const finalAmount = ref(originalAmount.value);
+const finalAmount = ref(0);
 
 onMounted(async () => {
     try {
@@ -80,6 +80,7 @@ const fetchInsurance = (insuranceId) => {
             insurance.value = response;
             console.log(insurance.value)
             originalAmount.value = insurance.value.premium;
+            finalAmount.value = originalAmount.value;
         })
 
     } catch (error) {
@@ -91,26 +92,30 @@ const fetchInsurance = (insuranceId) => {
 const applyCoupon = () => {
     
     if (!selectedCoupon.value) {
-        alert("적용할 쿠폰을 선택해주세요.");
-        return;
+        alert("적용할 쿠폰이 없습니다.");
+        finalAmount.value = originalAmount.value
     }
+
+    
 
     if (selectedCoupon.value) {
         const discount = originalAmount.value * (5 / 100);
         finalAmount.value = originalAmount.value - discount;
         alert(`쿠폰이 적용되었습니다! 할인 금액: ${discount.toLocaleString()}원`);
-    } else {
-        alert("유효한 쿠폰이 아닙니다.");
-    }
+        console.log(finalAmount.value)
+    } 
 };
 
 const payInsurance = async () => {
     try {
+
         const insuranceId = route.params.insuranceId;
-        const redirectUrl = await store.payInsurance(insuranceId, selectedCoupon.value);
+
+        console.log(insuranceId)
+        const redirectUrl = await store.payInsurance(insuranceId, selectedCoupon.value, finalAmount.value);
         window.location.href = redirectUrl || "/pay/success";
     } catch (error) {
-        alert("결제에 실패했습니다. 다시 시도해주세요.");
+        alert("결제에 실패했습니다. 다시 시도해주세요." + error);
     }
 };
 </script>

@@ -91,30 +91,20 @@ export const useUserStore = defineStore('user', () => {
   };
 
   // 결제 요청 메서드
-  const payInsurance = async (insuranceId, couponCode = null) => {
+  const payInsurance = async (insuranceId, couponCode, finalAmount) => {
     try {
-        const token = localStorage.getItem("access-token"); // 토큰 가져오기
-        if (!token) {
-            throw new Error("Token is missing");
-        }
-
         const response = await axios
-          .post(`${REST_API_URL}/${insuranceId}/pay`,// 보험 ID를 경로에 포함
-                { couponCode }, // 쿠폰 코드 전달
+          .post(`${REST_API_URL}/insurance/${insuranceId}/pay`,
+                { 
+                  couponCode,
+                  finalAmount
+                }, // 쿠폰 코드 전달
                 {
                   headers: {
                     "access-token": localStorage.getItem("access-token"), // 인증 헤더
-                  },
-                // Axios의 리다이렉트를 따르도록 설정
-                  maxRedirects: 0, // 리다이렉트 추적을 방지
-                  validateStatus: (status) => status < 400 || status === 302, // 리다이렉트도 유효한 상태로 처리
+                  }
                 }
           );
-
-        // 리다이렉트가 발생했으면 브라우저가 처리
-        if (response.status === 302) {
-            window.location.href = response.headers.location || "/pay/ready";
-        }
     } catch (error) {
         console.error("Payment failed:", error);
         alert("결제에 실패했습니다. 다시 시도해주세요.");
