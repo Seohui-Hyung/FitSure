@@ -37,7 +37,7 @@ public class KaKaoPayService {
 	    parameters.put("quantity", "1");
 	    parameters.put("total_amount", String.valueOf(totalPrice));
 	    parameters.put("tax_free_amount", "0");
-	    parameters.put("approval_url", "http://localhost:5173/pay/completed");
+	    parameters.put("approval_url", "http://localhost:5173/insurance/pay/success");
 	    parameters.put("cancel_url", "http://localhost:8080/pay/cancel");
 	    parameters.put("fail_url", "http://localhost:8080/pay/fail");
 
