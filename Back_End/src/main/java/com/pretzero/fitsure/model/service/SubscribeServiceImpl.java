@@ -1,6 +1,7 @@
 package com.pretzero.fitsure.model.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,11 @@ public class SubscribeServiceImpl implements SubscribeService {
 		
 		subscribeDao.insertSub(sub);
 		
+	}
+
+	@Override
+	public List<Subscribe> ongoingSub(int userId) {
+		return subscribeDao.selectIns(userId);
 	}
 
 }

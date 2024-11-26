@@ -5,12 +5,12 @@
     </div>
     <form @submit.prevent="signup" class="signup-form">
       <div class="form-group-row">
-        <label for="name">이름</label>
-        <input id="name" v-model="name" type="text" placeholder="이름" required />
+        <label for="username">이름</label>
+        <input id="username" v-model="username" type="text" placeholder="이름" required />
       </div>
       <div class="form-group-row">
-        <label for="username">아이디</label>
-        <input id="username" v-model="username" type="text" placeholder="아이디" readonly />
+        <label for="userLoginId">아이디</label>
+        <input id="userLoginId" v-model="userLoginId" type="text" placeholder="아이디" readonly />
       </div>
       <div class="form-group-row">
         <label for="password">비밀번호</label>
@@ -32,18 +32,18 @@
       <div class="form-group-row">
         <label for="email">이메일</label>
         <div class="input-container email-container">
-          <input id="email" v-model="email" type="email" placeholder="이메일" @input="validateEmail" readonly />
+          <input id="email" v-model="email" type="email" placeholder="이메일" @input="validateEmail" />
         </div>
       </div>
       <div class="form-group-row">
-        <label for="dob">생년월일</label>
-        <input id="dob" v-model="dob" type="date" placeholder="생년월일" readonly />
+        <label for="birthDate">생년월일</label>
+        <input id="birthDate" v-model="birthDate" type="text" placeholder="생년월일" readonly />
       </div>
       <div class="form-group-row">
         <label for="gender">성별</label>
         <select id="gender" v-model="gender" disabled>
-          <option value="남성">남성</option>
-          <option value="여성">여성</option>
+          <option value="M">남성</option>
+          <option value="F">여성</option>
         </select>
       </div>
       <div class="lonely-button">
@@ -59,20 +59,21 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import router from "@/router";
 import { useUserStore } from "@/store/useUserStore";
 
-const name = ref("");
 const username = ref("");
+const userLoginId = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const email = ref("");
-const dob = ref("");
+const birthDate = ref(""); // 생년월일 수정 가능하도록
 const gender = ref("");
 const errorMessage = ref("");
 const successMessage = ref("");
-const userStore = useUserStore();
+const store = useUserStore();
+const isAuthenticated = ref(false)
 
 // 비밀번호가 일치하는지 확인하는 computed 속성
 const passwordsMatch = computed(() => password.value === confirmPassword.value);
@@ -83,22 +84,55 @@ function signup() {
     successMessage.value = "";
     return;
   }
+
+  try {
+    // 비동기 요청을 기다림
+    store.updateUser(username.value, password.value, email.value);
+    // 성공 메시지 처리
+    errorMessage.value = "";
+    successMessage.value = "수정이 완료되었습니다!";
+  } catch (error) {
+    errorMessage.value = "수정 중 문제가 발생했습니다.";
+  }
 }
 
 function confirmCancel() {
   const confirmCancel = confirm("취소하시겠습니까?");
   if (confirmCancel) {
-    router.push({ name: "Main" });
+    
   }
 }
 
 function confirmLeave() {
   const confirmLeave = confirm("탈퇴하시겠습니까?");
   if (confirmLeave) {
-    //
+    store.deleteUser();
   }
 }
+
+onMounted(() => {
+  try {
+    store.checkAuth().then((loggedInUser) => {
+      if (loggedInUser == null) {
+        isAuthenticated.value = false;
+      } else {
+        console.log("로그인 유저: ", loggedInUser);
+        username.value = loggedInUser.username;
+        userLoginId.value = loggedInUser.userLoginId;
+        password.value = loggedInUser.password;
+        confirmPassword.value = loggedInUser.password; // 비밀번호와 비밀번호 확인 초기화
+        email.value = loggedInUser.email;
+        birthDate.value = loggedInUser.birthDate.substring(0, 10);; // 초기화 가능
+        gender.value = loggedInUser.gender;
+        isAuthenticated.value = true;
+      }
+    });
+  } catch (error) {
+    console.error("Error during authentication:", error);
+  }
+});
 </script>
+
 
 <style scoped>
 .signup-container {

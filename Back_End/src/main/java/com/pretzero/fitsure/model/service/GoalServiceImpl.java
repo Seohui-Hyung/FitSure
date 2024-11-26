@@ -18,19 +18,19 @@ public class GoalServiceImpl implements GoalService {
 	GoalDao goalDao;
 	
 	@Override
-	public int createGoal(int user_id) {		
-		int list = findGoal(user_id);
+	public int createGoal(int userId) {		
+		int list = findGoal(userId);
 		
 		if(list == 0) {
-			return goalDao.insertGoal(user_id);
+			return goalDao.insertGoal(userId);
 		} else {
 			return 0;
 		}
 	}
 
 	@Override
-	public int findGoal(int user_id) {
-		int result = goalDao.selectGoal(user_id);
+	public int findGoal(int userId) {
+		int result = goalDao.selectGoal(userId);
 		
 		return result;
 	}

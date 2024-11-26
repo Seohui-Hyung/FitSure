@@ -21,6 +21,13 @@
 		        END
 		    )
 		</insert>
+		
+		<select id="selectIns" parameterType="int" resultType="Subscribe">
+			SELECT *
+			FROM subscribe
+			WHERE user_id=#{userId} 
+  				AND end_date >= now()
+		</select>
   		
   
   

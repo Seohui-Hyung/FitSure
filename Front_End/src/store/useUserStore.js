@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import router from '@/router'
 
 const REST_API_URL = "http://localhost:8080"; // API 서버 주소
 
@@ -11,6 +12,7 @@ export const useUserStore = defineStore('user', () => {
   const authToken = ref(""); // JWT 토큰
   const couponList = ref([]);
   const insurance = ref([]);
+  const insuranceList = ref([])
 
   // 로그인 메서드
   async function login(userLoginId, password) {
@@ -59,6 +61,42 @@ export const useUserStore = defineStore('user', () => {
           console.error("인증 실패:", error);
         });
   }
+
+  const updateUser = (username, password, email) => {
+    const data = {
+      username,
+      password,
+      email
+    };
+  
+  
+    axios.patch(`${REST_API_URL}/user/token/update`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        "access-token": localStorage.getItem("access-token")
+      }
+    })
+    .then((res) => {
+      console.log(res);
+      router.push({ name: "MyPage" });
+    }).catch((error) => {
+      console.error(error);
+    });
+  };
+
+  const deleteUser = async () => {
+    axios.put(`${REST_API_URL}/user/token/delete`, {}, {
+      headers: { "access-token": localStorage.getItem("access-token") }
+    })
+    .then((res) => {
+      console.log(res);
+      router.push({ name: "Main" });
+    })
+    .catch((error) => {
+      console.error("Error deleting user:", error);
+    });
+    
+  };
 
   // 쿠폰 리스트 가져오기
   const getCouponList = async () => {
@@ -158,6 +196,43 @@ const payInsurance = async (insuranceId, couponCode, finalAmount) => {
   }
 
 
+  const createGoal = function(){
+    axios.post(`${REST_API_URL}/user/goal/create`,{},{
+      headers: {
+        "access-token": localStorage.getItem("access-token")
+      }
+    }).then((res) => {
+      return "ok";
+    })
+  }
+
+  const goalList = ref({})
+
+  const getGoalList = function(){
+    return axios.get(`${REST_API_URL}/user/goal`, {
+      headers: {
+        "access-token": localStorage.getItem("access-token")
+      }
+    }).then((res)=>{
+      goalList.value = res.data
+      console.log(goalList.value)
+      return goalList.value
+    })
+  }
+
+
+  const findmySubscribe = function(){
+    return axios.get(`${REST_API_URL}/insurance/ongoing`, {
+      headers: {
+        "access-token": localStorage.getItem("access-token")
+      }
+    }).then((res)=>{
+      insuranceList.value = res.data
+      console.log(goalList.value)
+      return insuranceList.value
+    })
+  }
+  
 
   // // 입력 초기화
   // const resetForm = () => {
@@ -187,6 +262,9 @@ const payInsurance = async (insuranceId, couponCode, finalAmount) => {
     // resetForm, // 주석 유지
 
     // 공지사항 
-    getNoticeList, noticeList, notice, noticeDetail, searchNoticeList
+    getNoticeList, noticeList, notice, noticeDetail, searchNoticeList,
+
+    updateUser, deleteUser, createGoal, getGoalList, goalList,
+    findmySubscribe, insuranceList
   };
 });

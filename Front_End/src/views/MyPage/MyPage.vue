@@ -1,85 +1,133 @@
 <template>
-  <div class="profile-page">
-    <!-- 사용자 정보 섹션 -->
-    <section class="user-info">
-      <div class="user-details">
-        <h2>{{ username }}</h2>
-        <div class="details-row">
-          <RouterLink to="/auth/info-change">개인 정보 수정</RouterLink> | 보유 쿠폰 1개
+    <div class="profile-page">
+      <!-- 사용자 정보 섹션 -->
+      <section class="user-info">
+        <div class="user-details">
+          <h1>{{ username }}</h1>
+          <hr />
+          <div class="details-row">
+            <RouterLink to="/auth/info-change">개인 정보 수정</RouterLink> | 보유 쿠폰 {{ coupon }} 개
+          </div>
+          <ChallengeProgress :challengeStarted="challengeStarted" />
         </div>
-        <ChallengeProgress :challengeStarted="challengeStarted" />
-      </div>
-      <div class="challenge-box">
-        <!-- 챌린지 시작하기 버튼 또는 로드맵 이미지 -->
-        <template v-if="!challengeStarted">
-          <button class="challenge-button" @click="startChallenge">
-            24주 챌린지 시작하기
-          </button>
-          <ul class="challenge-info">
-            <br />
-            <a>▶ </a>
-            <a style="text-decoration: underline;">24주 챌린지란?</a>
-            <li>24주간 매주 5일 이상 7000보 이상 걷는 챌린지입니다.</li>
-            <li>(연속으로 달성하지 못할 시 카운트가 초기화됩니다.)</li>
-            <br />
-            <a>▶ </a>
-            <a style="text-decoration: underline;">달성 시 혜택</a>
-            <li>FITSURE의 보험 상품 하나를 6개월간 5% 할인된 가격에</li>
-            <li>이용 가능한 쿠폰을 제공해드립니다.</li>
-          </ul>
+        <div class="challenge-box">
+          <!-- 챌린지 시작하기 버튼 또는 로드맵 이미지 -->
+          <template v-if="!challengeStarted">
+            <button class="challenge-button" @click="startChallenge">
+              24주 챌린지 시작하기
+            </button>
+            <ul class="challenge-info">
+              <br />
+              <a>▶ </a>
+              <a style="text-decoration: underline;">24주 챌린지란?</a>
+              <li>24주간 매주 5일 이상 7000보 이상 걷는 챌린지입니다.</li>
+              <li>(연속으로 달성하지 못할 시 카운트가 초기화됩니다.)</li>
+              <br />
+              <a>▶ </a>
+              <a style="text-decoration: underline;">달성 시 혜택</a>
+              <li>FITSURE의 보험 상품 하나를 6개월간 5% 할인된 가격에</li>
+              <li>이용 가능한 쿠폰을 제공해드립니다.</li>
+            </ul>
+          </template>
+          <template v-else>
+            <img src="/images/road.png" alt="로드맵" class="road-image" />
+          </template>
+        </div>
+      </section>
+  
+      <!-- 보험 가입 내역 섹션 -->
+      <section class="insurance-section">
+        <h3>보험 가입 내역</h3>
+        <template v-if="insurance.length === 0">
+          <p>가입한 보험이 없습니다.</p>
         </template>
-        <template v-else>
-          <img src="/public/images/road.png" alt="로드맵" class="road-image" />
-        </template>
-      </div>
-    </section>
-
-    <!-- 보험 가입 내역 섹션 -->
-    <section class="insurance-section">
-      <h3>보험 가입 내역</h3>
-      <p>가입한 보험이 없습니다.</p>
-    </section>
-
-    <!-- 과거 보험 가입 내역 섹션 -->
-    <section class="insurance-section">
-      <h3>과거 보험 가입 내역</h3>
-      <p>과거 보험 가입 내역이 없습니다.</p>
-    </section>
-  </div>
-</template>
-
-<script>
-import { ref } from "vue";
-import { useUserStore } from "@/store/useUserStore";
-import ChallengeProgress from "@/components/challenge/ChallengeProgress.vue";
-
-export default {
-  components: {
-    ChallengeProgress,
-  },
-  setup() {
-    const userStore = useUserStore();
-    const username = userStore.username;
-    const challengeStarted = ref(false);
-
-    const startChallenge = () => {
-      challengeStarted.value = true;
-    };
-
-    const logout = () => {
-      userStore.logout(); // 로그아웃 함수 호출
-      window.location.href = '/'; // 로그아웃 후 메인 페이지로 이동
-    };
-
-    return {
-      username,
-      challengeStarted,
-      startChallenge,
-      logout,
-    };
-  },
-};
-</script>
+        <ul v-else>
+          <li v-for="(item, index) in insurance" :key="index">
+            {{ item.name }} - {{ item.details }}
+          </li>
+        </ul>
+      </section>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, computed, onMounted } from "vue";
+  import { useUserStore } from "@/store/useUserStore"; // store import
+  import { useRouter, useRoute } from 'vue-router';
+  import ChallengeProgress from "@/components/challenge/ChallengeProgress.vue";
+  
+  // 컴포넌트 등록
+  const store = useUserStore();
+  const challengeStarted = ref(false);
+  
+  // 함수 정의
+  const startChallenge = async () => {
+    try {
+      // store의 createGoal 함수 호출
+      const response = store.createGoal();
+  
+      challengeStarted.value = true; // 목표 생성 성공 시 챌린지 시작
+    } catch (error) {
+      console.error("Error while starting the challenge:", error);
+    }
+  };
+  
+  const logout = () => {
+    store.logout(); // 로그아웃 함수 호출
+    window.location.href = '/'; // 로그아웃 후 메인 페이지로 이동
+  };
+  
+  // 인증 상태와 로그인 사용자
+  const isAuthenticated = ref(false);
+  // 상태 관리 변수
+  const username = ref("");
+  const goal = ref({})
+  const coupon = ref(0)
+  const insurance = ref([]) // 보험 목록을 배열로 초기화
+  
+  // 인증 체크
+  onMounted(() => {
+      try {
+        store.checkAuth()
+        .then((loggedInUser) => {
+            if (loggedInUser == null) {
+                isAuthenticated.value = false;
+            } else {
+                console.log("로그인 유저  "+ loggedInUser)
+                username.value = loggedInUser.username;
+                isAuthenticated.value = true;
+            }
+        })
+        store.getGoalList()
+        .then((goal) => {
+            if (goal == null) {
+                challengeStarted.value = false;
+            } else {
+                goal.value = goal
+                challengeStarted.value = true;
+            }
+        })
+        store.getCouponList()
+        .then((couponList)=> {
+            if (couponList == null) {
+                coupon.value = 0;
+            } else {
+                coupon.value = couponList.length;
+            }
+        })
+        store.findmySubscribe()
+        .then((insuranceList)=> {
+            if (insuranceList == null) {
+                insurance.value = [];
+            } else {
+                insurance.value = insuranceList; // 보험 목록을 배열로 저장
+            }
+        })
+    } catch (error) {
+      console.error("Error during authentication:", error);
+    }
+  });
+  </script>
 
 <style scoped>
 body {
@@ -87,6 +135,10 @@ body {
   padding: 0;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
+}
+
+h1{
+    margin-left: 20px !important;
 }
 
 .profile-page {

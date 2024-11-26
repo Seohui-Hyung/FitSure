@@ -6,9 +6,9 @@ import com.pretzero.fitsure.model.dto.Goal;
 
 public interface GoalDao {
 
-	int selectGoal(int user_id);
+	int selectGoal(int userId);
 
-	int insertGoal(int user_id);
+	int insertGoal(int userId);
 
 	void addWeekGoal();
 

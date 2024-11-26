@@ -1,19 +1,20 @@
 package com.pretzero.fitsure.model.dto;
 
+import java.util.Date;
 
 public class Goal {
     private int goalId;
     private int userId;
     private int dayGoal;
     private int weekGoal;
-    private int startDay;
-    private int expireDay;
+    private Date startDay;
+    private Date expireDay;
     private boolean exchange;
     private boolean cancel;
     
     public Goal() {}
     
-	public Goal(int goalId, int userId, int dayGoal, int weekGoal, int startDay, int expireDay, boolean exchange,
+	public Goal(int goalId, int userId, int dayGoal, int weekGoal, Date startDay, Date expireDay, boolean exchange,
 			boolean cancel) {
 		super();
 		this.goalId = goalId;
@@ -51,16 +52,16 @@ public class Goal {
 	public void setWeekGoal(int weekGoal) {
 		this.weekGoal = weekGoal;
 	}
-	public int getStartDay() {
+	public Date getStartDay() {
 		return startDay;
 	}
-	public void setStartDay(int startDay) {
+	public void setStartDay(Date startDay) {
 		this.startDay = startDay;
 	}
-	public int getExpireDay() {
+	public Date getExpireDay() {
 		return expireDay;
 	}
-	public void setExpireDay(int expireDay) {
+	public void setExpireDay(Date expireDay) {
 		this.expireDay = expireDay;
 	}
 	public boolean isExchange() {

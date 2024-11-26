@@ -135,25 +135,25 @@ public class UserControllerToken {
 
 
     // 회원 탈퇴
-    @PatchMapping("/delete")
-    public ResponseEntity<String> deleteUser(HttpServletRequest request, @RequestBody User user) {
+    @PutMapping("/delete")
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
         String token = request.getHeader("access-token"); 
         String userLoginId = JwtUtil.getLoginId(token);
         
-        if (userLoginId == null || !userService.getPassword(userLoginId).equals(user.getPassword())) {
+        if (userLoginId == null ) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
-
+        System.out.println("삭제" + userLoginId);
         boolean deleted = userService.deleteUser(userLoginId);
         
         return deleted ? ResponseEntity.ok("Account deleted successfully") : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete account");
     }
     
     
-    @PatchMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<String> updateUserInfo(HttpServletRequest request, @RequestBody User updatedUser) {
-        String token = request.getHeader("access-token"); 
-        String userLoginId = JwtUtil.getLoginId(token);
+    	String token = request.getHeader("access-token");  
+    	String userLoginId = JwtUtil.getLoginId(token);
 
         if (userLoginId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This service requires login.");
@@ -163,7 +163,7 @@ public class UserControllerToken {
 
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setBirthDate(updatedUser.getBirthDate());
+        existingUser.setUsername(updatedUser.getUsername());
 
         boolean updated = userService.updateUserInfo(existingUser);
 

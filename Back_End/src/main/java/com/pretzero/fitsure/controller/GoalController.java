@@ -14,6 +14,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,8 +52,8 @@ public class GoalController {
 	// 목표 생성
 	@PostMapping("/create")
 	public ResponseEntity<String> createGoal(HttpServletRequest request) {
-		String token = request.getHeader("Authorization"); // "Bearer " 제거
-		int userId = JwtUtil.getuserId(token);
+		String token = request.getHeader("access-token"); 
+        int userId = JwtUtil.getuserId(token);
 
 		// 토큰의 유효성을 검사하고 만료된 경우 Unauthorized 응답
 		if (userId < 0 || JwtUtil.isExpired(token)) {
@@ -68,6 +69,8 @@ public class GoalController {
 		}
 	}
 
+	// 목표 조회 
+	
 	// 목표 달성
 	@PostMapping("/done")
 	public ResponseEntity<String> completeGoal(HttpServletRequest request, @RequestParam("file") MultipartFile file,
@@ -145,7 +148,7 @@ public class GoalController {
 		}
 	}
 
-	@PatchMapping("/cancel")
+	@PutMapping("/cancel")
 	public ResponseEntity<String> cancelGoal(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
 		int userId = JwtUtil.getuserId(token);
@@ -164,7 +167,7 @@ public class GoalController {
 		}
 	}
 
-	@GetMapping("/{userId}")
+	@GetMapping("")
 	public ResponseEntity<?> goalList(HttpServletRequest request) {
 		String token = request.getHeader("access-token");
 		int userId = JwtUtil.getuserId(token);
@@ -175,15 +178,12 @@ public class GoalController {
 		
 		Goal ongoingGoal = goalService.getGoalList(userId);
 		
-		
 		if (ongoingGoal != null) {
-			return new ResponseEntity<>(ongoingGoal, HttpStatus.OK);
+			return ResponseEntity.ok(ongoingGoal);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 		            .body("No registered goals found. Please create a new goal.");
 		}
-		
-		
 	}
 
 

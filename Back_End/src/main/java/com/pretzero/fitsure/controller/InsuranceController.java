@@ -19,11 +19,13 @@ import org.springframework.web.server.ResponseStatusException;
 import com.pretzero.fitsure.model.dto.Comment;
 import com.pretzero.fitsure.model.dto.InsurancePlan;
 import com.pretzero.fitsure.model.dto.Payment;
+import com.pretzero.fitsure.model.dto.Subscribe;
 import com.pretzero.fitsure.model.dto.paymenttest.paymentjson;
 import com.pretzero.fitsure.model.service.CommentService;
 import com.pretzero.fitsure.model.service.CouponService;
 import com.pretzero.fitsure.model.service.InsurancePlanService;
 import com.pretzero.fitsure.model.service.PaymentService;
+import com.pretzero.fitsure.model.service.SubscribeService;
 import com.pretzero.fitsure.util.JwtUtil;
 import com.pretzero.fitsure.util.SessionUtils;
 
@@ -49,6 +51,9 @@ public class InsuranceController {
 	
 	@Autowired
 	HttpSession session;
+	
+	@Autowired
+	SubscribeService subscribeService;
 	
 	// 보험 전체 목록 조회 
 	@GetMapping("")
@@ -151,8 +156,18 @@ public class InsuranceController {
 	}
 	
 
-	
-	
+	@GetMapping("/ongoing")
+	public ResponseEntity<?> ongoingSub(HttpServletRequest request){
+		String token = request.getHeader("access-token");
+		int userId = JwtUtil.getuserId(token);
+		
+		List<Subscribe> subscribe = subscribeService.ongoingSub(userId);
+
+		if (subscribe != null) {
+			return ResponseEntity.ok(subscribe);
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add comment");	
+	}
 	
 	
 	

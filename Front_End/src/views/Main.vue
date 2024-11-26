@@ -1,258 +1,262 @@
 <template>
-  <div class="main-container">
-    <!-- 홍보 자료 슬라이더와 로그인 폼 -->
-    <section v-if="slides.length > 0" class="promo-login-section">
-      <!-- 홍보 슬라이더 -->
-      <div class="promo-slider" @mouseenter="pauseSlider" @mouseleave="resumeSlider">
-        <img :src="slides[currentSlide]" alt="Promo Image" class="promo-image" />
-        <div class="pagination">
-          <span 
-            v-for="(slide, index) in slides" 
-            :key="index" 
-            :class="{ active: index === currentSlide }"
-            @click="goToSlide(index)"
-          ></span>
-        </div>
-      </div>
-
-      <!-- 로그인 폼 또는 로그인 후 상태
-      <div class="login-status">
-        <div v-if="isAuthenticated" class="logged-in">
-          <p class="welcome-message">
-            <span>{{ loggedInUser }}</span>님, <br />
-            일일 목표 {{ stepsGoal }} 걸음
-          </p>
-          <div class="circle-container">
-            <div v-for="n in 5" :key="n" :class="['circle', { active: n === currentStep }]">
-              {{ n }}
-            </div>
+    <div class="main-container">
+      <!-- 홍보 자료 슬라이더와 로그인 폼 -->
+      <section v-if="slides.length > 0" class="promo-login-section">
+        <!-- 홍보 슬라이더 -->
+        <div class="promo-slider" @mouseenter="pauseSlider" @mouseleave="resumeSlider">
+          <img :src="slides[currentSlide]" alt="Promo Image" class="promo-image" />
+          <div class="pagination">
+            <span 
+              v-for="(slide, index) in slides" 
+              :key="index" 
+              :class="{ active: index === currentSlide }"
+              @click="goToSlide(index)"
+            ></span>
           </div>
-          <button class="action-button">현재 3주째 달성 중 🎉</button>
         </div>
-
-        <div v-else class="login-box">
-          <p class="login-prompt">안녕하세요<br />로그인 해주세요</p>
-          <form @submit.prevent="handleLogin" class="login-form">
-            <input id="username" v-model="username" type="text" placeholder="아이디" class="input-box" required />
-            <input id="password" v-model="password" type="password" placeholder="비밀번호" class="input-box" required />
-            <button type="submit" class="login-button">Login</button>
+  
+        <!-- 로그인 폼 -->
+        <div v-if="isAuthenticated" class="login-form">
+            <h2 style="padding-top: 20px;">안녕하세요<br>기분 좋은 하루 되세요</h2>
+            <ChallengeProgress :challengeStarted="challengeStarted" />
+        </div>
+        <div v-else class="login-form">
+          <h2>안녕하세요<br>로그인 해주세요</h2>
+          <form class="login-form-container">
+            <div class="input-container">
+              <input type="text" placeholder="아이디를 입력하세요" />
+              <input type="password" placeholder="패스워드를 입력하세요" />
+            </div>
+            <button class="button1" type="submit">Login</button>
           </form>
         </div>
-      </div> -->
-
-      <!-- 로그인 폼 -->
-      <div class="login-form">
-        <h2>안녕하세요<br>로그인 해주세요</h2>
-        <form class="login-form-container">
-          <div class="input-container">
-            <input type="text" placeholder="아이디를 입력하세요" />
-            <input type="password" placeholder="패스워드를 입력하세요" />
-          </div>
-          <button class="button1" type="submit">Login</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- 네비게이션 바 -->
-    <nav class="insurance-nav">
-      <a href="#travel-insurance" @click.prevent="scrollToSection('travel-insurance')">여행자 보험</a>
-      <a href="#health-insurance" @click.prevent="scrollToSection('health-insurance')">건강 보험</a>
-      <a href="#medical-insurance" @click.prevent="scrollToSection('medical-insurance')">실손 의료비 보험</a>
-    </nav>
-
-    <!-- 보험 섹션 -->
-    <section id="travel-insurance" class="insurance-section">
-      <h3>여행자 보험</h3>
-      <p>안전한 여행을 위한 준비</p>
-      <button class="button2" @click="navigateTo('/traveler')">
-        <span class="button-title">해외 여행 보험</span>
-        <br>
-        <span class="button-description">분실~ 병원~ 전부 보장!</span>
-      </button>
-    </section>
-
-    <section id="health-insurance" class="insurance-section">
-        <h3>건강 보험</h3>
-        <p>질병에 필요한 보장, 최대 100세까지 든든하게</p>
-        <button class="button2" @click="navigateWithInsuranceId('/health', 2)">
-            <span class="button-title">건강 보험(16~40)</span>
-            <br>
-            <span class="button-description">고혈압, 당뇨 특약</span>
+      </section>
+  
+      <!-- 로그인 된 경우 -->
+      
+  
+      <!-- 네비게이션 바 -->
+      <nav class="insurance-nav">
+        <a href="#travel-insurance" @click.prevent="scrollToSection('travel-insurance')">여행자 보험</a>
+        <a href="#health-insurance" @click.prevent="scrollToSection('health-insurance')">건강 보험</a>
+        <a href="#medical-insurance" @click.prevent="scrollToSection('medical-insurance')">실손 의료비 보험</a>
+      </nav>
+  
+      <!-- 보험 섹션 -->
+      <section id="travel-insurance" class="insurance-section">
+        <h3>여행자 보험</h3>
+        <p>안전한 여행을 위한 준비</p>
+        <button class="button2" @click="navigateTo('/traveler')">
+          <span class="button-title">해외 여행 보험</span>
+          <br>
+          <span class="button-description">분실~ 병원~ 전부 보장!</span>
         </button>
-        <button class="button2" @click="navigateWithInsuranceId('/health', 3)">
-            <span class="button-title">건강 보험(41~70)</span>
-            <br>
-            <span class="button-description">고혈압, 당뇨 특약</span>
-        </button>
-        <button class="button2" @click="navigateWithInsuranceId('/health', 4)">
-            <span class="button-title">암 보험</span>
-            <br>
-            <span class="button-description">췌장암, 대장암, 유방암 보장</span>
-        </button>
-    </section>
-
-
-    <section id="medical-insurance" class="insurance-section">
-        <h3>실손 의료비 보험</h3>
-        <p>상해/질병 보장</p>
-        <!-- 실손 의료비 보험 버튼 -->
-        <button class="button2" @click="navigateWithTab('/actualexpense', 5)">
-            <span class="button-title">실손 의료비 보험</span>
-            <br>
-            <span class="button-description">이것저것 다 보장!</span>
-        </button>
-        <!-- 유병자 실손 보험 버튼 -->
-        <button class="button2" @click="navigateWithTab('/actualexpense', 6)">
-            <span class="button-title">유병자 실손 보험</span>
-            <br>
-            <span class="button-description">병이 있나?? 이거 하라</span>
-        </button>
-        </section>
-
-        <section class="consultation-section">
-            <div class="consultation-content">
-            <h2>상담을 원하십니까?</h2>
-            <p>당신을 위한 맞춤형 상담 제공!</p>
-            <p>지금 시작하세요!</p>
-            <button class="consultation-button" @click="handleConsultationClick">여길 클릭하세요 ></button>
-            </div>
-            <div class="consultation-image">
-            <img src="/images/promotion/tmp1.jpg" alt="상담 이미지" />
-            </div>
-        </section>
-    
-
-    <section class="testimonial-section">
-      <h2>고객들의 이용 후기</h2>
-      <div class="underline"></div>
-      <div class="testimonial-slider">
-        <div 
-          v-for="(testimonial, index) in testimonials" 
-          :key="index" 
-          v-show="index === currentTestimonial"
-        >
-          <blockquote>{{ testimonial.text }}</blockquote>
-          <p>{{ testimonial.name }}</p>
+      </section>
+  
+      <!-- 추가적인 보험 섹션들 -->
+      <section id="health-insurance" class="insurance-section">
+          <h3>건강 보험</h3>
+          <p>질병에 필요한 보장, 최대 100세까지 든든하게</p>
+          <button class="button2" @click="navigateWithInsuranceId('/health', 2)">
+              <span class="button-title">건강 보험(16~40)</span>
+              <br>
+              <span class="button-description">고혈압, 당뇨 특약</span>
+          </button>
+          <button class="button2" @click="navigateWithInsuranceId('/health', 3)">
+              <span class="button-title">건강 보험(41~70)</span>
+              <br>
+              <span class="button-description">고혈압, 당뇨 특약</span>
+          </button>
+          <button class="button2" @click="navigateWithInsuranceId('/health', 4)">
+              <span class="button-title">암 보험</span>
+              <br>
+              <span class="button-description">췌장암, 대장암, 유방암 보장</span>
+          </button>
+      </section>
+  
+      <section id="medical-insurance" class="insurance-section">
+          <h3>실손 의료비 보험</h3>
+          <p>상해/질병 보장</p>
+          <!-- 실손 의료비 보험 버튼 -->
+          <button class="button2" @click="navigateWithTab('/actualexpense', 5)">
+              <span class="button-title">실손 의료비 보험</span>
+              <br>
+              <span class="button-description">이것저것 다 보장!</span>
+          </button>
+          <!-- 유병자 실손 보험 버튼 -->
+          <button class="button2" @click="navigateWithTab('/actualexpense', 6)">
+              <span class="button-title">유병자 실손 보험</span>
+              <br>
+              <span class="button-description">병이 있나?? 이거 하라</span>
+          </button>
+      </section>
+  
+      <!-- 상담 섹션 -->
+      <section class="consultation-section">
+        <div class="consultation-content">
+          <h2>상담을 원하십니까?</h2>
+          <p>당신을 위한 맞춤형 상담 제공!</p>
+          <p>지금 시작하세요!</p>
+          <button class="consultation-button" @click="handleConsultationClick">여길 클릭하세요 ></button>
         </div>
-      </div>
-      <div class="pagination">
-        <span 
-          v-for="(testimonial, index) in testimonials" 
-          :key="index" 
-          :class="{ active: index === currentTestimonial }"
-          @click="goToTestimonial(index)"
-        ></span>
-      </div>
-    </section>
-    
-  </div>
-</template>
-<script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-
-// 슬라이드 이미지 배열
-const slides = [
+        <div class="consultation-image">
+          <img src="/images/promotion/tmp1.jpg" alt="상담 이미지" />
+        </div>
+      </section>
+  
+      <!-- 고객 후기를 위한 섹션 -->
+      <section class="testimonial-section">
+        <h2>고객들의 이용 후기</h2>
+        <div class="underline"></div>
+        <div class="testimonial-slider">
+          <div 
+            v-for="(testimonial, index) in testimonials" 
+            :key="index" 
+            v-show="index === currentTestimonial"
+          >
+            <blockquote>{{ testimonial.text }}</blockquote>
+            <p>{{ testimonial.name }}</p>
+          </div>
+        </div>
+        <div class="pagination">
+          <span 
+            v-for="(testimonial, index) in testimonials" 
+            :key="index" 
+            :class="{ active: index === currentTestimonial }"
+            @click="goToTestimonial(index)"
+          ></span>
+        </div>
+      </section>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted } from "vue";
+  import { useRouter } from "vue-router";
+  import { useUserStore } from "@/store/useUserStore";
+  import ChallengeProgress from "@/components/challenge/ChallengeProgress.vue";
+  
+  // 슬라이드 이미지 배열
+  const slides = [
   '/images/promotion/001.png',
   '/images/promotion/002.png',
   '/images/promotion/003.png',
   '/images/promotion/004.png',
 ];
-const currentSlide = ref(0);
-let sliderInterval = null;
-
-// 후기에 대한 데이터
-const testimonials = ref([
-  { text: "여러 보험을 한눈에 모아주고 맞춤형 추천까지 해주는 점이 너무 좋아요!", name: "YOONJUNE, UM" },
-  { text: "직관적이고 사용하기 편리합니다. 500만원을 아꼈습니다!", name: "JIEUN LEE, IU" },
-  { text: "비대면이라 가서 직접 계약하지 않아도 되니 편했어요!", name: "BYUNGHEE, YOON" }
-]);
-const currentTestimonial = ref(0);
-
-const router = useRouter(); // Vue Router 사용
-
-// 경로로 단순 이동
-const navigateTo = (path) => {
-  router.push(path);
-};
-
-// 경로 및 쿼리 파라미터로 이동
-const navigateWithTab = (path, insuranceId) => {
-  router.push({
-    path: path,
-    query: { tab: insuranceId }, // 쿼리 파라미터로 탭 전달
-  });
-};
-
-const navigateWithInsuranceId = (path, insuranceId) => {
+  const currentSlide = ref(0);
+  let sliderInterval = null;
+  const store = useUserStore();
+  
+  // 후기에 대한 데이터
+  const testimonials = ref([
+    { text: "여러 보험을 한눈에 모아주고 맞춤형 추천까지 해주는 점이 너무 좋아요!", name: "YOONJUNE, UM" },
+    { text: "직관적이고 사용하기 편리합니다. 500만원을 아꼈습니다!", name: "JIEUN LEE, IU" },
+    { text: "비대면이라 가서 직접 계약하지 않아도 되니 편했어요!", name: "BYUNGHEE, YOON" }
+  ]);
+  const currentTestimonial = ref(0);
+  
+  // 챌린지 상태
+  const challengeStarted = ref(false);
+  
+  // 로그인 상태
+  const isAuthenticated = ref(false);
+  const router = useRouter(); // Vue Router 사용
+  
+  // 경로로 단순 이동
+  const navigateTo = (path) => {
+    router.push(path);
+  };
+  
+  // 경로 및 쿼리 파라미터로 이동
+  const navigateWithTab = (path, insuranceId) => {
     router.push({
-        path: path,
-        query: { insuranceId: insuranceId },
+      path: path,
+      query: { tab: insuranceId }, // 쿼리 파라미터로 탭 전달
     });
-};
-
-// 슬라이더 동작 관련 메서드
-const startSlider = () => {
-  sliderInterval = setInterval(() => {
-    nextSlide();
-  }, 5000);
-};
-
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % slides.length;
-};
-
-const pauseSlider = () => {
-  clearInterval(sliderInterval);
-};
-
-const resumeSlider = () => {
-  startSlider();
-};
-
-const goToSlide = (index) => {
-  pauseSlider();
-  currentSlide.value = index;
-  resumeSlider();
-};
-
-// 섹션 스크롤
-const scrollToSection = (sectionId) => {
-  const section = document.getElementById(sectionId); // 섹션 ID로 요소 찾기
-  if (section) {
-    const offset = section.getBoundingClientRect().top + window.pageYOffset; // 섹션의 Y 좌표 계산
-    const offsetMiddle = offset - (window.innerHeight / 2) + (section.offsetHeight / 2); // 화면 중앙에 맞추기
-    window.scrollTo({
-      top: offsetMiddle, // 중앙 위치로 스크롤
-      behavior: 'smooth', // 부드럽게 이동
+  };
+  
+  const navigateWithInsuranceId = (path, insuranceId) => {
+    router.push({
+      path: path,
+      query: { insuranceId: insuranceId },
     });
+  };
+  
+  // 슬라이더 동작 관련 메서드
+  const startSlider = () => {
+    sliderInterval = setInterval(() => {
+      nextSlide();
+    }, 5000);
+  };
+  
+  const nextSlide = () => {
+    currentSlide.value = (currentSlide.value + 1) % slides.length;
+  };
+  
+  const pauseSlider = () => {
+    clearInterval(sliderInterval);
+  };
+  
+  const resumeSlider = () => {
+    startSlider();
+  };
+  
+  const goToSlide = (index) => {
+    pauseSlider();
+    currentSlide.value = index;
+    resumeSlider();
+  };
+  
+  // 섹션 스크롤
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      const offset = section.getBoundingClientRect().top + window.pageYOffset;
+      const offsetMiddle = offset - (window.innerHeight / 2) + (section.offsetHeight / 2);
+      window.scrollTo({
+        top: offsetMiddle,
+        behavior: 'smooth',
+      });
+    }
+  };
+  
+  // 후기에 대한 메서드
+  const goToTestimonial = (index) => {
+    currentTestimonial.value = index;
+  };
+  
+  const nextTestimonial = () => {
+    currentTestimonial.value = (currentTestimonial.value + 1) % testimonials.value.length;
+  };
+  
+  const prevTestimonial = () => {
+    currentTestimonial.value = (currentTestimonial.value - 1 + testimonials.value.length) % testimonials.value.length;
+  };
+  
+  // 컴포넌트가 마운트될 때 슬라이더 시작
+  onMounted(() => {
+    startSlider();
+    try {
+      store.checkAuth()
+      .then((loggedInUser) => {
+        if (loggedInUser == null) {
+          isAuthenticated.value = false;
+        } else {
+          console.log("로그인 유저  "+ loggedInUser);
+          isAuthenticated.value = true;
+        }
+      })
+    } catch (error) {
+      console.error("Error during authentication:", error);
+    }
+  });
+  
+  function handleConsultationClick() {
+    alert("서비스 준비 중입니다.\n 더 자세히 확인할 수 있는 링크로 이동합니다.");
+    window.open("https://youtu.be/MqLc0ZkOJ28?feature=shared", "_blank");
   }
-};
-
-// 후기에 대한 메서드
-const goToTestimonial = (index) => {
-  currentTestimonial.value = index;
-};
-
-const nextTestimonial = () => {
-  currentTestimonial.value = (currentTestimonial.value + 1) % testimonials.value.length;
-};
-
-const prevTestimonial = () => {
-  currentTestimonial.value = (currentTestimonial.value - 1 + testimonials.value.length) % testimonials.value.length;
-};
-
-// 컴포넌트가 마운트될 때 슬라이더 시작
-onMounted(() => {
-  startSlider();
-});
-
-function handleConsultationClick() {
-  alert("서비스 준비 중입니다.\n 더 자세히 확인할 수 있는 링크로 이동합니다.");
-  // YouTube 링크 출력
-  window.open("https://youtu.be/MqLc0ZkOJ28?feature=shared", "_blank");
-}
-</script>
+  </script>
+  
 
 
 <style scoped>

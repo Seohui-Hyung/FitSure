@@ -24,7 +24,7 @@
   		
   		</insert>
   
-  		<update id = "deleteUser" parameterType="int">
+  		<update id = "deleteUser" parameterType="String">
     		UPDATE user SET available = 0 WHERE user_loginid = #{userLoginId}
 		</update>
 		
@@ -62,7 +62,7 @@
   			UPDATE user
   			SET password = #{password}, 
   				email = #{email},
-  				birth_date = #{birthDate}
+  				username = #{username}
   			WHERE user_id = #{userId}
   		</update>
  
