@@ -35,8 +35,8 @@ import { ref } from "vue";
 
 // 탭 정보 정의
 const tabs = ref([
-  { label: "실손 의료비 보험", image: "/assets/health1.jpg" }, // 실제 이미지 경로로 대체
-  { label: "유병자 실손 보험", image: "/assets/health2.jpg" },
+  { label: "실손 의료비 보험", image: "/images/insurance/실손 의료비 보험.png" }, // 실제 이미지 경로로 대체
+  { label: "유병자 실손 보험", image: "/images/insurance/유병자 실손 보험.png" },
 ]);
 
 const activeTab = ref(0); // 기본 탭 설정

@@ -35,9 +35,9 @@
   
   // 탭 정보 정의
   const tabs = ref([
-    { label: "건강 보험(6~40)", image: "/assets/health1.jpg" }, // 실제 이미지 경로로 대체
-    { label: "건강 보험(41~70)", image: "/assets/health2.jpg" },
-    { label: "암 보험", image: "/assets/daily.jpg" },
+    { label: "건강 보험(6~40)", image: "/images/insurance/건강 보험 (16~40).png" }, // 실제 이미지 경로로 대체
+    { label: "건강 보험(41~70)", image: "/images/insurance/건강 보험 (41~70).png" },
+    { label: "암 보험", image: "/images/insurance/암 보험.png" },
   ]);
   
   const activeTab = ref(0); // 기본 탭 설정

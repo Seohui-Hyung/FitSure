@@ -23,5 +23,6 @@ export default [
     path: '/auth/info-change',
     name: 'InfoChange',
     component: InfoChange,
+    // meta: { requiresAuth: true },
   }
 ];

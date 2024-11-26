@@ -107,6 +107,7 @@ export default {
   display: flex; /* Flexbox로 구성 */
   align-items: center; /* 수직 중앙 정렬 */
   margin-bottom: 20px; /* ChallengeProgress와 간격 추가 */
+  margin-left: 20px;
 }
 
 .details-row a {
@@ -127,7 +128,7 @@ export default {
 }
 
 .challenge-progress {
-  margin-top: 20px; /* 필요에 따라 조정 */
+  margin: 10px; /* 필요에 따라 조정 */
 }
 
 .profile-picture {

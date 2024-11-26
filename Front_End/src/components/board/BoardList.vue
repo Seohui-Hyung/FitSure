@@ -1,66 +1,60 @@
 <template>
-    <div class="notice-list-page">
-        <!-- 제목 -->
-        <h3 class="page-title">NOTICE LIST</h3>
-        <hr />
+    <!-- 테이블 -->
+    <table class="notice-table">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성일</th>
+                <th>조회수</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-if="store.noticeList.length === 0">
+                <td colspan="4" class="no-data">검색 결과가 없습니다.</td>
+            </tr>
+            <tr v-for="notice in paginatedNotice" :key="notice.noticeId">
+                <td>{{ notice.noticeId }}</td>
+                <td><a
+                        class="notice-title-link"
+                        @click.prevent="goToNoticeDetail(notice.noticeId)"
+                    >
+                        {{ notice.title }}
+                    </a>
+                </td>
+                <td>{{ formatDate(notice.regDate) }}</td>
+                <td>{{ notice.viewCnt }}</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <!-- 검색 바 컴포넌트 -->
-        <BoardSearchInput />
+    <!-- 검색 바 컴포넌트 -->
+    <BoardSearchInput />
 
-        <!-- 테이블 -->
-        <table class="notice-table">
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성일</th>
-                    <th>조회수</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-if="store.noticeList.length === 0">
-                    <td colspan="4" class="no-data">검색 결과가 없습니다.</td>
-                </tr>
-                <tr v-for="notice in paginatedNotice" :key="notice.noticeId">
-                    <td>{{ notice.noticeId }}</td>
-                    <td><a
-                            class="notice-title-link"
-                            @click.prevent="goToNoticeDetail(notice.noticeId)"
-                        >
-                            {{ notice.title }}
-                        </a>
-                    </td>
-                    <td>{{ formatDate(notice.regDate) }}</td>
-                    <td>{{ notice.viewCnt }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- 페이징 및 버튼 -->
-        <div class="table-footer">
-            <!-- 페이징 -->
-            <div class="pagination">
-                <button 
-                    :disabled="currentPage === 1" 
-                    @click="changePage(currentPage - 1)"
-                >
-                    &lt;
-                </button>
-                <button 
-                    v-for="page in totalPages" 
-                    :key="page" 
-                    :class="{ active: currentPage === page }"
-                    @click="changePage(page)"
-                >
-                    {{ page }}
-                </button>
-                <button 
-                    :disabled="currentPage === totalPages" 
-                    @click="changePage(currentPage + 1)"
-                >
-                    &gt;
-                </button>
-            </div>
+    <!-- 페이징 및 버튼 -->
+    <div class="table-footer">
+        <!-- 페이징 -->
+        <div class="pagination">
+            <button 
+                :disabled="currentPage === 1" 
+                @click="changePage(currentPage - 1)"
+            >
+                &lt;
+            </button>
+            <button 
+                v-for="page in totalPages" 
+                :key="page" 
+                :class="{ active: currentPage === page }"
+                @click="changePage(page)"
+            >
+                {{ page }}
+            </button>
+            <button 
+                :disabled="currentPage === totalPages" 
+                @click="changePage(currentPage + 1)"
+            >
+                &gt;
+            </button>
         </div>
     </div>
 </template>
@@ -137,13 +131,6 @@ const handleDeleteSelected = () => {
 </script>
 
 <style scoped>
-.notice-list-page {
-    padding: 20px;
-    background-color: #fcfcfc;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
 .page-title {
     margin-bottom: 20px;
     color: #000000;
@@ -153,15 +140,14 @@ const handleDeleteSelected = () => {
     width: 100%;
     border-collapse: collapse;
     background-color: #ffffff;
-    border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .notice-table thead {
     text-align: center;
-    background-color: #043873;
-    color: #ffffff;
+    background-color: #ddd;
+    color: #043873;
 }
 
 .notice-table th,
@@ -184,7 +170,7 @@ const handleDeleteSelected = () => {
 /* 페이징 및 버튼 */
 .table-footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-top: 20px;
 }

@@ -74,6 +74,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import router from "@/router";
 import { useUserStore } from "@/store/useUserStore";
 
 const name = ref("");
@@ -217,11 +218,10 @@ function confirmCancel() {
   justify-content: center;
   align-items: flex-start;
   gap: 20px;
-  position: relative;
 }
 
 .form-group-row label {
-  width: 200px;
+  width: 200px !important;
   padding: 10px;
   font-weight: bold;
   color: #333;
@@ -229,8 +229,8 @@ function confirmCancel() {
 
 .form-group-row input,
 .form-group-row select {
-  width: 300px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 580px;
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -240,22 +240,30 @@ function confirmCancel() {
 
 .input-container {
   display: flex;
-  align-items: center;
   flex-direction: column;
   gap: 10px;
+  width: calc(100% - 220px);
 }
 
 /* 이메일 input-container를 상대 위치로 설정 */
 .email-container,
 .verification-container {
   position: relative;
+  width: 100%;
+}
+
+.email-container input {
+  width: calc(100% - 45px); /* 인증 버튼 크기를 고려한 너비 */
+  margin-left: 45px;
+  box-sizing: border-box; /* 패딩과 border 포함 */
 }
 
 /* 인증번호 제출 버튼과 이메일 인증 버튼 공통 */
 .email-verify-button {
   position: absolute;
-  top: 8px;
-  right: 5px;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%); /* 수직 정렬 보정 */
   background-color: #043873;
   color: white;
   border: none;

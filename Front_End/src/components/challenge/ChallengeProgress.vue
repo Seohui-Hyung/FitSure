@@ -96,7 +96,7 @@ export default {
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  width: 300px;
+  width: 450px;
 }
 
 .challenge-status {
@@ -115,7 +115,7 @@ export default {
 .inner-box {
   background-color: white;
   border-radius: 8px;
-  width: 90%;
+  width: 100%;
   height: 90%;
   display: flex;
   justify-content: center;
