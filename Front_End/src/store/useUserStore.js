@@ -76,6 +76,9 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
+
+
+
   // 보험 상세 정보 가져오기
   const detail = async (insuranceId) => {
     try {
@@ -109,7 +112,42 @@ export const useUserStore = defineStore('user', () => {
         console.error("Payment failed:", error);
         alert("결제에 실패했습니다. 다시 시도해주세요.");
     }
-};
+  };
+
+  // 공지 사항 관련 
+  const noticeList = ref([]);
+  const notice = ref({});
+
+  const getNoticeList = function(){
+    axios.get(`${REST_API_URL}/notice`)
+    .then((res)=>{
+      noticeList.value = res.data
+    }).catch((err) => {
+      console.error(err.response.data); 
+    });
+  }
+
+  const noticeDetail = function(noticeId){
+    console.log("호출")
+    return axios.get(`${REST_API_URL}/notice/${noticeId}`)
+        .then((res) => {
+          notice.value = res.data
+          console.log(res.data)
+          return notice.value
+        }) 
+  };
+
+  const searchNoticeList = function (searchCondition){
+    axios.get(`${REST_API_URL}/notice/search`, {
+      params: searchCondition
+    })
+      .then((res) => {
+        console.log(res)
+        noticeList.value = res.data
+      })
+  }
+
+
 
   // // 입력 초기화
   // const resetForm = () => {
@@ -137,5 +175,8 @@ export const useUserStore = defineStore('user', () => {
     detail,
     payInsurance,
     // resetForm, // 주석 유지
+
+    // 공지사항 
+    getNoticeList, noticeList, notice, noticeDetail, searchNoticeList
   };
 });

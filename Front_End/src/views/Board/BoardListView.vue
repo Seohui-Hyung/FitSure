@@ -4,6 +4,9 @@
       <div class="content">
         <h2 class="title">이용 안내</h2>
         <nav class="tab-nav">공지사항</nav>
+        <div class="content-box">
+            <RouterView />
+        </div>
       </div>
     </div>
 </template>
