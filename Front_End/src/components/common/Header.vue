@@ -46,8 +46,8 @@
 
       <!-- 로그인/회원가입 또는 사용자 이름 -->
       <div class="nav-actions">
-        <template v-if="isAuthenticated">
-          <RouterLink to="/mypage" class="welcome-message">{{ loggedInUser }}님 환영합니다!</RouterLink>
+        <template v-if="store.isAuthenticated">
+          <RouterLink to="/mypage" class="welcome-message">{{ username }}</RouterLink> 님 환영합니다!
         </template>
         <template v-else>
           <button @click="handleLogin">로그인/회원가입</button>
@@ -57,40 +57,55 @@
   </header>
 </template>
 
-<script>
-import { ref, computed } from 'vue';
-import { RouterView, RouterLink } from 'vue-router';
+<script setup>
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useUserStore } from "@/store/useUserStore";
 
-// const { isAuthenticated, loggedInUser, logout } = useUserStore();
+// 상태 관리
+const activeMenu = ref(null);
+const store = useUserStore();
+const router = useRouter(); // Vue Router 사용
+const route = useRoute();
 
-export default {
-// components: { RouterView, RouterLink },
-setup() {
-  const activeMenu = ref(null);
-  const store = useUserStore();
-
-  const toggleMenu = (menu) => {
-    activeMenu.value = menu;
-  };
-
-  const isAuthenticated = computed(() => store.isAuthenticated);
-  const loggedInUser = computed(() => store.username);
-  
-  return {
-    activeMenu,
-    isAuthenticated,
-    loggedInUser,
-    toggleMenu,
-  };
-},
-methods: {
-  handleLogin() {
-    this.$router.push('/login');
-  },
-},
+// 메뉴 토글
+const toggleMenu = (menu) => {
+  activeMenu.value = menu;
 };
+
+// 로그인 처리
+const handleLogin = () => {
+  router.push('/login');
+};
+
+// 인증 상태와 로그인 사용자
+const isAuthenticated = ref(false);
+// 상태 관리 변수
+const username = ref("");
+
+console.log(isAuthenticated)
+
+
+onMounted(() => {
+    try {
+    store.checkAuth()
+    .then((loggedInUser)=>{
+        if(loggedInUser == null) {
+            isAuthenticated.value = false;
+        } else {
+            console.log("로그인 유저  "+ loggedInUser)
+            username.value = loggedInUser.username;
+            isAuthenticated.value = true;
+        }
+    })
+  } catch (error) {
+    console.error("Error during authentication:", error);
+  }
+});
+
+
 </script>
+
 
 <style scoped>
 @font-face {
@@ -230,6 +245,11 @@ cursor: pointer;
 background-color: #e60000;
 }
 
+a.welcome-message {
+    color: #FFE492 !important;
+    text-decoration: underline;
+}
+
 /* 반응형 스타일 */
 @media (min-width: 1024px) {
 .header {
@@ -308,5 +328,6 @@ background-color: #e60000;
 .nav-item a {
   padding: 8px 12px; /* 메뉴 간격 줄이기 */
 }
+
 }
 </style>

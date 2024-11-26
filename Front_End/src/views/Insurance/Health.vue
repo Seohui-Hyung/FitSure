@@ -23,31 +23,75 @@
           <img :src="tabs[activeTab].image" alt="보험 이미지" class="insurance-image" />
           <p class="image-placeholder" v-if="!tabs[activeTab].image">대응 이미지</p>
         </div>
-  
       </div>
       <!-- 보험 가입 버튼 -->
-      <button class="subscribe-button">보험 가입하기</button>
+      <button class="subscribe-button" @click="goToPayRoutine">보험 가입하기</button>
     </div>
   </template>
   
   <script setup>
-  import { ref } from "vue";
+  import { ref, watch, onMounted } from "vue";
+  import { useRouter, useRoute } from "vue-router";
+  
+  // Vue Router 사용
+  const router = useRouter();
+  const route = useRoute();
   
   // 탭 정보 정의
   const tabs = ref([
-    { label: "건강 보험(6~40)", image: "/images/insurance/건강 보험 (16~40).png" }, // 실제 이미지 경로로 대체
+    { label: "건강 보험(16~40)", image: "/images/insurance/건강 보험 (16~40).png" },
     { label: "건강 보험(41~70)", image: "/images/insurance/건강 보험 (41~70).png" },
     { label: "암 보험", image: "/images/insurance/암 보험.png" },
   ]);
   
-  const activeTab = ref(0); // 기본 탭 설정
+  const activeTab = ref(0); // 기본 탭 설정 (첫 번째 탭)
   
+  // 탭 선택 시 실행
   function selectTab(index) {
     activeTab.value = index;
+  
+    // `insuranceId`는 2부터 시작
+    const insuranceId = index + 2;
+  
+    // URL 업데이트
+    router.push({
+      path: "/health",
+      query: { insuranceId },
+    });
   }
+  
+  // 보험 가입 버튼 동작
+  function goToPayRoutine() {
+    // `insuranceId`는 2부터 시작
+    const insuranceId = activeTab.value + 2;
+  
+    // PayRoutine 경로로 이동
+    router.push(`/insurance/pay/${insuranceId}`);
+  }
+  
+  // 컴포넌트 마운트 시 URL의 `insuranceId` 값을 읽어 탭 설정
+  onMounted(() => {
+    const insuranceId = parseInt(route.query.insuranceId, 10);
+  
+    // 유효한 `insuranceId`인지 확인하고 탭 설정
+    if (insuranceId >= 2 && insuranceId <= 4) {
+      activeTab.value = insuranceId - 2;
+    }
+  });
+  
+  // URL의 query 변화 감지
+  watch(
+    () => route.query.insuranceId,
+    (newInsuranceId) => {
+      const insuranceId = parseInt(newInsuranceId, 10);
+      if (insuranceId >= 2 && insuranceId <= 4) {
+        activeTab.value = insuranceId - 2;
+      }
+    }
+  );
   </script>
   
-  <style scoped>  
+  <style scoped>
   /* 제목 스타일 */
   .title {
     display: flex;
@@ -60,7 +104,7 @@
     height: 150px;
     margin: 0;
   }
-
+  
   /* 네비게이션 탭 스타일 */
   .tab-nav {
     display: flex;
@@ -126,4 +170,5 @@
   .subscribe-button:hover {
     background-color: #ffda70;
   }
-  </style>  
+  </style>
+  

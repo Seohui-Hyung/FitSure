@@ -72,51 +72,55 @@
     </section>
 
     <section id="health-insurance" class="insurance-section">
-      <h3>건강 보험</h3>
-      <p>질병에 필요한 보장, 최대 100세까지 든든하게</p>
-      <button class="button2" @click="navigateWithTab('/health', 0)">
-        <span class="button-title">건강 보험(16~40)</span>
-        <br>
-        <span class="button-description">고혈압, 당뇨 특약</span>
-      </button>
-      <button class="button2" @click="navigateWithTab('/health', 1)">
-        <span class="button-title">건강 보험(41~70)</span>
-        <br>
-        <span class="button-description">고혈압, 당뇨 특약</span>
-      </button>
-      <button class="button2" @click="navigateWithTab('/health', 2)">
-        <span class="button-title">암 보험</span>
-        <br>
-        <span class="button-description">췌장암, 대장암, 유방암 보장</span>
-      </button>
+        <h3>건강 보험</h3>
+        <p>질병에 필요한 보장, 최대 100세까지 든든하게</p>
+        <button class="button2" @click="navigateWithInsuranceId('/health', 2)">
+            <span class="button-title">건강 보험(16~40)</span>
+            <br>
+            <span class="button-description">고혈압, 당뇨 특약</span>
+        </button>
+        <button class="button2" @click="navigateWithInsuranceId('/health', 3)">
+            <span class="button-title">건강 보험(41~70)</span>
+            <br>
+            <span class="button-description">고혈압, 당뇨 특약</span>
+        </button>
+        <button class="button2" @click="navigateWithInsuranceId('/health', 4)">
+            <span class="button-title">암 보험</span>
+            <br>
+            <span class="button-description">췌장암, 대장암, 유방암 보장</span>
+        </button>
     </section>
+
 
     <section id="medical-insurance" class="insurance-section">
-      <h3>실손 의료비 보험</h3>
-      <p>상해/질병 보장</p>
-      <button class="button2" @click="navigateWithTab('/actualexpense', 0)">
-        <span class="button-title">실손 의료비 보험</span>
-        <br>
-        <span class="button-description">이것저것 다 보장!</span>
-      </button>
-      <button class="button2" @click="navigateWithTab('/actualexpense', 1)">
-        <span class="button-title">유병자 실손 보험</span>
-        <br>
-        <span class="button-description">병이 있나?? 이거 하라</span>
-      </button>
-    </section>
+        <h3>실손 의료비 보험</h3>
+        <p>상해/질병 보장</p>
+        <!-- 실손 의료비 보험 버튼 -->
+        <button class="button2" @click="navigateWithTab('/actualexpense', 5)">
+            <span class="button-title">실손 의료비 보험</span>
+            <br>
+            <span class="button-description">이것저것 다 보장!</span>
+        </button>
+        <!-- 유병자 실손 보험 버튼 -->
+        <button class="button2" @click="navigateWithTab('/actualexpense', 6)">
+            <span class="button-title">유병자 실손 보험</span>
+            <br>
+            <span class="button-description">병이 있나?? 이거 하라</span>
+        </button>
+        </section>
 
-    <section class="consultation-section">
-      <div class="consultation-content">
-        <h2>상담을 원하십니까?</h2>
-        <p>당신을 위한 맞춤형 상담 제공!</p>
-        <p>지금 시작하세요!</p>
-        <button class="consultation-button">여길 클릭하세요 ></button>
-      </div>
-      <div class="consultation-image">
-        <img src="/images/promotion/tmp1.jpg" alt="상담 이미지">
-      </div>
-    </section>
+        <section class="consultation-section">
+            <div class="consultation-content">
+            <h2>상담을 원하십니까?</h2>
+            <p>당신을 위한 맞춤형 상담 제공!</p>
+            <p>지금 시작하세요!</p>
+            <button class="consultation-button" @click="handleConsultationClick">여길 클릭하세요 ></button>
+            </div>
+            <div class="consultation-image">
+            <img src="/images/promotion/tmp1.jpg" alt="상담 이미지" />
+            </div>
+        </section>
+    
 
     <section class="testimonial-section">
       <h2>고객들의 이용 후기</h2>
@@ -140,102 +144,116 @@
         ></span>
       </div>
     </section>
+    
   </div>
 </template>
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
-<script>
-import { useRouter } from 'vue-router';
-// import { ref } from "vue";
-// import { useUserStore } from "@/store/useUserStore";
-export default {
-  data() {
-    return {
-      slides: [
-        '/images/promotion/tmp1.jpg',
-        '/images/promotion/tmp2.jpg',
-        '/images/promotion/tmp3.png',
-        '/images/promotion/tmp4.jpg',
-      ],
-      currentSlide: 0,
-      sliderInterval: null,
-      testimonials: [
-        { text: "여러 보험을 한눈에 모아주고 맞춤형 추천까지 해주는 점이 너무 좋아요!", name: "YOONJUNE, UM" },
-        { text: "직관적이고 사용하기 편리합니다. 500만원을 아꼈습니다!", name: "JIEUN LEE, IU" },
-        { text: "비대면이라 가서 직접 계약하지 않아도 되니 편했어요!", name: "BYUNGHEE, YOON" }
-      ],
-    currentTestimonial: 0,
-    };
-  },
+// 슬라이드 이미지 배열
+const slides = [
+  '/images/promotion/tmp1.jpg',
+  '/images/promotion/tmp2.jpg',
+  '/images/promotion/tmp3.png',
+  '/images/promotion/tmp4.jpg',
+];
+const currentSlide = ref(0);
+let sliderInterval = null;
 
-  setup() {
-    const router = useRouter(); // useRouter를 setup에서 선언
+// 후기에 대한 데이터
+const testimonials = ref([
+  { text: "여러 보험을 한눈에 모아주고 맞춤형 추천까지 해주는 점이 너무 좋아요!", name: "YOONJUNE, UM" },
+  { text: "직관적이고 사용하기 편리합니다. 500만원을 아꼈습니다!", name: "JIEUN LEE, IU" },
+  { text: "비대면이라 가서 직접 계약하지 않아도 되니 편했어요!", name: "BYUNGHEE, YOON" }
+]);
+const currentTestimonial = ref(0);
 
-    // 경로로 단순 이동
-    const navigateTo = (path) => {
-      router.push(path);
-    };
+const router = useRouter(); // Vue Router 사용
 
-    // 경로 및 쿼리 파라미터로 이동
-    const navigateWithTab = (path, tabIndex) => {
-      router.push({
+// 경로로 단순 이동
+const navigateTo = (path) => {
+  router.push(path);
+};
+
+// 경로 및 쿼리 파라미터로 이동
+const navigateWithTab = (path, insuranceId) => {
+  router.push({
+    path: path,
+    query: { tab: insuranceId }, // 쿼리 파라미터로 탭 전달
+  });
+};
+
+const navigateWithInsuranceId = (path, insuranceId) => {
+    router.push({
         path: path,
-        query: { tab: tabIndex }, // 쿼리 파라미터로 탭 전달
-      });
-    };
+        query: { insuranceId: insuranceId },
+    });
+};
 
-    return {
-      navigateTo,
-      navigateWithTab,
-    };
-  },
+// 슬라이더 동작 관련 메서드
+const startSlider = () => {
+  sliderInterval = setInterval(() => {
+    nextSlide();
+  }, 5000);
+};
 
-  mounted() {
-    this.startSlider();
-  },
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % slides.length;
+};
 
-  methods: {
-    startSlider() {
-      this.sliderInterval = setInterval(() => {
-        this.nextSlide();
-      }, 5000);
-    },
-    nextSlide() {
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-    },
-    pauseSlider() {
-      clearInterval(this.sliderInterval);
-    },
-    resumeSlider() {
-      this.startSlider();
-    },
-    goToSlide(index) { // 클릭한 동그라미에 해당하는 이미지로 이동
-      this.pauseSlider(); // 슬라이더 자동 재생 중단
-      this.currentSlide = index; // 현재 슬라이드 업데이트
-      this.resumeSlider(); // 슬라이더 재생 재개
-    },
-    scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId); // 섹션 ID로 요소 찾기
-    if (section) {
-      const offset = section.getBoundingClientRect().top + window.pageYOffset; // 섹션의 Y 좌표 계산
-      const offsetMiddle = offset - (window.innerHeight / 2) + (section.offsetHeight / 2); // 화면 중앙에 맞추기
-      window.scrollTo({
-        top: offsetMiddle, // 중앙 위치로 스크롤
-        behavior: 'smooth' // 부드럽게 이동
-      });
-    }
-    },
-    goToTestimonial(index) {
-      this.currentTestimonial = index; // 현재 후기 업데이트
-    },
-    nextTestimonial() {
-      this.currentTestimonial = (this.currentTestimonial + 1) % this.testimonials.length;
-    },
-    prevTestimonial() {
-      this.currentTestimonial = (this.currentTestimonial - 1 + this.testimonials.length) % this.testimonials.length;
-    },
+const pauseSlider = () => {
+  clearInterval(sliderInterval);
+};
+
+const resumeSlider = () => {
+  startSlider();
+};
+
+const goToSlide = (index) => {
+  pauseSlider();
+  currentSlide.value = index;
+  resumeSlider();
+};
+
+// 섹션 스크롤
+const scrollToSection = (sectionId) => {
+  const section = document.getElementById(sectionId); // 섹션 ID로 요소 찾기
+  if (section) {
+    const offset = section.getBoundingClientRect().top + window.pageYOffset; // 섹션의 Y 좌표 계산
+    const offsetMiddle = offset - (window.innerHeight / 2) + (section.offsetHeight / 2); // 화면 중앙에 맞추기
+    window.scrollTo({
+      top: offsetMiddle, // 중앙 위치로 스크롤
+      behavior: 'smooth', // 부드럽게 이동
+    });
   }
 };
+
+// 후기에 대한 메서드
+const goToTestimonial = (index) => {
+  currentTestimonial.value = index;
+};
+
+const nextTestimonial = () => {
+  currentTestimonial.value = (currentTestimonial.value + 1) % testimonials.value.length;
+};
+
+const prevTestimonial = () => {
+  currentTestimonial.value = (currentTestimonial.value - 1 + testimonials.value.length) % testimonials.value.length;
+};
+
+// 컴포넌트가 마운트될 때 슬라이더 시작
+onMounted(() => {
+  startSlider();
+});
+
+function handleConsultationClick() {
+  alert("서비스 준비 중입니다.\n 더 자세히 확인할 수 있는 링크로 이동합니다.");
+  // YouTube 링크 출력
+  window.open("https://youtu.be/MqLc0ZkOJ28?feature=shared", "_blank");
+}
 </script>
+
 
 <style scoped>
 @font-face {
@@ -583,4 +601,5 @@ input {
 .pagination .active {
   background-color: #043873; /* 활성화된 페이지네이션 색상 */
 }
+
 </style>

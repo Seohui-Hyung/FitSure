@@ -23,15 +23,19 @@
           <img :src="tabs[activeTab].image" alt="보험 이미지" class="insurance-image" />
           <p class="image-placeholder" v-if="!tabs[activeTab].image">대응 이미지</p>
         </div>
-  
       </div>
+  
       <!-- 보험 가입 버튼 -->
-      <button class="subscribe-button">보험 가입하기</button>
+      <button class="subscribe-button" @click="goToPayRoutine">보험 가입하기</button>
     </div>
   </template>
   
   <script setup>
   import { ref } from "vue";
+  import { useRouter } from "vue-router";
+  
+  // Vue Router 사용
+  const router = useRouter();
   
   // 탭 정보 정의
   const tabs = ref([
@@ -43,9 +47,15 @@
   function selectTab(index) {
     activeTab.value = index;
   }
+  
+  // 보험 가입 버튼 동작
+  function goToPayRoutine() {
+    const insuranceId = 1; 
+    router.push(`/insurance/pay/${insuranceId}`);
+  }
   </script>
   
-  <style scoped>  
+  <style scoped>
   /* 제목 스타일 */
   .title {
     display: flex;
@@ -58,7 +68,7 @@
     height: 150px;
     margin: 0;
   }
-
+  
   /* 네비게이션 탭 스타일 */
   .tab-nav {
     display: flex;
@@ -124,4 +134,5 @@
   .subscribe-button:hover {
     background-color: #ffda70;
   }
-  </style>  
+  </style>
+  

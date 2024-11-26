@@ -5,7 +5,7 @@
         <div class="amount-block">
             <p>결제 금액: <strong>{{ originalAmount.toLocaleString() }}원</strong></p>
         </div>
-
+        <hr />
         <div class="coupon-block">
             <h3>쿠폰 적용</h3>
             <div class="coupon-row">
@@ -15,7 +15,7 @@
                         v-for="coupon in coupons"
                         :key="coupon.couponId"
                         :value="coupon.couponId"
-                        >
+                    >
                         24주 챌린지 달성 쿠폰 (5% 할인)
                     </option>
                 </select>
@@ -23,11 +23,11 @@
             </div>
         </div>
 
-        <div v-if="finalAmount !== originalAmount" class="final-amount-block">
-            <p>최종 금액: <strong>{{ finalAmount.toLocaleString() }}원</strong></p>
-        </div>
-
-        <div class="pay-button-container">
+        <!-- 최종 금액과 결제 버튼을 한 라인으로 정렬 -->
+        <div class="payment-row">
+            <p class="final-amount">
+                최종 금액: <strong>{{ finalAmount.toLocaleString() }}원</strong>
+            </p>
             <button @click="payInsurance" class="pay-button">결제하기</button>
         </div>
     </div>
@@ -45,7 +45,7 @@ const route = useRoute();
 const coupons = ref([]);
 const insurance = ref([]);
 const selectedCoupon = ref(0);
-const originalAmount = ref(0); // 초기 금액
+const originalAmount = ref(0);
 const finalAmount = ref(0);
 
 onMounted(async () => {
@@ -61,65 +61,46 @@ onMounted(async () => {
 
 const fetchCouponList = () => {
     try {
-        store.getCouponList()
-        .then((response) => {
+        store.getCouponList().then((response) => {
             coupons.value = response;
-            selectedCoupon.value = response[0].couponaId;
-            console.log(response)
-        })
-
+            selectedCoupon.value = response[0]?.couponId || 0;
+        });
     } catch (error) {
-        console.error("공지 데이터를 가져오는 중 오류 발생:", error);
+        console.error("쿠폰 데이터를 가져오는 중 오류 발생:", error);
     }
 };
 
 const fetchInsurance = (insuranceId) => {
     try {
-        store.detail(insuranceId)
-        .then((response) => {
+        store.detail(insuranceId).then((response) => {
             insurance.value = response;
-            console.log(insurance.value)
             originalAmount.value = insurance.value.premium;
             finalAmount.value = originalAmount.value;
-        })
-
+        });
     } catch (error) {
-        console.error("공지 데이터를 가져오는 중 오류 발생:", error);
+        console.error("보험 데이터를 가져오는 중 오류 발생:", error);
     }
 };
 
-
 const applyCoupon = () => {
-    
     if (!selectedCoupon.value) {
         alert("적용할 쿠폰이 없습니다.");
-        finalAmount.value = originalAmount.value
+        finalAmount.value = originalAmount.value;
+        return;
     }
 
-    
-
-    if (selectedCoupon.value) {
-        const discount = originalAmount.value * (5 / 100);
-        finalAmount.value = originalAmount.value - discount;
-        alert(`쿠폰이 적용되었습니다! 할인 금액: ${discount.toLocaleString()}원`);
-        console.log(finalAmount.value)
-    } 
+    const discount = originalAmount.value * 0.05;
+    finalAmount.value = originalAmount.value - discount;
+    alert(`쿠폰이 적용되었습니다! 할인 금액: ${discount.toLocaleString()}원`);
 };
 
 const payInsurance = async () => {
     try {
-
         const insuranceId = route.params.insuranceId;
-        const couponId = 0;
-        if(selectedCoupon.value) couponId = selectedCoupon.value;
+        const couponId = selectedCoupon.value || 0;
         const amount = finalAmount.value;
 
-        // 요청 데이터 출력
-        console.log("Request Data:", {
-            insuranceId,
-            couponId,
-            amount,
-        });
+        console.log("Request Data:", { insuranceId, couponId, amount });
         const redirectUrl = await store.payInsurance(insuranceId, couponId, amount);
         // window.location.href = redirectUrl || "/pay/success";
     } catch (error) {
@@ -128,7 +109,6 @@ const payInsurance = async () => {
 };
 </script>
 
-
 <style scoped>
 .step3-container {
     max-width: 600px;
@@ -136,7 +116,6 @@ const payInsurance = async () => {
     font-family: Arial, sans-serif;
     position: relative;
     padding-bottom: 60px;
-    /* 결제 버튼 공간 확보 */
 }
 
 .amount-block {
@@ -151,7 +130,6 @@ const payInsurance = async () => {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* 드롭다운과 버튼 사이 간격 */
 }
 
 .coupon-select {
@@ -159,8 +137,13 @@ const payInsurance = async () => {
     padding: 10px;
 }
 
-.apply-button {
-    background-color: #007bff;
+.apply-button,
+.pay-button {
+    width: 120px; /* 동일한 너비 지정 */
+    height: 40px; /* 동일한 높이 지정 */
+    text-align: center;
+    font-size: 14px; /* 텍스트 크기 동일 */
+    background-color: #007bff; /* 쿠폰 적용 버튼 색상 */
     color: white;
     border: none;
     padding: 10px 15px;
@@ -172,28 +155,25 @@ const payInsurance = async () => {
     background-color: #0056b3;
 }
 
-.final-amount-block {
-    margin-top: 20px;
-    font-size: 16px;
-    color: #333;
-}
-
-.pay-button-container {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-}
-
 .pay-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
+    background-color: #28a745; /* 결제 버튼 색상 */
 }
 
 .pay-button:hover {
     background-color: #218838;
 }
+
+.payment-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.final-amount {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+}
+
 </style>

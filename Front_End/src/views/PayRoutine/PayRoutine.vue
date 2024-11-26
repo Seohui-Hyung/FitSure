@@ -109,6 +109,7 @@ const steps = [
     margin-top: 20px;
     margin-left: 30px;
     margin-right: 30px;
+    margin-bottom: 30px;
 }
 
 .nav-button {
@@ -128,7 +129,7 @@ const steps = [
 }
 
 .nav-button:disabled {
-    background-color: #ccc;
+    background-color: #ffffff;
     cursor: not-allowed;
 }
 </style>
