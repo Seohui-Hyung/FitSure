@@ -1,5 +1,6 @@
 package com.pretzero.fitsure.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.pretzero.fitsure.model.dto.Comment;
 import com.pretzero.fitsure.model.dto.InsurancePlan;
 import com.pretzero.fitsure.model.dto.Payment;
+import com.pretzero.fitsure.model.dto.paymenttest.paymentjson;
 import com.pretzero.fitsure.model.service.CommentService;
 import com.pretzero.fitsure.model.service.CouponService;
 import com.pretzero.fitsure.model.service.InsurancePlanService;
@@ -26,6 +28,8 @@ import com.pretzero.fitsure.util.JwtUtil;
 import com.pretzero.fitsure.util.SessionUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/insurance") // 사용자를 위한 insuranceController 
@@ -42,6 +46,9 @@ public class InsuranceController {
 	
 	@Autowired
 	CouponService couponService;
+	
+	@Autowired
+	HttpSession session;
 	
 	// 보험 전체 목록 조회 
 	@GetMapping("")
@@ -65,8 +72,8 @@ public class InsuranceController {
 	
 	// 보험 결제의 경우 PayController로 별도 진행 
 	@PostMapping("/{insuranceId}/pay")
-	public String payInsurance(@PathVariable int insuranceId, @RequestParam(required = false,  defaultValue = "0") int couponCode, 
-							@RequestParam(required = true) int finalAmount, HttpServletRequest request){
+	public void payInsurance(@PathVariable int insuranceId, @RequestBody paymentjson paymentjson, HttpServletRequest request, HttpServletResponse response) throws IOException{
+		
 		String token = request.getHeader("access-token"); 
 		int userId = JwtUtil.getuserId(token);
 		
@@ -77,7 +84,7 @@ public class InsuranceController {
 		Payment paytemp = new Payment();
 		paytemp.setUserId(userId);
 		paytemp.setInsuranceId(insuranceId);
-		System.out.println(finalAmount);
+		System.out.println(paymentjson.getFinalAmount());
 		
 		InsurancePlan insurance = insuranceService.readInsurance(insuranceId);
 		
@@ -85,19 +92,20 @@ public class InsuranceController {
 
 		
 		// 쿠폰 사용하는 경우, 5% 할인을 위하여 
-		if (couponCode != 0) {
-	        couponService.useCoupon(couponCode);
+		if (paymentjson.getCouponCode() != 0) {
+	        couponService.useCoupon(paymentjson.getCouponCode());
 	    }
 		
-		paytemp.setAmount(finalAmount); // 적용된 쿠폰 코드 저장
-		
+		paytemp.setAmount(paymentjson.getFinalAmount()); // 적용된 쿠폰 코드 저장
+		System.out.println(paymentjson.getFinalAmount());
 		paymentService.createPayment(paytemp);
 		
+		
 		 // 세션에 결제 정보 저장
-	    SessionUtils.addAttribute("payment", paytemp);
-
-	    // payReady로 리다이렉트
-	    return "redirect:/pay/ready";
+//	    SessionUtils.addAttribute("payment", paytemp);
+		session.setAttribute("payment", paytemp);
+		
+	    response.sendRedirect("/pay/ready");
 
 		
 	}

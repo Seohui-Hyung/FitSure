@@ -12,14 +12,15 @@ import com.pretzero.fitsure.interceptor.AdminInterceptor;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 	
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // 모든 엔드포인트에 대해 CORS를 허용합니다.
-                .allowedOrigins("http://localhost:5173") // Vue.js 애플리케이션의 주소
-                .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드
-                .allowedHeaders("*") // 모든 헤더 허용
-                .allowCredentials(true);
-    }
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+	    registry.addMapping("/**")
+	            .allowedOrigins("http://localhost:5173", "http://localhost:8080")
+	            .allowedMethods("GET", "POST", "PUT", "DELETE")
+	            .allowedHeaders("*")
+	            .allowCredentials(true);
+	}
+
     
     
     // 정적 리소스 위치 적용 

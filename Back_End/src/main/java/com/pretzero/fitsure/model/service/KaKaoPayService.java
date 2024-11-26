@@ -18,7 +18,7 @@ import com.pretzero.fitsure.model.dto.paymenttest.ReadyResponse;
 @Service
 public class KaKaoPayService {
 
-	private static final String ACCESS_TOKEN = "DEV1C0C9D143BD4A603237A94C1759AA12809291";
+	private static final String ACCESS_TOKEN = "DEVD877A3D3E997CA916E6340C5D9FEE5319499A";
 
 	private HttpHeaders getHeaders() {
 		HttpHeaders headers = new HttpHeaders();
@@ -37,7 +37,7 @@ public class KaKaoPayService {
 	    parameters.put("quantity", "1");
 	    parameters.put("total_amount", String.valueOf(totalPrice));
 	    parameters.put("tax_free_amount", "0");
-	    parameters.put("approval_url", "http://localhost:8080/pay/completed");
+	    parameters.put("approval_url", "http://localhost:5173/pay/completed");
 	    parameters.put("cancel_url", "http://localhost:8080/pay/cancel");
 	    parameters.put("fail_url", "http://localhost:8080/pay/fail");
 

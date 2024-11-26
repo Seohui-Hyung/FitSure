@@ -110,10 +110,18 @@ const payInsurance = async () => {
     try {
 
         const insuranceId = route.params.insuranceId;
+        const couponId = 0;
+        if(selectedCoupon.value) couponId = selectedCoupon.value;
+        const amount = finalAmount.value;
 
-        console.log(insuranceId)
-        const redirectUrl = await store.payInsurance(insuranceId, selectedCoupon.value, finalAmount.value);
-        window.location.href = redirectUrl || "/pay/success";
+        // 요청 데이터 출력
+        console.log("Request Data:", {
+            insuranceId,
+            couponId,
+            amount,
+        });
+        const redirectUrl = await store.payInsurance(insuranceId, couponId, amount);
+        // window.location.href = redirectUrl || "/pay/success";
     } catch (error) {
         alert("결제에 실패했습니다. 다시 시도해주세요." + error);
     }

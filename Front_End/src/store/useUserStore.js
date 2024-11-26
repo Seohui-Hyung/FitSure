@@ -94,25 +94,35 @@ export const useUserStore = defineStore('user', () => {
   };
 
   // 결제 요청 메서드
-  const payInsurance = async (insuranceId, couponCode, finalAmount) => {
-    try {
-        const response = await axios
-          .post(`${REST_API_URL}/insurance/${insuranceId}/pay`,
-                { 
-                  couponCode,
-                  finalAmount
-                }, // 쿠폰 코드 전달
-                {
-                  headers: {
-                    "access-token": localStorage.getItem("access-token"), // 인증 헤더
-                  }
-                }
-          );
-    } catch (error) {
-        console.error("Payment failed:", error);
-        alert("결제에 실패했습니다. 다시 시도해주세요.");
+const payInsurance = async (insuranceId, couponCode, finalAmount) => {
+  try {
+    const response = await axios.post(
+      `${REST_API_URL}/insurance/${insuranceId}/pay`,
+      {
+        couponCode,
+        finalAmount,
+      },
+      {
+        headers: {
+          "access-token": localStorage.getItem("access-token"), // 인증 헤더
+        },
+        withCredentials: true,
+      }
+    );
+
+    // 서버 응답 처리
+    const responseData = response.data; // 서버에서 전달된 응답 데이터
+
+    if (responseData && responseData.next_redirect_pc_url) {
+      // 리다이렉트 URL이 응답에 포함되어 있다면 리다이렉트 실행
+      location.href = responseData.next_redirect_pc_url;
+    } else {
+      console.error("리다이렉트 URL이 응답에 포함되어 있지 않습니다.");
     }
-  };
+  } catch (error) {
+    console.error("결제 요청 중 오류가 발생했습니다:", error);
+  }
+};
 
   // 공지 사항 관련 
   const noticeList = ref([]);

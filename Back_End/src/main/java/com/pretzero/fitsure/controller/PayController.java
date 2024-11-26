@@ -22,6 +22,7 @@ import com.pretzero.fitsure.model.service.PaymentService;
 import com.pretzero.fitsure.model.service.SubscribeService;
 import com.pretzero.fitsure.util.SessionUtils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -40,12 +41,20 @@ public class PayController {
 	@Autowired
 	private PaymentService paymentService;
     
+	@Autowired
+	HttpSession httpsession;
 	
-    @PostMapping("/ready")
-    public @ResponseBody ReadyResponse payReady(@RequestBody Payment payment, HttpSession session) {
+    @GetMapping("/ready")
+    public @ResponseBody ReadyResponse payReady(HttpServletRequest request) {
+//    	System.out.println(((Payment) SessionUtils.getAttribute("payment")));
+//    	Payment payment = (Payment) SessionUtils.getAttribute("payment");
+    	HttpSession session = request.getSession(true);
     	
+    	Payment payment = (Payment) httpsession.getAttribute("payment");
+    	if(payment == null) payment = (Payment) session.getAttribute("payment");
+
         int userId = payment.getUserId();
-        session.setAttribute("userId", userId);
+        httpsession.setAttribute("userId", userId);
         int insurance = payment.getInsuranceId();
         String insurancename = insurancePlanService.readInsurance(insurance).getInsuranceName();
         System.out.println(insurancename);

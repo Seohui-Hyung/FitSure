@@ -43,7 +43,7 @@ public class UserControllerToken {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody User user, HttpServletRequest request) {
         // 사용자 인증 (UserService에서 해당 메서드를 구현해야 합니다)
         User authenticatedUser = userService.login(user.getUserLoginId(), user.getPassword());
 
@@ -55,6 +55,7 @@ public class UserControllerToken {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Login successful");
             response.put("access-token", token);
+            response.put("JSESSIONID", request.getRequestedSessionId());
 
             return ResponseEntity.ok(response);
         } else {
