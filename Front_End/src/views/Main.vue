@@ -153,10 +153,10 @@ import { useRouter } from "vue-router";
 
 // 슬라이드 이미지 배열
 const slides = [
-  '/images/promotion/tmp1.jpg',
-  '/images/promotion/tmp2.jpg',
-  '/images/promotion/tmp3.png',
-  '/images/promotion/tmp4.jpg',
+  '/images/promotion/001.png',
+  '/images/promotion/002.png',
+  '/images/promotion/003.png',
+  '/images/promotion/004.png',
 ];
 const currentSlide = ref(0);
 let sliderInterval = null;
