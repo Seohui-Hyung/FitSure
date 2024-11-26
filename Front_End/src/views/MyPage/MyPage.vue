@@ -82,7 +82,13 @@ export default {
 </script>
 
 <style scoped>
-/* 스타일 수정: 사진과 유사한 레이아웃 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
 .profile-page {
   display: flex;
   flex-direction: column;
@@ -94,7 +100,7 @@ export default {
 .user-info {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
   background-color: #043873;
   color: white;
   width: 100%;
@@ -111,12 +117,12 @@ export default {
 }
 
 .details-row a {
-  color: #ffe492;
+  color: #ffffff;
   text-decoration: none;
 }
 
 .details-row a:hover {
-  color: #ffd54f; /* 호버 시 색상 변경 (선택 사항) */
+  text-decoration: underline;
 }
 
 .details-row p {
@@ -221,190 +227,6 @@ export default {
   object-fit: cover;
 }
 
-.insurance-section {
-  width: 100%;
-  max-width: 1200px;
-  position: relative;
-
-  margin-left: 10px;
-}
-
-.insurance-section h3 {
-  position: relative;
-  display: inline-block;
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 10px;
-  padding-left: 5px;
-  color: #043873;
-}
-
-.insurance-section h3::after {
-  content: ''; /* 가상 요소 생성 */
-  position: absolute; /* 제목 밑에 위치 설정 */
-  bottom: 0px; /* 제목 아래에 위치 */
-  left: 0;
-  width: 250%; /* 제목 너비에 맞게 이미지 크기 조정 */
-  height: 12px; /* 이미지 높이 */
-  background-image: url('/images/deco/underline.png'); /* 이미지 경로 */
-  background-size: contain; /* 이미지 크기 조정 */
-  background-repeat: no-repeat; /* 이미지 반복 제거 */
-}
-
-.insurance-section p {
-  margin: 0;
-  font-size: 16px;
-  padding-left: 5px;
-  color: #777;
-}
-</style>
-
-<style scoped>
-/* 기본 스타일 */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-}
-
-.profile-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  padding: 20px;
-}
-
-/* 사용자 정보 섹션 */
-.user-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  background-color: #043873;
-  color: white;
-  width: 100%;
-  max-width: 1200px;
-  padding: 20px;
-  border-radius: 8px;
-  /* gap: 20px; */
-}
-
-.details-row {
-  display: flex; /* Flexbox로 구성 */
-  align-items: center; /* 수직 중앙 정렬 */
-  margin-bottom: 20px; /* ChallengeProgress와 간격 추가 */
-}
-
-.details-row a {
-  color: #ffe492; /* 텍스트 색상 */
-  text-decoration: none; /* 기본 밑줄 제거 */
-}
-
-.details-row a:hover {
-  color: #ffd54f; /* 호버 시 색상 변경 (선택 사항) */
-  text-decoration: underline; /* 호버 시 밑줄 추가 (선택 사항) */
-}
-
-.details-row p {
-  margin: 0; /* 기본 마진 제거 */
-  margin-left: 30px;
-  text-align: left; /* 좌측 정렬 */
-  font-size: 16px; /* 글자 크기 조정 */
-  white-space: nowrap; /* 텍스트를 한 줄로 출력 */
-}
-
-/* ChallengeProgress 상단 여백 */
-.challenge-progress {
-  margin-top: 20px; /* 필요에 따라 조정 */
-}
-
-.profile-picture {
-  flex-shrink: 0; /* 사진 크기 고정 */
-  margin-right: 20px; /* 텍스트와 간격 추가 */
-}
-
-.profile-picture img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 3px solid #c4defd;
-}
-
-.user-details {
-  flex: 1;
-  margin-bottom: 0px;
-}
-
-.user-details p {
-    text-align: right;
-}
-
-.user-details h2 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.challenge-status {
-  background-color: #c4defd;
-  width: 90%;
-  height: 200px;
-  padding: 20px;
-  margin: 10px;
-  border-radius: 8px;
-}
-
-.challenge-status p {
-    text-align: center;
-    margin-bottom: 0px;
-}
-
-.challenge-box {
-  background-color: white;
-  color: #043873;
-  width: 50%;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: left;
-  margin: 10px;
-}
-
-.challenge-button {
-  background-color: #ffe492;
-  color: #043873;
-  padding: 10px 20px;
-  width: 100%;
-  height: 90px;
-  border: none;
-  border-radius: 8px;
-  font-size: 24px;
-  font-weight: 800;
-  cursor: pointer;
-  margin-bottom: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 그림자 추가 */
-  transition: box-shadow 0.3s ease; /* 호버 시 부드러운 전환 */
-}
-
-.challenge-button:hover {
-  background-color: #ffd54f;
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 강조 */
-}
-
-.challenge-info {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.challenge-info a {
-  font-weight: 600;
-}
-
-.challenge-info li {
-  margin-bottom: 5px;
-}
-
-/* 보험 내역 섹션 */
 .insurance-section {
   width: 100%;
   max-width: 1200px;

@@ -46,6 +46,9 @@
           <option value="여성">여성</option>
         </select>
       </div>
+      <div class="lonely-button">
+        <button type="button" class="btn-tertiary" @click="confirmLeave">회원 탈퇴하기</button>
+      </div>
       <div class="button-group">
         <button type="submit" class="btn-primary" :disabled="!passwordsMatch">확인</button>
         <button type="button" class="btn-secondary" @click="confirmCancel">취소</button>
@@ -86,6 +89,13 @@ function confirmCancel() {
   const confirmCancel = confirm("취소하시겠습니까?");
   if (confirmCancel) {
     router.push({ name: "Main" });
+  }
+}
+
+function confirmLeave() {
+  const confirmLeave = confirm("탈퇴하시겠습니까?");
+  if (confirmLeave) {
+    //
   }
 }
 </script>
@@ -232,5 +242,21 @@ function confirmCancel() {
 
 .btn-secondary:hover {
   background-color: #aaa;
+}
+
+.btn-tertiary {
+  background-color: #ffffff;
+  color: #333;
+  border: none;
+  text-decoration: underline;
+}
+
+.btn-tertiary:hover {
+  color: red;
+}
+
+.lonely-button {
+  display: flex;
+  justify-content: right;
 }
 </style>
